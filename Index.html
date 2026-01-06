@@ -1,0 +1,770 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Toyo – Seguimiento</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="./manifest.webmanifest">
+  <meta name="theme-color" content="#0046BE">
+
+  <!-- Supabase (UMD) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
+  <!-- Excel export (SheetJS) -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+  <style>
+    :root{
+      --blue:#0046BE; --navy:#002E80;
+      --bg:#F3F5F8; --card:#fff; --border:#d9dde6;
+      --text:#0f172a; --muted:#64748b;
+      --danger:#dc2626; --ok:#16a34a;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;padding:14px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+    .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:10px;flex-wrap:wrap}
+    .brand b{color:var(--blue);font-size:16px}
+    .brand div{color:var(--muted);font-size:12px;margin-top:2px}
+    .pill{border:1px solid var(--border);background:#fff;border-radius:999px;padding:8px 10px;font-size:12px;color:var(--muted);font-weight:900}
+    .pill b{color:var(--text)}
+    .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+    .tab{border:1px solid var(--border);background:#fff;padding:10px 12px;border-radius:12px;font-weight:900;cursor:pointer;user-select:none}
+    .tab.active{background:var(--blue);border-color:var(--blue);color:#fff}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px;box-shadow:0 6px 18px rgba(15,23,42,.06);margin-bottom:12px}
+    .grid{display:grid;grid-template-columns:1fr;gap:10px}
+    @media(min-width:900px){.grid.two{grid-template-columns:1fr 1fr}.grid.three{grid-template-columns:1fr 1fr 1fr}}
+    label{display:block;font-size:12px;color:var(--muted);font-weight:900;margin-bottom:6px}
+    input,select,textarea{width:100%;border:1px solid var(--border);border-radius:12px;padding:12px;font-size:15px;background:#fff;outline:none}
+    textarea{min-height:90px;resize:vertical}
+    .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .btn{border:0;border-radius:12px;padding:12px 14px;font-weight:900;cursor:pointer}
+    .btn.primary{background:var(--blue);color:#fff}
+    .btn.dark{background:var(--navy);color:#fff}
+    .btn.ghost{background:#fff;border:1px solid var(--border)}
+    .btn.danger{background:var(--danger);color:#fff}
+    .mini{font-size:12px;color:var(--muted)}
+    .hide{display:none !important}
+    table{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--border);border-radius:14px;overflow:hidden;background:#fff}
+    th,td{padding:10px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:top}
+    th{background:#f8fafc;text-align:left;color:var(--muted);font-weight:900}
+    tr:last-child td{border-bottom:0}
+    .right{text-align:right}
+    .notice{padding:10px 12px;border-radius:12px;border:1px dashed var(--border);background:#fff;color:var(--muted);font-size:12px;line-height:1.35}
+    .ok{color:var(--ok);font-weight:900}
+    .err{color:var(--danger);font-weight:900}
+    a{color:var(--blue);font-weight:900;text-decoration:none}
+    a:hover{text-decoration:underline}
+    .chip{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);background:#fff;border-radius:12px;padding:10px 12px}
+  </style>
+</head>
+<body>
+
+  <div class="top">
+    <div class="brand">
+      <b>Toyo – Seguimiento</b>
+      <div id="who">Selecciona vendedor</div>
+    </div>
+    <div class="row">
+      <span class="pill">Red: <b id="net">—</b></span>
+      <span class="pill">Backend: <b id="apiStatus">—</b></span>
+    </div>
+  </div>
+
+  <div class="tabs" id="tabs">
+    <div class="tab active" data-tab="visita">🧭 Visita</div>
+    <div class="tab" data-tab="hist">📆 Historial</div>
+    <div class="tab" data-tab="admin">🔒 Admin</div>
+  </div>
+
+  <!-- VENDEDOR -->
+  <section id="view_visita">
+    <div class="card">
+      <b>Vendedor</b>
+      <div class="mini" style="margin:6px 0 12px;">
+        Modo simple: sin login. Elige vendedor y registra visitas.
+      </div>
+
+      <div class="grid two">
+        <div>
+          <label>Selecciona vendedor</label>
+          <select id="sellerSel">
+            <option value="">Cargando…</option>
+          </select>
+          <div class="mini">Si sale vacío: no conectó a Supabase o no existen tablas / permisos.</div>
+        </div>
+        <div style="display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap">
+          <button class="btn dark" id="btnUseSeller">Usar este vendedor</button>
+          <button class="btn ghost" id="btnReloadSellers">Recargar</button>
+          <span class="chip mini">Actual: <b id="sellerNow">—</b></span>
+        </div>
+      </div>
+
+      <div class="notice" style="margin-top:12px;">
+        <b>Tip:</b> Para que funcione con ANON KEY sin login, tus tablas deben permitir lecturas/escrituras (RLS desactivado o políticas).
+      </div>
+    </div>
+
+    <!-- REGISTRAR VISITA -->
+    <div class="card">
+      <b>Registrar visita</b>
+
+      <div class="grid two" style="margin-top:10px;">
+        <div>
+          <label>Cliente visitado</label>
+          <input id="client" placeholder="Ej. Sushi Factory / HEB..." />
+        </div>
+        <div>
+          <label>Motivo</label>
+          <select id="reason">
+            <option value="">Selecciona…</option>
+            <option>Entrega de producto</option>
+            <option>Cobranza</option>
+            <option>Negociación</option>
+            <option>Degustación</option>
+            <option>Cotización</option>
+            <option>Visita de seguimiento</option>
+            <option>Otro</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="margin-top:10px;">
+        <label>Comentarios</label>
+        <textarea id="comments" placeholder="Acuerdos, pendientes, observaciones..."></textarea>
+      </div>
+
+      <div class="row" style="margin-top:10px;">
+        <button class="btn primary" id="btnStart">▶ Iniciar (GPS)</button>
+        <button class="btn danger" id="btnEnd" disabled>■ Terminar (GPS + Guardar)</button>
+        <button class="btn ghost" id="btnClear">Limpiar</button>
+        <button class="btn ghost" id="btnFlush">Reintentar envío</button>
+      </div>
+
+      <div class="grid two" style="margin-top:12px;">
+        <div class="pill">Inicio: <b id="startInfo">—</b></div>
+        <div class="pill">Duración: <b id="durInfo">—</b></div>
+      </div>
+
+      <div class="notice" style="margin-top:12px;">
+        Guarda: inicio/fin + GPS inicio/fin + duración.
+      </div>
+    </div>
+
+    <!-- ULTIMAS -->
+    <div class="card">
+      <div class="row" style="justify-content:space-between;">
+        <b>Últimas visitas (del vendedor seleccionado)</b>
+        <button class="btn ghost" id="btnMyExcel">⬇ Excel</button>
+      </div>
+      <div id="myVisits" style="margin-top:10px;"></div>
+    </div>
+  </section>
+
+  <!-- HISTORIAL -->
+  <section id="view_hist" class="hide">
+    <div class="card">
+      <div class="grid three">
+        <div>
+          <label>Desde</label>
+          <input id="histFrom" type="date" />
+        </div>
+        <div>
+          <label>Hasta</label>
+          <input id="histTo" type="date" />
+        </div>
+        <div style="display:flex;align-items:flex-end;gap:10px;">
+          <button class="btn primary" id="btnLoadHist">Cargar</button>
+          <button class="btn ghost" id="btnHistExcel">⬇ Excel</button>
+        </div>
+      </div>
+      <div class="notice" style="margin-top:12px;">
+        El historial se filtra por el vendedor seleccionado.
+      </div>
+    </div>
+    <div class="card">
+      <b>Visitas</b>
+      <div id="histTable" style="margin-top:10px;"></div>
+    </div>
+  </section>
+
+  <!-- ADMIN -->
+  <section id="view_admin" class="hide">
+    <div class="card" id="adminGate">
+      <b>Admin</b>
+      <div class="mini" style="margin:6px 0 12px;">Protegido por PIN.</div>
+      <div class="grid two">
+        <div>
+          <label>PIN</label>
+          <input id="adminPin" type="password" inputmode="numeric" placeholder="••••••" />
+        </div>
+        <div style="display:flex;align-items:flex-end;gap:10px;">
+          <button class="btn dark" id="btnAdminEnter">Entrar</button>
+          <button class="btn ghost" id="btnAdminExit">Salir</button>
+        </div>
+      </div>
+      <div class="notice" style="margin-top:12px;">
+        Cambia el PIN en el código (const ADMIN_PIN).
+      </div>
+    </div>
+
+    <div class="card hide" id="adminPanel">
+      <div class="row" style="justify-content:space-between;">
+        <b>Admin – Visitas</b>
+        <div class="row">
+          <button class="btn ghost" id="btnAdminReload">🔄 Recargar</button>
+          <button class="btn ghost" id="btnAdminExcel">⬇ Excel</button>
+        </div>
+      </div>
+
+      <div class="grid three" style="margin-top:10px;">
+        <div>
+          <label>Desde</label>
+          <input id="adminFrom" type="date" />
+        </div>
+        <div>
+          <label>Hasta</label>
+          <input id="adminTo" type="date" />
+        </div>
+        <div>
+          <label>Motivo (opcional)</label>
+          <select id="adminReason">
+            <option value="">Todos</option>
+            <option>Entrega de producto</option>
+            <option>Cobranza</option>
+            <option>Negociación</option>
+            <option>Degustación</option>
+            <option>Cotización</option>
+            <option>Visita de seguimiento</option>
+            <option>Otro</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid three" style="margin-top:10px;">
+        <span class="pill">Registros: <b id="kCount">—</b></span>
+        <span class="pill">Prom. duración: <b id="kAvg">—</b></span>
+        <span class="pill">Última carga: <b id="kLast">—</b></span>
+      </div>
+
+      <div id="adminTable" style="margin-top:12px;"></div>
+
+      <div class="notice" style="margin-top:12px;">
+        <b>Mapa:</b> Admin muestra link aunque falte GPS final (usa END si existe, si no START).
+      </div>
+    </div>
+  </section>
+
+<script>
+/* =========================
+   CONFIG (CAMBIA SOLO ESTO)
+   ========================= */
+const SUPABASE_URL = "PEGA_AQUI_TU_SUPABASE_URL";
+const SUPABASE_ANON_KEY = "PEGA_AQUI_TU_SUPABASE_ANON_KEY";
+
+/* Tablas */
+const T_SELLERS = "toyo_sellers";
+const T_VISITS   = "toyo_visits";
+
+/* Admin PIN (cámbialo) */
+const ADMIN_PIN = "260129";
+
+/* =========================
+   INIT
+   ========================= */
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const $ = (id)=>document.getElementById(id);
+
+function setNet(){ $("net").textContent = navigator.onLine ? "Online" : "Offline"; }
+addEventListener("online", setNet);
+addEventListener("offline", setNet);
+setNet();
+
+function todayISO(){
+  const d=new Date(); const mm=String(d.getMonth()+1).padStart(2,"0"); const dd=String(d.getDate()).padStart(2,"0");
+  return `${d.getFullYear()}-${mm}-${dd}`;
+}
+function fmtDT(v){ try{return new Date(v).toLocaleString("es-MX")}catch(e){return String(v||"")} }
+function fmtNum(n){ return Number(n||0).toLocaleString("es-MX",{maximumFractionDigits:2}); }
+
+function exportExcel(name, rows){
+  const ws = XLSX.utils.json_to_sheet(rows || []);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Datos");
+  XLSX.writeFile(wb, `${name}_${new Date().toISOString().slice(0,10)}.xlsx`);
+}
+
+function deviceId(){
+  const k="toyo_device_id_v3";
+  let v=localStorage.getItem(k);
+  if(!v){ v="DEV-"+Math.random().toString(16).slice(2)+"-"+Date.now().toString(16); localStorage.setItem(k,v); }
+  return v;
+}
+
+/* =========================
+   MAP HELPERS (FIX)
+   END -> si no existe usa START
+   ========================= */
+function pickCoord(r){
+  const lat = r.end_lat ?? r.lat ?? r.start_lat;
+  const lng = r.end_lng ?? r.lng ?? r.start_lng;
+  if (lat === null || lat === undefined || lng === null || lng === undefined) return null;
+
+  const nlat = Number(lat);
+  const nlng = Number(lng);
+  if (Number.isNaN(nlat) || Number.isNaN(nlng)) return null;
+
+  return { lat: nlat, lng: nlng };
+}
+function mapUrl(r){
+  const c = pickCoord(r);
+  if(!c) return "";
+  return `https://www.google.com/maps?q=${c.lat},${c.lng}`;
+}
+
+/* =========================
+   BACKEND STATUS
+   ========================= */
+async function updateConnStatus(){
+  try{
+    const { error } = await sb.from(T_SELLERS).select("id").limit(1);
+    if(error) throw error;
+    $("apiStatus").innerHTML = `<span class="ok">OK</span>`;
+  }catch(e){
+    const msg = String(e?.message || e || "");
+    if(msg.toLowerCase().includes("invalid api key")){
+      $("apiStatus").innerHTML = `<span class="err">INVALID KEY</span>`;
+    }else{
+      $("apiStatus").innerHTML = `<span class="err">FAIL</span>`;
+    }
+  }
+}
+updateConnStatus();
+
+/* =========================
+   OFFLINE QUEUE
+   ========================= */
+const QKEY="toyo_queue_v1";
+const getQ=()=>{ try{return JSON.parse(localStorage.getItem(QKEY)||"[]")}catch(e){return []} };
+const setQ=(q)=>localStorage.setItem(QKEY, JSON.stringify(q));
+function pushQ(item){ const q=getQ(); q.unshift(item); setQ(q); }
+
+async function flushQ(){
+  if(!navigator.onLine) return alert("Sin internet.");
+  let q=getQ();
+  if(!q.length) return alert("No hay pendientes.");
+  const remaining=[];
+  for(const item of q){
+    try{
+      if(item.type==="visit"){
+        const { error } = await sb.from(T_VISITS).insert(item.payload);
+        if(error) throw error;
+      }
+    }catch(e){
+      remaining.push(item);
+    }
+  }
+  setQ(remaining);
+  alert("Pendientes: " + remaining.length);
+}
+$("btnFlush").onclick = flushQ;
+
+/* =========================
+   TABS
+   ========================= */
+function openTab(id){
+  document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active", t.dataset.tab===id));
+  $("view_visita").classList.toggle("hide", id!=="visita");
+  $("view_hist").classList.toggle("hide", id!=="hist");
+  $("view_admin").classList.toggle("hide", id!=="admin");
+
+  if(id==="visita") refreshMyVisits();
+}
+document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>openTab(t.dataset.tab));
+
+/* =========================
+   SELLERS
+   ========================= */
+let currentSeller = null; // {id, name}
+
+function setWho(){
+  $("sellerNow").textContent = currentSeller ? currentSeller.name : "—";
+  $("who").textContent = currentSeller ? `Vendedor: ${currentSeller.name}` : "Selecciona vendedor";
+}
+
+function loadSellerFromStorage(){
+  try{
+    const raw = localStorage.getItem("toyo_current_seller");
+    if(!raw) return;
+    currentSeller = JSON.parse(raw);
+  }catch(e){}
+  setWho();
+}
+
+function saveSellerToStorage(){
+  if(currentSeller) localStorage.setItem("toyo_current_seller", JSON.stringify(currentSeller));
+}
+
+async function loadSellers(){
+  $("sellerSel").innerHTML = `<option value="">Cargando…</option>`;
+  try{
+    const { data, error } = await sb
+      .from(T_SELLERS)
+      .select("id, name, active")
+      .eq("active", true)
+      .order("name", { ascending:true });
+
+    if(error) throw error;
+
+    const rows = data || [];
+    if(!rows.length){
+      $("sellerSel").innerHTML = `<option value="">(sin vendedores)</option>`;
+      return;
+    }
+
+    $("sellerSel").innerHTML = `<option value="">Selecciona…</option>` +
+      rows.map(r=>`<option value="${r.id}">${r.name}</option>`).join("");
+
+    // si ya había un seller guardado, seleccionarlo
+    if(currentSeller?.id){
+      $("sellerSel").value = currentSeller.id;
+    }
+  }catch(e){
+    $("sellerSel").innerHTML = `<option value="">(error al cargar)</option>`;
+    alert("No pude cargar vendedores: " + (e?.message || e));
+  }
+}
+
+$("btnReloadSellers").onclick = async ()=>{
+  await updateConnStatus();
+  await loadSellers();
+};
+
+$("btnUseSeller").onclick = ()=>{
+  const id = $("sellerSel").value;
+  const name = $("sellerSel").selectedOptions?.[0]?.textContent || "";
+  if(!id) return alert("Selecciona un vendedor.");
+  currentSeller = { id, name };
+  saveSellerToStorage();
+  setWho();
+  refreshMyVisits();
+  alert("✅ Vendedor seleccionado: " + name);
+};
+
+/* =========================
+   GPS + VISIT FLOW
+   ========================= */
+let current=null, timer=null;
+
+function getGeo(){
+  return new Promise((resolve,reject)=>{
+    if(!navigator.geolocation) return reject(new Error("Sin geolocalización"));
+    navigator.geolocation.getCurrentPosition(
+      p=>resolve({lat:p.coords.latitude,lng:p.coords.longitude,acc:p.coords.accuracy}),
+      e=>reject(new Error(e.message||"Error GPS")),
+      { enableHighAccuracy:true, timeout:15000, maximumAge:0 }
+    );
+  });
+}
+
+function clearVisit(){
+  current=null;
+  $("startInfo").textContent="—";
+  $("durInfo").textContent="—";
+  $("btnStart").disabled=false;
+  $("btnEnd").disabled=true;
+  if(timer){ clearInterval(timer); timer=null; }
+}
+
+$("btnClear").onclick=()=>{
+  $("client").value=""; $("reason").value=""; $("comments").value="";
+  clearVisit();
+};
+
+$("btnStart").onclick=async ()=>{
+  if(!currentSeller?.id) return alert("Primero selecciona un vendedor.");
+  const client=$("client").value.trim();
+  const reason=$("reason").value.trim();
+  if(!client) return alert("Escribe el cliente.");
+  if(!reason) return alert("Selecciona el motivo.");
+
+  try{
+    $("btnStart").disabled=true;
+    const g=await getGeo();
+    const start=new Date();
+    current={
+      seller_id: currentSeller.id,
+      seller_name: currentSeller.name,
+      client_name: client,
+      reason,
+      comments: $("comments").value.trim(),
+      start_ts: start.toISOString(),
+      start_ms: Date.now(),
+      start_lat: g.lat, start_lng: g.lng, start_acc: g.acc,
+      device_id: deviceId()
+    };
+
+    $("startInfo").textContent = `${fmtDT(current.start_ts)} | ±${Math.round(g.acc)}m`;
+    $("btnEnd").disabled=false;
+
+    timer=setInterval(()=>{
+      if(!current) return;
+      const min=Math.max(0, Math.round((Date.now()-current.start_ms)/60000));
+      $("durInfo").textContent = `${min} min`;
+    },1000);
+  }catch(e){
+    $("btnStart").disabled=false;
+    alert(e.message || e);
+  }
+};
+
+$("btnEnd").onclick=async ()=>{
+  if(!current) return;
+  try{
+    $("btnEnd").disabled=true;
+    const g=await getGeo();
+    const end=new Date();
+    const duration_min=Math.max(0, Math.round((Date.now()-current.start_ms)/60000));
+
+    const payload={
+      seller_id: current.seller_id,
+      seller_name: current.seller_name,
+      client_name: current.client_name,
+      reason: current.reason,
+      comments: current.comments,
+      start_ts: current.start_ts,
+      end_ts: end.toISOString(),
+      duration_min,
+      start_lat: current.start_lat,
+      start_lng: current.start_lng,
+      start_acc: current.start_acc,
+      end_lat: g.lat,
+      end_lng: g.lng,
+      end_acc: g.acc,
+      device_id: current.device_id
+    };
+
+    const { error } = await sb.from(T_VISITS).insert(payload);
+
+    if(error){
+      pushQ({type:"visit", payload});
+      alert("Guardada local (pendiente de envío).");
+    }else{
+      alert("✅ Visita guardada.");
+    }
+
+    clearVisit();
+    refreshMyVisits();
+  }catch(e){
+    alert(e.message || e);
+    $("btnEnd").disabled=false;
+  }
+};
+
+/* =========================
+   LISTADOS
+   ========================= */
+async function refreshMyVisits(){
+  if(!currentSeller?.id){
+    $("myVisits").innerHTML = `<div class="mini">Selecciona un vendedor.</div>`;
+    return;
+  }
+
+  const { data, error } = await sb
+    .from(T_VISITS)
+    .select("created_at, client_name, reason, duration_min, start_lat, start_lng, end_lat, end_lng")
+    .eq("seller_id", currentSeller.id)
+    .order("created_at", { ascending:false })
+    .limit(20);
+
+  if(error){
+    $("myVisits").innerHTML = `<div class="mini">No se pudo cargar: ${error.message}</div>`;
+    return;
+  }
+
+  if(!data?.length){
+    $("myVisits").innerHTML = `<div class="mini">Sin visitas.</div>`;
+    return;
+  }
+
+  window.__myVisits = data;
+
+  let html=`<table><thead><tr>
+    <th>Fecha</th><th>Cliente</th><th>Motivo</th><th class="right">Dur</th><th>Mapa</th>
+  </tr></thead><tbody>`;
+
+  data.forEach(r=>{
+    const map = mapUrl(r);
+    html += `<tr>
+      <td>${fmtDT(r.created_at)}</td>
+      <td>${r.client_name}</td>
+      <td>${r.reason}</td>
+      <td class="right">${r.duration_min ?? ""}</td>
+      <td>${map ? `<a href="${map}" target="_blank" rel="noopener">Ver</a>` : "—"}</td>
+    </tr>`;
+  });
+
+  html += `</tbody></table>`;
+  $("myVisits").innerHTML = html;
+}
+
+$("btnMyExcel").onclick=()=>{
+  exportExcel("Visitas_Vendedor", (window.__myVisits||[]).map(r=>({ ...r, map_url: mapUrl(r) })));
+};
+
+/* HISTORIAL */
+$("histFrom").value = todayISO();
+$("histTo").value = todayISO();
+$("btnLoadHist").onclick = loadHist;
+$("btnHistExcel").onclick = ()=> exportExcel("Historial_Visitas", (window.__histRows||[]).map(r=>({ ...r, map_url: mapUrl(r) })));
+
+async function loadHist(){
+  if(!currentSeller?.id) return alert("Selecciona un vendedor.");
+
+  const from=$("histFrom").value;
+  const to=$("histTo").value;
+  const toD=new Date(to); toD.setDate(toD.getDate()+1);
+  const toPlus=toD.toISOString().slice(0,10);
+
+  const { data, error } = await sb
+    .from(T_VISITS)
+    .select("created_at, client_name, reason, duration_min, start_lat, start_lng, end_lat, end_lng")
+    .eq("seller_id", currentSeller.id)
+    .gte("created_at", from)
+    .lt("created_at", toPlus)
+    .order("created_at", {ascending:false});
+
+  if(error){ $("histTable").innerHTML = `<div class="mini">${error.message}</div>`; return; }
+
+  window.__histRows = data || [];
+
+  if(!data?.length){
+    $("histTable").innerHTML = `<div class="mini">Sin registros.</div>`; return;
+  }
+
+  let html=`<table><thead><tr>
+    <th>Fecha</th><th>Cliente</th><th>Motivo</th><th class="right">Dur</th><th>Mapa</th>
+  </tr></thead><tbody>`;
+
+  data.forEach(r=>{
+    const map = mapUrl(r);
+    html += `<tr>
+      <td>${fmtDT(r.created_at)}</td>
+      <td>${r.client_name}</td>
+      <td>${r.reason}</td>
+      <td class="right">${r.duration_min ?? ""}</td>
+      <td>${map ? `<a href="${map}" target="_blank" rel="noopener">Ver</a>` : "—"}</td>
+    </tr>`;
+  });
+
+  html+=`</tbody></table>`;
+  $("histTable").innerHTML=html;
+}
+
+/* =========================
+   ADMIN (PIN)
+   ========================= */
+let adminOk = false;
+
+$("btnAdminEnter").onclick = ()=>{
+  const pin = ($("adminPin").value || "").trim();
+  if(pin !== ADMIN_PIN) return alert("PIN incorrecto.");
+  adminOk = true;
+  $("adminGate").classList.add("hide");
+  $("adminPanel").classList.remove("hide");
+  adminReload();
+};
+
+$("btnAdminExit").onclick = ()=>{
+  adminOk = false;
+  $("adminPin").value = "";
+  $("adminGate").classList.remove("hide");
+  $("adminPanel").classList.add("hide");
+};
+
+$("adminFrom").value = todayISO();
+$("adminTo").value = todayISO();
+$("btnAdminReload").onclick = adminReload;
+$("btnAdminExcel").onclick = ()=>{
+  exportExcel("Admin_Visitas", (window.__adminRows||[]).map(r=>({ ...r, map_url: mapUrl(r) })));
+};
+
+async function adminReload(){
+  if(!adminOk) return;
+
+  const from=$("adminFrom").value;
+  const to=$("adminTo").value;
+  const reason=$("adminReason").value;
+
+  const toD=new Date(to); toD.setDate(toD.getDate()+1);
+  const toPlus=toD.toISOString().slice(0,10);
+
+  let q = sb
+    .from(T_VISITS)
+    .select("created_at, seller_name, client_name, reason, duration_min, start_lat, start_lng, end_lat, end_lng")
+    .gte("created_at", from)
+    .lt("created_at", toPlus)
+    .order("created_at", {ascending:false})
+    .limit(300);
+
+  if(reason) q = q.eq("reason", reason);
+
+  const { data, error } = await q;
+
+  if(error){
+    $("adminTable").innerHTML = `<div class="mini">${error.message}</div>`;
+    return;
+  }
+
+  window.__adminRows = data || [];
+  const count = data?.length || 0;
+  const avg = count ? (data.reduce((a,r)=>a+Number(r.duration_min||0),0)/count) : 0;
+
+  $("kCount").textContent = count;
+  $("kAvg").textContent = avg.toFixed(1) + " min";
+  $("kLast").textContent = new Date().toLocaleTimeString("es-MX");
+
+  if(!count){
+    $("adminTable").innerHTML = `<div class="mini">Sin registros con ese filtro.</div>`;
+    return;
+  }
+
+  let html=`<table><thead><tr>
+    <th>Fecha</th><th>Vendedor</th><th>Cliente</th><th>Motivo</th><th class="right">Dur</th><th>Mapa</th>
+  </tr></thead><tbody>`;
+
+  data.forEach(r=>{
+    const map = mapUrl(r); // FIX AQUI ✅
+    html += `<tr>
+      <td>${fmtDT(r.created_at)}</td>
+      <td>${r.seller_name}</td>
+      <td>${r.client_name}</td>
+      <td>${r.reason}</td>
+      <td class="right">${r.duration_min ?? ""}</td>
+      <td>${map ? `<a href="${map}" target="_blank" rel="noopener">Ver</a>` : "—"}</td>
+    </tr>`;
+  });
+
+  html += `</tbody></table>`;
+  $("adminTable").innerHTML=html;
+}
+
+/* =========================
+   BOOT
+   ========================= */
+loadSellerFromStorage();
+loadSellers();
+setWho();
+clearVisit();
+</script>
+
+<script>
+  // Service worker (PWA) opcional
+  if("serviceWorker" in navigator){
+    navigator.serviceWorker.register("./sw.js").catch(()=>{});
+  }
+</script>
+
+</body>
+</html>
