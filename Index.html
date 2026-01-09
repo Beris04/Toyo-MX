@@ -3,13 +3,16 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Toyo – Seguimiento (Simple)</title>
+  <title>Toyo – Visitas (Simple)</title>
 
   <link rel="manifest" href="./manifest.webmanifest">
   <meta name="theme-color" content="#0046BE">
 
-  <!-- Supabase JS (una sola vez) -->
+  <!-- Supabase JS (UMD) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
+  <!-- SheetJS (Excel export) -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
   <style>
     :root{
@@ -25,10 +28,10 @@
     .brand div{color:var(--muted);font-size:12px;margin-top:2px}
     .pill{border:1px solid var(--border);background:#fff;border-radius:999px;padding:8px 10px;font-size:12px;color:var(--muted);font-weight:800}
     .pill b{color:var(--text)}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px;box-shadow:0 6px 18px rgba(15,23,42,.06);margin-bottom:12px}
     .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
     .tab{border:1px solid var(--border);background:#fff;padding:10px 12px;border-radius:12px;font-weight:900;cursor:pointer;user-select:none}
     .tab.active{background:var(--blue);border-color:var(--blue);color:#fff}
-    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px;box-shadow:0 6px 18px rgba(15,23,42,.06);margin-bottom:12px}
     .grid{display:grid;grid-template-columns:1fr;gap:10px}
     @media(min-width:900px){.grid.two{grid-template-columns:1fr 1fr}.grid.three{grid-template-columns:1fr 1fr 1fr}}
     label{display:block;font-size:12px;color:var(--muted);font-weight:900;margin-bottom:6px}
@@ -58,39 +61,42 @@
 
   <div class="top">
     <div class="brand">
-      <b>Toyo – Seguimiento</b>
+      <b>Toyo – Seguimiento (Modo Simple)</b>
       <div id="who">Selecciona vendedor</div>
     </div>
     <div class="row">
       <span class="pill">Red: <b id="net">—</b></span>
       <span class="pill">Backend: <b id="apiStatus">—</b></span>
-      <button class="btn ghost" id="btnResetSeller">Cambiar vendedor</button>
+      <button class="btn ghost" id="btnReload">Recargar</button>
     </div>
   </div>
 
-  <div class="tabs" id="tabs"></div>
+  <div class="card">
+    <b>Vendedor</b>
+    <div class="mini" style="margin-top:6px;">Modo simple: sin login. Elige vendedor y registra visitas.</div>
+    <div class="grid two" style="margin-top:10px;">
+      <div>
+        <label>Selecciona vendedor</label>
+        <select id="sellerSelect">
+          <option value="">Cargando…</option>
+        </select>
+        <div class="mini">Si sale vacío: no conectó a Supabase o no existen tablas/policies.</div>
+      </div>
+      <div style="display:flex;align-items:flex-end;gap:10px;">
+        <button class="btn primary" id="btnUseSeller">Usar este vendedor</button>
+        <button class="btn ghost" id="btnRefreshSellers">Recargar vendedores</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="tabs" id="tabs">
+    <div class="tab active" data-tab="visita">🧭 Visita</div>
+    <div class="tab" data-tab="hist">📆 Historial</div>
+    <div class="tab" data-tab="admin">🔒 Admin</div>
+  </div>
 
   <!-- VISITA -->
   <section id="view_visita">
-    <div class="card">
-      <b>Vendedor</b>
-      <div class="mini" style="margin:6px 0 12px;">Modo simple: sin login. Elige vendedor y registra visitas.</div>
-
-      <div class="grid two">
-        <div>
-          <label>Selecciona vendedor</label>
-          <select id="sellerSelect">
-            <option value="">Cargando…</option>
-          </select>
-          <div class="mini" id="sellerHint">Si sale vacío: no conectó a Supabase o no existen tablas/policies.</div>
-        </div>
-        <div style="display:flex;align-items:flex-end;gap:10px;">
-          <button class="btn primary" id="btnUseSeller">Usar este vendedor</button>
-          <button class="btn ghost" id="btnReloadSellers">Recargar</button>
-        </div>
-      </div>
-    </div>
-
     <div class="card">
       <b>Registrar visita</b>
 
@@ -120,10 +126,9 @@
       </div>
 
       <div class="row" style="margin-top:10px;">
-        <button class="btn dark" id="btnStart">▶ Iniciar (GPS)</button>
+        <button class="btn primary" id="btnStart">▶ Iniciar (GPS)</button>
         <button class="btn danger" id="btnEnd" disabled>■ Terminar (GPS + Guardar)</button>
         <button class="btn ghost" id="btnClear">Limpiar</button>
-        <button class="btn ghost" id="btnFlush">Reintentar envío</button>
       </div>
 
       <div class="grid two" style="margin-top:12px;">
@@ -132,14 +137,14 @@
       </div>
 
       <div class="notice" style="margin-top:12px;">
-        Para el mapa, se guarda GPS de inicio y fin. Si “Ver mapa” sale en blanco, es porque el celular/navegador no dio permisos de ubicación.
+        Se guarda ubicación (GPS) al iniciar y al terminar. En Admin se muestra <b>Mapa</b>.
       </div>
     </div>
 
     <div class="card">
       <div class="row" style="justify-content:space-between;">
-        <b>Últimas visitas (del vendedor seleccionado)</b>
-        <button class="btn ghost" id="btnMyCSV">⬇ CSV</button>
+        <b>Últimas visitas (del vendedor)</b>
+        <button class="btn ghost" id="btnMyExcel">⬇ Excel</button>
       </div>
       <div id="myVisits" style="margin-top:10px;"></div>
     </div>
@@ -159,32 +164,42 @@
         </div>
         <div style="display:flex;align-items:flex-end;gap:10px;">
           <button class="btn primary" id="btnLoadHist">Cargar</button>
-          <button class="btn ghost" id="btnHistCSV">⬇ CSV</button>
+          <button class="btn ghost" id="btnHistExcel">⬇ Excel</button>
         </div>
       </div>
-
-      <div class="row" style="margin-top:10px;">
-        <label style="display:flex;gap:8px;align-items:center;margin:0;">
-          <input type="checkbox" id="histOnlyMine" checked style="width:auto;">
-          <span class="mini">Solo vendedor seleccionado</span>
-        </label>
-      </div>
     </div>
-
     <div class="card">
-      <b>Visitas</b>
+      <b>Visitas (rango)</b>
       <div id="histTable" style="margin-top:10px;"></div>
     </div>
   </section>
 
   <!-- ADMIN -->
   <section id="view_admin" class="hide">
-    <div class="card">
+    <div class="card" id="adminLockCard">
+      <b>Admin</b>
+      <div class="mini" style="margin-top:6px;">Ingresa PIN para ver tablero.</div>
+      <div class="grid two" style="margin-top:10px;">
+        <div>
+          <label>PIN</label>
+          <input id="adminPin" type="password" placeholder="•••••" />
+        </div>
+        <div style="display:flex;align-items:flex-end;gap:10px;">
+          <button class="btn dark" id="btnUnlock">Entrar</button>
+          <button class="btn ghost" id="btnLock">Cerrar</button>
+        </div>
+      </div>
+      <div class="notice" style="margin-top:12px;">
+        Este PIN es solo para la app (modo simple). Si quieres seguridad real, lo hacemos con Auth.
+      </div>
+    </div>
+
+    <div class="card hide" id="adminPanel">
       <div class="row" style="justify-content:space-between;">
-        <b>Admin – Visitas</b>
+        <b>Admin – Visitas (con ubicación)</b>
         <div class="row">
           <button class="btn ghost" id="btnAdminReload">🔄 Recargar</button>
-          <button class="btn ghost" id="btnAdminCSV">⬇ CSV</button>
+          <button class="btn ghost" id="btnAdminExcel">⬇ Excel</button>
         </div>
       </div>
 
@@ -198,9 +213,16 @@
           <input id="adminTo" type="date" />
         </div>
         <div>
-          <label>Filtrar por vendedor (opcional)</label>
-          <select id="adminSeller">
+          <label>Motivo (opcional)</label>
+          <select id="adminReason">
             <option value="">Todos</option>
+            <option>Entrega de producto</option>
+            <option>Cobranza</option>
+            <option>Negociación</option>
+            <option>Degustación</option>
+            <option>Cotización</option>
+            <option>Visita de seguimiento</option>
+            <option>Otro</option>
           </select>
         </div>
       </div>
@@ -212,10 +234,6 @@
       </div>
 
       <div id="adminTable" style="margin-top:12px;"></div>
-
-      <div class="notice" style="margin-top:12px;">
-        Nota: este PIN protege solo la UI. Si quieres seguridad real (que nadie vea admin), se requiere login o RPC + RLS más estricta.
-      </div>
     </div>
   </section>
 
@@ -223,14 +241,16 @@
 /* =========================
    CONFIG (CAMBIA SOLO ESTO)
    ========================= */
-const SUPABASE_URL = "https://alprfxtjoyszkqvoeqkb.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFscHJmeHRqb3lzemtxdm9lcWtiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc0NDg4MzUsImV4cCI6MjA4MzAyNDgzNX0.-nAPH5bv0e7oDvySgY9G5B83_afn34ByjmjnTlfiqqI";
-const ADMIN_PIN = "1234"; // <-- cámbialo
+const SUPABASE_URL = "PEGA_AQUI_TU_PROJECT_URL";
+const SUPABASE_ANON_KEY = "PEGA_AQUI_TU_ANON_PUBLIC_KEY";
+
+/* PIN Admin (solo UI) */
+const ADMIN_PIN = "26019"; // cámbialo si quieres
 
 /* =========================
    INIT
    ========================= */
-const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const $ = (id)=>document.getElementById(id);
 
 function setNet(){ $("net").textContent = navigator.onLine ? "Online" : "Offline"; }
@@ -241,25 +261,13 @@ function todayISO(){
   return `${d.getFullYear()}-${mm}-${dd}`;
 }
 function fmtDT(v){ try{return new Date(v).toLocaleString("es-MX")}catch(e){return String(v||"")} }
+function fmtNum(n){ return Number(n||0).toLocaleString("es-MX",{maximumFractionDigits:2}); }
 
-function csvDownload(filename, rows){
-  const arr = rows || [];
-  if(!arr.length){ alert("No hay datos."); return; }
-  const headers = Object.keys(arr[0]);
-  const esc = (v)=> `"${String(v ?? "").replaceAll('"','""')}"`;
-  const lines = [
-    headers.join(","),
-    ...arr.map(r => headers.map(h => esc(r[h])).join(","))
-  ];
-  const blob = new Blob([lines.join("\n")], {type:"text/csv;charset=utf-8"});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
+function exportExcel(name, rows){
+  const ws = XLSX.utils.json_to_sheet(rows || []);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Datos");
+  XLSX.writeFile(wb, `${name}_${new Date().toISOString().slice(0,10)}.xlsx`);
 }
 
 function deviceId(){
@@ -269,16 +277,11 @@ function deviceId(){
   return v;
 }
 
-/* =========================
-   BACKEND STATUS
-   ========================= */
 async function updateConnStatus(){
   try{
     const { error } = await sb.from("toyo_sellers").select("id").limit(1);
     if(error){
-      const msg = (error.message||"").toLowerCase();
-      if(msg.includes("invalid api key")) $("apiStatus").innerHTML = `<span class="err">INVALID KEY</span>`;
-      else $("apiStatus").innerHTML = `<span class="err">FAIL</span>`;
+      $("apiStatus").innerHTML = `<span class="err">${(error.message||"FAIL").includes("Invalid API key") ? "INVALID KEY" : "FAIL"}</span>`;
       return;
     }
     $("apiStatus").innerHTML = `<span class="ok">OK</span>`;
@@ -286,155 +289,82 @@ async function updateConnStatus(){
     $("apiStatus").innerHTML = `<span class="err">FAIL</span>`;
   }
 }
-updateConnStatus();
-
-/* =========================
-   OFFLINE QUEUE
-   ========================= */
-const QKEY="toyo_queue_simple_v1";
-const getQ=()=>{ try{return JSON.parse(localStorage.getItem(QKEY)||"[]")}catch(e){return []} };
-const setQ=(q)=>localStorage.setItem(QKEY, JSON.stringify(q));
-function pushQ(item){ const q=getQ(); q.unshift(item); setQ(q); }
-
-async function flushQ(){
-  if(!navigator.onLine) return alert("Sin internet.");
-  let q=getQ();
-  if(!q.length) return alert("No hay pendientes.");
-  const remaining=[];
-  for(const item of q){
-    try{
-      const { error } = await sb.from("toyo_visits").insert(item.payload);
-      if(error) throw error;
-    }catch(e){
-      remaining.push(item);
-    }
-  }
-  setQ(remaining);
-  alert("Pendientes: " + remaining.length);
-}
-$("btnFlush").onclick=flushQ;
-
-/* =========================
-   TABS
-   ========================= */
-function setTabs(){
-  const tabs = [
-    {id:"visita", label:"🧭 Visita"},
-    {id:"hist", label:"📆 Historial"},
-    {id:"admin", label:"🔒 Admin"}
-  ];
-  $("tabs").innerHTML = "";
-  for(const t of tabs){
-    const el=document.createElement("div");
-    el.className="tab";
-    el.textContent=t.label;
-    el.onclick=()=>openTab(t.id);
-    $("tabs").appendChild(el);
-  }
-  openTab("visita");
-}
-
-function openTab(id){
-  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
-  [...$("tabs").children].forEach(x=>{
-    const tx=x.textContent;
-    if((tx.includes("Visita") && id==="visita") ||
-       (tx.includes("Historial") && id==="hist") ||
-       (tx.includes("Admin") && id==="admin")){
-      x.classList.add("active");
-    }
-  });
-
-  $("view_visita").classList.toggle("hide", id!=="visita");
-  $("view_hist").classList.toggle("hide", id!=="hist");
-  $("view_admin").classList.toggle("hide", id!=="admin");
-
-  if(id==="visita") refreshMyVisits();
-  if(id==="hist") loadHist();
-  if(id==="admin") adminGate();
-}
+$("btnReload").onclick = ()=>{ location.reload(); };
 
 /* =========================
    SELLERS
    ========================= */
-const SELLER_KEY="toyo_selected_seller_v1";
-let selectedSeller=null;
-
-function loadSelectedSeller(){
-  try{ selectedSeller = JSON.parse(localStorage.getItem(SELLER_KEY)||"null"); }catch(e){ selectedSeller=null; }
-  if(selectedSeller?.id && selectedSeller?.name){
-    $("who").textContent = selectedSeller.name;
-  }else{
-    $("who").textContent = "Selecciona vendedor";
-  }
-}
-
-function saveSelectedSeller(id, name){
-  selectedSeller = {id, name};
-  localStorage.setItem(SELLER_KEY, JSON.stringify(selectedSeller));
-  $("who").textContent = name;
-  refreshMyVisits();
-}
-
-$("btnResetSeller").onclick=()=>{
-  localStorage.removeItem(SELLER_KEY);
-  selectedSeller=null;
-  loadSelectedSeller();
-  alert("Listo: selecciona otro vendedor.");
-};
+let currentSeller = null;
 
 async function loadSellers(){
-  $("sellerSelect").innerHTML = `<option value="">Cargando…</option>`;
-  try{
-    const { data, error } = await sb
-      .from("toyo_sellers")
-      .select("id,name,active")
-      .eq("active", true)
-      .order("name", {ascending:true})
-      .limit(500);
+  await updateConnStatus();
+  const sel = $("sellerSelect");
+  sel.innerHTML = `<option value="">Cargando…</option>`;
 
-    if(error) throw error;
+  const { data, error } = await sb
+    .from("toyo_sellers")
+    .select("id, name, active")
+    .eq("active", true)
+    .order("name", { ascending:true });
 
-    if(!data?.length){
-      $("sellerSelect").innerHTML = `<option value="">No hay vendedores</option>`;
-      return;
-    }
-
-    $("sellerSelect").innerHTML = `<option value="">Selecciona…</option>` + data.map(s=>(
-      `<option value="${s.id}">${s.name}</option>`
-    )).join("");
-
-    // para Admin filter
-    $("adminSeller").innerHTML = `<option value="">Todos</option>` + data.map(s=>(
-      `<option value="${s.id}">${s.name}</option>`
-    )).join("");
-
-    // si ya había vendedor guardado, lo preselecciona
-    if(selectedSeller?.id){
-      $("sellerSelect").value = selectedSeller.id;
-    }
-
-  }catch(e){
-    $("sellerSelect").innerHTML = `<option value="">(Error) Revisa URL/KEY o policies</option>`;
-    alert("No pude cargar vendedores: " + (e.message||e));
+  if(error){
+    sel.innerHTML = `<option value="">Error: ${error.message}</option>`;
+    alert("No pude cargar vendedores: " + error.message);
+    return;
   }
+
+  if(!data?.length){
+    sel.innerHTML = `<option value="">Sin vendedores</option>`;
+    return;
+  }
+
+  sel.innerHTML = `<option value="">Selecciona…</option>` + data.map(r=>`<option value="${r.id}">${r.name}</option>`).join("");
 }
 
-$("btnReloadSellers").onclick=async ()=>{ await updateConnStatus(); await loadSellers(); };
+$("btnRefreshSellers").onclick = loadSellers;
 
-$("btnUseSeller").onclick=()=>{
+$("btnUseSeller").onclick = async ()=>{
   const id = $("sellerSelect").value;
   if(!id) return alert("Selecciona un vendedor.");
   const name = $("sellerSelect").selectedOptions[0].textContent;
-  saveSelectedSeller(id, name);
+  currentSeller = { id, name };
+  localStorage.setItem("toyo_current_seller", JSON.stringify(currentSeller));
+  $("who").textContent = `Vendedor: ${name}`;
+  await refreshMyVisits();
   alert("✅ Vendedor seleccionado: " + name);
 };
 
-/* =========================
-   GPS / VISIT FLOW
-   ========================= */
-let current=null, timer=null;
+function restoreSeller(){
+  try{
+    const v = JSON.parse(localStorage.getItem("toyo_current_seller") || "null");
+    if(v?.id && v?.name){
+      currentSeller = v;
+      $("who").textContent = `Vendedor: ${v.name}`;
+    }
+  }catch(e){}
+}
 
+/* =========================
+   TABS
+   ========================= */
+document.querySelectorAll(".tab").forEach(t=>{
+  t.onclick = ()=>{
+    document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+    t.classList.add("active");
+
+    const id = t.dataset.tab;
+    ["visita","hist","admin"].forEach(v=>{
+      $("view_"+v).classList.toggle("hide", v!==id);
+    });
+
+    if(id==="hist") { $("histFrom").value = todayISO(); $("histTo").value = todayISO(); }
+    if(id==="admin") { /* nada */ }
+  };
+});
+
+/* =========================
+   GPS
+   ========================= */
 function getGeo(){
   return new Promise((resolve,reject)=>{
     if(!navigator.geolocation) return reject(new Error("Sin geolocalización"));
@@ -445,6 +375,11 @@ function getGeo(){
     );
   });
 }
+
+/* =========================
+   VISIT FLOW
+   ========================= */
+let current=null, timer=null;
 
 function clearVisit(){
   current=null;
@@ -461,7 +396,7 @@ $("btnClear").onclick=()=>{
 };
 
 $("btnStart").onclick=async ()=>{
-  if(!selectedSeller?.id) return alert("Primero selecciona vendedor.");
+  if(!currentSeller) return alert("Primero selecciona vendedor.");
   const client=$("client").value.trim();
   const reason=$("reason").value.trim();
   if(!client) return alert("Escribe el cliente.");
@@ -472,15 +407,15 @@ $("btnStart").onclick=async ()=>{
     const g=await getGeo();
     const start=new Date();
     current={
-      seller_id:selectedSeller.id,
-      seller_name:selectedSeller.name,
-      client_name:client,
+      seller_id: currentSeller.id,
+      seller_name: currentSeller.name,
+      client_name: client,
       reason,
-      comments:$("comments").value.trim(),
-      start_ts:start.toISOString(),
-      start_ms:Date.now(),
+      comments: $("comments").value.trim(),
+      start_ts: start.toISOString(),
+      start_ms: Date.now(),
       start_lat:g.lat, start_lng:g.lng, start_acc:g.acc,
-      device_id:deviceId()
+      device_id: deviceId()
     };
     $("startInfo").textContent = `${fmtDT(current.start_ts)} | ±${Math.round(g.acc)}m`;
     $("btnEnd").disabled=false;
@@ -525,12 +460,12 @@ $("btnEnd").onclick=async ()=>{
 
     const { error } = await sb.from("toyo_visits").insert(payload);
     if(error){
-      pushQ({type:"visit", payload});
-      alert("Guardada local (pendiente de envío).");
-    }else{
-      alert("✅ Visita guardada.");
+      alert("No se pudo guardar: " + error.message);
+      $("btnEnd").disabled=false;
+      return;
     }
 
+    alert("✅ Visita guardada.");
     clearVisit();
     refreshMyVisits();
 
@@ -540,41 +475,39 @@ $("btnEnd").onclick=async ()=>{
   }
 };
 
-/* =========================
-   VISITS (MY)
-   ========================= */
+/* Render seller visits */
 async function refreshMyVisits(){
-  if(!selectedSeller?.id){
-    $("myVisits").innerHTML = `<div class="mini">Selecciona un vendedor para ver sus visitas.</div>`;
+  if(!currentSeller){
+    $("myVisits").innerHTML = `<div class="mini">Selecciona vendedor primero.</div>`;
     return;
   }
 
   const { data, error } = await sb
     .from("toyo_visits")
-    .select("id, created_at, client_name, reason, duration_min, start_lat, start_lng, end_lat, end_lng")
-    .eq("seller_id", selectedSeller.id)
+    .select("id, created_at, client_name, reason, duration_min, end_lat, end_lng, start_lat, start_lng")
+    .eq("seller_id", currentSeller.id)
     .order("created_at", { ascending:false })
-    .limit(30);
+    .limit(20);
 
   if(error){
     $("myVisits").innerHTML = `<div class="mini">No se pudo cargar: ${error.message}</div>`;
     return;
   }
 
-  window.__myVisits = data || [];
-
   if(!data?.length){
     $("myVisits").innerHTML = `<div class="mini">Sin visitas.</div>`;
     return;
   }
+
+  window.__myVisits = data;
 
   let html=`<table><thead><tr>
     <th>Fecha</th><th>Cliente</th><th>Motivo</th><th class="right">Dur</th><th>Mapa</th>
   </tr></thead><tbody>`;
 
   data.forEach(r=>{
-    const lat = (r.end_lat ?? r.start_lat);
-    const lng = (r.end_lng ?? r.start_lng);
+    const lat = r.end_lat ?? r.start_lat;
+    const lng = r.end_lng ?? r.start_lng;
     const map = (lat && lng) ? `https://www.google.com/maps?q=${lat},${lng}` : "";
     html += `<tr>
       <td>${fmtDT(r.created_at)}</td>
@@ -589,7 +522,7 @@ async function refreshMyVisits(){
   $("myVisits").innerHTML = html;
 }
 
-$("btnMyCSV").onclick=()=> csvDownload("Mis_Visitas.csv", window.__myVisits || []);
+$("btnMyExcel").onclick=()=> exportExcel("Mis_Visitas", window.__myVisits || []);
 
 /* =========================
    HISTORIAL
@@ -597,30 +530,22 @@ $("btnMyCSV").onclick=()=> csvDownload("Mis_Visitas.csv", window.__myVisits || [
 $("histFrom").value = todayISO();
 $("histTo").value = todayISO();
 
-$("btnLoadHist").onclick=loadHist;
-$("btnHistCSV").onclick=()=> csvDownload("Historial_Visitas.csv", window.__histRows || []);
+$("btnLoadHist").onclick = loadHist;
+$("btnHistExcel").onclick=()=> exportExcel("Historial_Visitas", window.__histRows || []);
 
 async function loadHist(){
   const from=$("histFrom").value;
   const to=$("histTo").value;
-  const onlyMine = $("histOnlyMine").checked;
-
   const toD=new Date(to); toD.setDate(toD.getDate()+1);
   const toPlus=toD.toISOString().slice(0,10);
 
-  let q = sb
+  const { data, error } = await sb
     .from("toyo_visits")
-    .select("created_at, seller_name, client_name, reason, duration_min, start_lat, start_lng, end_lat, end_lng")
+    .select("created_at, seller_name, client_name, reason, duration_min, end_lat, end_lng, start_lat, start_lng")
     .gte("created_at", from)
     .lt("created_at", toPlus)
     .order("created_at", {ascending:false})
-    .limit(300);
-
-  if(onlyMine && selectedSeller?.id){
-    q = q.eq("seller_id", selectedSeller.id);
-  }
-
-  const { data, error } = await q;
+    .limit(500);
 
   if(error){ $("histTable").innerHTML = `<div class="mini">${error.message}</div>`; return; }
   window.__histRows = data || [];
@@ -634,8 +559,8 @@ async function loadHist(){
   </tr></thead><tbody>`;
 
   data.forEach(r=>{
-    const lat = (r.end_lat ?? r.start_lat);
-    const lng = (r.end_lng ?? r.start_lng);
+    const lat = r.end_lat ?? r.start_lat;
+    const lng = r.end_lng ?? r.start_lng;
     const map=(lat && lng) ? `https://www.google.com/maps?q=${lat},${lng}` : "";
     html += `<tr>
       <td>${fmtDT(r.created_at)}</td>
@@ -653,42 +578,50 @@ async function loadHist(){
 /* =========================
    ADMIN (PIN UI)
    ========================= */
+function isAdminUnlocked(){
+  return sessionStorage.getItem("toyo_admin_ok")==="1";
+}
+function lockAdmin(){
+  sessionStorage.removeItem("toyo_admin_ok");
+  $("adminPanel").classList.add("hide");
+  $("adminLockCard").classList.remove("hide");
+}
+function unlockAdmin(){
+  sessionStorage.setItem("toyo_admin_ok","1");
+  $("adminLockCard").classList.add("hide");
+  $("adminPanel").classList.remove("hide");
+}
+
+$("btnUnlock").onclick=()=>{
+  const p = $("adminPin").value.trim();
+  if(p !== ADMIN_PIN) return alert("PIN incorrecto.");
+  unlockAdmin();
+  adminReload();
+};
+$("btnLock").onclick=lockAdmin;
+
 $("adminFrom").value = todayISO();
 $("adminTo").value = todayISO();
 $("btnAdminReload").onclick=adminReload;
-$("btnAdminCSV").onclick=()=> csvDownload("Admin_Visitas.csv", window.__adminRows || []);
-
-function adminGate(){
-  const ok = sessionStorage.getItem("toyo_admin_ok")==="1";
-  if(ok){ adminReload(); return; }
-  const pin = prompt("PIN Admin:");
-  if(pin === null) { openTab("visita"); return; }
-  if(pin !== ADMIN_PIN){
-    alert("PIN incorrecto.");
-    openTab("visita");
-    return;
-  }
-  sessionStorage.setItem("toyo_admin_ok","1");
-  adminReload();
-}
+$("btnAdminExcel").onclick=()=> exportExcel("Admin_Visitas", window.__adminRows || []);
 
 async function adminReload(){
   const from=$("adminFrom").value;
   const to=$("adminTo").value;
-  const seller=$("adminSeller").value;
+  const reason=$("adminReason").value;
 
   const toD=new Date(to); toD.setDate(toD.getDate()+1);
   const toPlus=toD.toISOString().slice(0,10);
 
   let q = sb
     .from("toyo_visits")
-    .select("created_at, seller_id, seller_name, client_name, reason, duration_min, start_lat, start_lng, end_lat, end_lng")
+    .select("created_at, seller_name, client_name, reason, duration_min, end_lat, end_lng, start_lat, start_lng")
     .gte("created_at", from)
     .lt("created_at", toPlus)
     .order("created_at", {ascending:false})
-    .limit(500);
+    .limit(800);
 
-  if(seller) q = q.eq("seller_id", seller);
+  if(reason) q = q.eq("reason", reason);
 
   const { data, error } = await q;
   if(error){ $("adminTable").innerHTML = `<div class="mini">${error.message}</div>`; return; }
@@ -711,8 +644,8 @@ async function adminReload(){
   </tr></thead><tbody>`;
 
   data.forEach(r=>{
-    const lat = (r.end_lat ?? r.start_lat);
-    const lng = (r.end_lng ?? r.start_lng);
+    const lat = r.end_lat ?? r.start_lat;
+    const lng = r.end_lng ?? r.start_lng;
     const map=(lat && lng) ? `https://www.google.com/maps?q=${lat},${lng}` : "";
     html += `<tr>
       <td>${fmtDT(r.created_at)}</td>
@@ -731,18 +664,24 @@ async function adminReload(){
 /* =========================
    BOOT
    ========================= */
-function boot(){
-  loadSelectedSeller();
-  setTabs();
-  loadSellers();
-  clearVisit();
+async function boot(){
+  restoreSeller();
+  await loadSellers();
+  if(currentSeller) await refreshMyVisits();
+  if(isAdminUnlocked()){
+    unlockAdmin();
+  }else{
+    lockAdmin();
+  }
 }
 boot();
+</script>
 
-/* PWA */
-if("serviceWorker" in navigator){
-  navigator.serviceWorker.register("./sw.js").catch(()=>{});
-}
+<script>
+  // Service worker (PWA)
+  if("serviceWorker" in navigator){
+    navigator.serviceWorker.register("./sw.js").catch(()=>{});
+  }
 </script>
 
 </body>
