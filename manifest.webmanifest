@@ -1,6 +1,6 @@
 {
-  "name": "Toyo Visitas Simple",
-  "short_name": "ToyoVisitas",
+  "name": "Toyo - Seguimiento",
+  "short_name": "Toyo",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
