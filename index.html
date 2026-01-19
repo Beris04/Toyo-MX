@@ -782,7 +782,7 @@ const SUPABASE_ANON_KEY    = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzd
 
 // Si lo dejas en true, Admin intentará leer desde Supabase.
 // (Requiere policy SELECT para anon; si no, hará fallback a local.)
-const ADMIN_READS_FROM_SUPABASE = true;
+const ADMIN_READS_FROM_SUPABASE = false;
 
 let sb = null;
 let _syncBusy = false;
