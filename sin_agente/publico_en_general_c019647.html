@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solicitud de Pedido | Toyo Foods</title>
+
+<style>
+:root{
+  --blue:#0B4CCB;
+  --bg:#F3F5F7;
+  --card:#ffffff;
+  --border:#D1D5DB;
+  --text:#111827;
+  --muted:#6b7280;
+}
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:var(--text);}
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;gap:12px;flex-wrap:wrap;}
+.header h1{color:var(--blue);margin:0}
+.badge{border:1px solid #c7dbff;color:var(--blue);padding:8px 14px;border-radius:20px;font-weight:700;background:#eef4ff;}
+.sub{color:var(--muted);margin-top:4px}
+.card{background:var(--card);border-radius:18px;padding:24px;margin-bottom:22px;box-shadow:0 10px 25px rgba(0,0,0,.06);}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+
+/* Campos superiores más compactos */
+.dataFields label{display:block;font-weight:800;margin-bottom:6px;color:#0b3c91;font-size:13px;}
+.dataFields input,.dataFields select,.dataFields textarea{width:100%;border-radius:12px;border:1px solid var(--border);background:#fff;outline:none;}
+.dataFields input,.dataFields select{padding:10px 12px;font-size:14px;}
+.dataFields input[readonly]{background:#f8fafc}
+.dataFields textarea{padding:12px;font-size:14px;resize:none;height:86px;}
+.note{margin-top:6px;font-size:12.5px;color:var(--muted)}
+
+/* Productos nuevos compactos */
+.promoHead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:12px;}
+.promoTitle{margin:0;color:var(--blue);font-size:16px;font-weight:900;}
+.promoSub{margin-top:6px;color:var(--muted);font-size:12.5px;line-height:1.35;}
+.promoBadge{font-size:11px;font-weight:800;color:var(--blue);background:#eef4ff;border:1px solid #c7dbff;padding:6px 10px;border-radius:999px;white-space:nowrap;}
+.promoGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+@media(max-width:980px){ .promoGrid{grid-template-columns:repeat(2,1fr)} }
+@media(max-width:560px){ .promoGrid{grid-template-columns:1fr} }
+.promoCard{border:1px solid #e5e7eb;border-radius:14px;padding:10px;background:#ffffff;box-shadow:0 8px 18px rgba(0,0,0,.05);display:flex;flex-direction:column;gap:8px;min-height:88px;}
+.promoTop{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;}
+.promoCode{font-weight:900;font-size:10.5px;color:#0b3c91;background:#f3f7ff;border:1px solid #dbe7ff;padding:5px 7px;border-radius:10px;line-height:1.05;}
+.promoTag{font-size:10px;font-weight:900;padding:5px 8px;border-radius:999px;border:1px solid #e5e7eb;color:#111827;background:#f9fafb;white-space:nowrap;}
+.promoName{font-weight:850;font-size:12px;line-height:1.15;}
+.promoMeta{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:auto;}
+.promoPrice{font-weight:950;color:#111827;font-size:12px;}
+.promoFoot{margin-top:12px;font-size:12px;color:var(--muted);line-height:1.35;background:#f8fafc;border:1px solid #e5e7eb;border-radius:14px;padding:10px 12px;}
+
+/* Tabla productos del cliente más compacta */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{background:var(--blue);color:#fff;padding:8px 10px;text-align:left;font-size:13px;}
+td{padding:6px 10px;border-bottom:1px solid #e5e7eb;font-size:13px;line-height:1.15;}
+td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border:1px solid var(--border);font-size:13px;}
+
+.btn{width:100%;padding:18px;font-size:18px;font-weight:800;background:var(--blue);color:#fff;border:none;border-radius:16px;cursor:pointer;}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <div>
+    <h1>Solicitud de Pedido</h1>
+    <div class="sub">Toyo Foods • Formato de pedido</div>
+  </div>
+  <div class="badge">Versión corporativa</div>
+</div>
+
+<!-- DATOS -->
+<div class="card dataFields">
+  <div class="grid">
+    <div>
+      <label>Nombre del cliente (como factura)</label>
+      <input id="cliente" value="PUBLICO EN GENERAL" readonly>
+    </div>
+
+    <div>
+      <label>Número de cliente</label>
+      <input id="codigo" value="C019647" readonly>
+    </div>
+
+    <div>
+      <label>Vendedor</label>
+      <input id="vendedor" placeholder="Nombre del vendedor (lo coloca el cliente)">
+    </div>
+
+    <div>
+      <label>Fecha y hora del pedido</label>
+      <input id="fechaHora" readonly>
+      <div class="note">📅 Automática, no editable</div>
+    </div>
+  </div>
+
+  <label style="margin-top:18px;">Comentarios / Producto Nuevo</label>
+  <textarea id="comentarios" placeholder="Ej. producto nuevo no listado / instrucciones de entrega"></textarea>
+</div>
+
+<!-- PRODUCTOS NUEVOS -->
+<div class="card">
+  <div class="promoHead">
+    <div>
+      <div class="promoTitle">Productos nuevos</div>
+      <div class="promoSub">
+        Novedades disponibles. Si te interesa alguno, coméntalo con tu vendedor para agendar una
+        <b>cotización</b>, <b>degustación</b> o <b>demostración</b>.
+      </div>
+    </div>
+    <div class="promoBadge">Precios referenciales</div>
+  </div>
+
+  <div class="promoGrid">
+    <div class="promoCard">
+      <div class="promoTop"><div class="promoCode">CO-DGB309-13883</div><div class="promoTag">Helado 5 L</div></div>
+      <div class="promoName">VOGLIA HELADO SABOR SAKE 5 L</div>
+      <div class="promoMeta"><div class="promoPrice">$718.06 MXP</div></div>
+    </div>
+<div class="promoCard">
+      <div class="promoTop"><div class="promoCode">CO-DGB309-13884</div><div class="promoTag">Helado 5 L</div></div>
+      <div class="promoName">VOGLIA HELADO SABOR TARO 5 L</div>
+      <div class="promoMeta"><div class="promoPrice">$862.50 MXP</div></div>
+    </div>
+<div class="promoCard">
+      <div class="promoTop"><div class="promoCode">CO-DGB309-12843</div><div class="promoTag">Helado 5.7 L</div></div>
+      <div class="promoName">MAEDA-EN HELADO DE TE VERDE 5.7 L</div>
+      <div class="promoMeta"><div class="promoPrice">$616.21 MXP</div></div>
+    </div>
+<div class="promoCard">
+      <div class="promoTop"><div class="promoCode">CO-DGB309-12844</div><div class="promoTag">Helado 5.7 L</div></div>
+      <div class="promoName">MAEDA-EN HELADO DE LYCHEE 5.7 L</div>
+      <div class="promoMeta"><div class="promoPrice">$616.21 MXP</div></div>
+    </div>
+<div class="promoCard">
+      <div class="promoTop"><div class="promoCode">CO-DGB309-12845</div><div class="promoTag">Helado 5.7 L</div></div>
+      <div class="promoName">MAEDA-EN HELADO DE YUZU 5.7 L</div>
+      <div class="promoMeta"><div class="promoPrice">$616.21 MXP</div></div>
+    </div>
+<div class="promoCard">
+      <div class="promoTop"><div class="promoCode">SE-BEB151-13887</div><div class="promoTag">Cerveza 500 ml</div></div>
+      <div class="promoName">YOUUS CERVEZA KYEONGBOKGUNG IPA 4.5% 500 ML</div>
+      <div class="promoMeta"><div class="promoPrice">$66.56 MXP</div></div>
+    </div>
+<div class="promoCard">
+      <div class="promoTop"><div class="promoCode">SE-BEB151-13885</div><div class="promoTag">Cerveza 500 ml</div></div>
+      <div class="promoName">YOUUS CERVEZA JEJU BAENGNOKDAM ALE 4.3% 500 ML</div>
+      <div class="promoMeta"><div class="promoPrice">$74.25 MXP</div></div>
+    </div>
+<div class="promoCard">
+      <div class="promoTop"><div class="promoCode">SE-BEB151-13886</div><div class="promoTag">Cerveza 500 ml</div></div>
+      <div class="promoName">YOUUS CERVEZA GWANGHWAMUN ALE 5% 500 ML</div>
+      <div class="promoMeta"><div class="promoPrice">$51.15 MXP</div></div>
+    </div>
+<div class="promoCard">
+      <div class="promoTop"><div class="promoCode">SE-BEB151-13888</div><div class="promoTag">Cerveza 500 ml</div></div>
+      <div class="promoName">YOUUS CERVEZA SEONGSAN ILCHULBONG ALE 5% 500 ML</div>
+      <div class="promoMeta"><div class="promoPrice">$74.25 MXP</div></div>
+    </div>
+  </div>
+
+  <div class="promoFoot">
+    *Precio sujeto a cambios. Si te interesa alguna cotización o degustación, favor de agendarlo con tu vendedor.
+  </div>
+</div>
+
+<!-- PAGO + BUSCADOR -->
+<div class="card dataFields">
+  <div class="grid">
+    <div>
+      <label>Forma de pago</label>
+      <select id="formaPago">
+        <option value="">Selecciona...</option>
+        <option>Contado</option>
+        <option>Transferencia</option>
+        <option>Crédito</option>
+      </select>
+    </div>
+
+    <div>
+      <label>Buscar producto</label>
+      <input id="buscador" placeholder="Escribe para filtrar (código o descripción)" onkeyup="filtrar()">
+      <div class="note">Tip: escribe “nori”, “arroz”, “salsa”, etc.</div>
+    </div>
+  </div>
+</div>
+
+<!-- PRODUCTOS DEL CLIENTE -->
+<div class="card table-wrap">
+<table id="tabla">
+<tr>
+  <th>Código</th>
+  <th>Descripción</th>
+  <th>Piezas</th>
+</tr>
+<tr><td>SE-BEB155-13456</td><td>ALPS JUGO DE DURAZNO 250 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB155-13455</td><td>ALPS JUGO DE MANZANA 250 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB155-13453</td><td>ALPS JUGO DE UVA 250 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB151-8538</td><td>ASAHI SUPER DRY BEER BOTELLA 330 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-13019</td><td>BEKSEJU VINO DE ARROZ Y 12 HIERBAS 375 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-13020</td><td>BOKBUNJA VINO DE FRAMBUESA 375ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>OT-UTE899-7894</td><td>BOLSART BOLSA ECOLOGICA CHICA (AZUL/ROSA) PZA</td><td><input type="number" min="0"></td></tr>
+<tr><td>OT-UTE899-7893</td><td>BOLSART BOLSA ECOLOGICA GRANDE (AZUL/CAFE) PZA</td><td><input type="number" min="0"></td></tr>
+<tr><td>RE-BEB159-0096</td><td>CALPI SUI 500 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB150-12594</td><td>CANTABILE CAFÉ CON AVELLANA 230 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB150-13474</td><td>CANTABILE CAFÉ CON VAINILLA 230 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB150-12593</td><td>CANTABILE CAFÉ ENDULZADO 230 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB156-5568</td><td>CHOYA SARARI LIGERO UMESHU 1.8 L</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB156-5566</td><td>CHOYA SARARI LIGERO UMESHU 180 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB156-5567</td><td>CHOYA SARARI LIGERO UMESHU 500 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB156-5564</td><td>CHOYA UMESHU 500 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>RE-BEB151-8550</td><td>FORTUNA CERVEZA SAKE ALE 355 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB158-13225</td><td>FURUSAWA SHUZO SETSUGEN SOBA SHOCHU 720 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-11676</td><td>GEKKEIKAN DAIGINJO 300 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-11677</td><td>GEKKEIKAN DAIGINJO 720 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-9599</td><td>GEKKEIKAN JUNMAI SAKE 1.5 L</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-9600</td><td>GEKKEIKAN JUNMAI SAKE 750 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-5611</td><td>GEKKEIKAN LIGHT SAKE 750 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-11678</td><td>GEKKEIKAN NIGORI SAKE 300 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-11679</td><td>GEKKEIKAN NIGORI SAKE 720 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-11680</td><td>GEKKEIKAN YAMADANISHIKI TOKUBETSU JUNMAI 300 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-11681</td><td>GEKKEIKAN YAMADANISHIKI TOKUBETSU JUNMAI 720ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB154-12132</td><td>GLINTER SPARKLING DURAZNO 350ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB154-12133</td><td>GLINTER SPARKLING FRESA 350ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB154-12128</td><td>GLINTER SPARKLING KIWI 350ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB154-12129</td><td>GLINTER SPARKLING LIMON 350ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB154-12130</td><td>GLINTER SPARKLING LYCHEE 350ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB154-12126</td><td>GLINTER SPARKLING MANZANA VERDE 350ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB154-12131</td><td>GLINTER SPARKLING NARANJA 350ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB156-11667</td><td>HAKUTSURU JUICY YUZU 700 ML / 720 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-11668</td><td>HAKUTSURU JUNMAI DRAFT 180 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-11669</td><td>HAKUTSURU JUNMAI DRAFT 300 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-11670</td><td>HAKUTSURU JUNMAI DRAFT 720 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-11671</td><td>HAKUTSURU SAYURI NIGORI 300 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-11672</td><td>HAKUTSURU SAYURI NIGORI 720 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-11674</td><td>HAKUTSURU SUPERIOR JUNMAI GINJO 300 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-11675</td><td>HAKUTSURU SUPERIOR JUNMAI GINJO 720 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB158-13495</td><td>HAMADA CHILL GREEN BITTER &amp; TROPICAL 720 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB158-13037</td><td>HAMADA CHILL GREEN SPICY &amp; CITRUS 720 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB158-13036</td><td>HAMADA DAIYAME 720 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB158-8332</td><td>HAMADA JAPANESE SPIRITS (SHOCHU) KAIDOUIWAINOAKA SHOCHU 720 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB156-8331</td><td>HAMADA JUJU 700 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB158-8333</td><td>HAMADA KAIDO AO 720 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-13267</td><td>HANA SAKE SABOR DURAZNO BLANCO 375 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-13268</td><td>HANA SAKE SABOR DURAZNO BLANCO 750 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-13269</td><td>HANA SAKE SABOR PIÑA 375 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-13271</td><td>HANA SAKE SABOR YUZU 375 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-13272</td><td>HANA SAKE SABOR YUZU 750 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB154-0543</td><td>HATA RAMUNE BLUEBERRY BOTTLE 200ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB154-2344</td><td>HATA RAMUNE ICHIGO BOTTLE 200ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB154-9917</td><td>HATA RAMUNE LICHI BOTTLE 200 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB154-2345</td><td>HATA RAMUNE MELON BOTTLE 200ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB154-9916</td><td>HATA RAMUNE YOGURT BOTTLE 200 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB158-5776</td><td>HITEJINRO JINRO CHAMISUL FRESH SOJU 360 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB158-10883</td><td>HITEJINRO JINRO CIRUELA 360 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB158-8505</td><td>HITEJINRO JINRO CLASSIC 360 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB158-11691</td><td>HITEJINRO JINRO DURAZNO 360 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB158-10884</td><td>HITEJINRO JINRO FRESA 360 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB158-8059</td><td>HITEJINRO JINRO TORONJA SOJU 13% 360 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB158-7899</td><td>HITEJINRO JINRO UVA 360 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB199-11779</td><td>HORAIYA AMAZAKE (ROJO) 350 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-2955</td><td>IICHIKO PACK 1.75L</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL251-13760</td><td>IRO IRO HOJICHA COLD BREW [16 oz]</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL251-13750</td><td>IRO IRO HOJICHA INFUSIÓN [12 OZ]</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL251-13761</td><td>IRO IRO JAZMÍN COL BREW [16 oz]</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL251-13756</td><td>IRO IRO JAZMÍN FRIO [16 OZ]</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL251-13751</td><td>IRO IRO JAZMÍN INFUSIÓN [12 OZ]</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL251-13762</td><td>IRO IRO MATCHA LATTE CALIENTE [12 oz]</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL251-13768</td><td>IRO IRO MATCHA LATTE FRAPPE [16 OZ]</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL251-13765</td><td>IRO IRO MATCHA LATTE FRÍO [16 OZ]</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL251-13909</td><td>IRO IRO MOCKTAIL JAZMIN CITRICOS</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL251-13908</td><td>IRO IRO MOCKTAIL OOLONG CITRICOS</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL251-13769</td><td>IRO IRO TARO LATTE FRAPPE [16 oz]</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL251-13763</td><td>IRO IRO TARO LATTE CALIENTE [12 oz]</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL251-13766</td><td>IRO IRO TARO LATTE FRÍO [16 OZ]</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL251-13774</td><td>IRO IRO TÉ HOJICHA MILK TEA [16 OZ]</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL251-13775</td><td>IRO IRO TÉ JAZMÍN MILK TEA [16 OZ]</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL251-13758</td><td>IRO IRO TÉ NEGRO COL BREW [16 oz]</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL251-13753</td><td>IRO IRO TÉ NEGRO Frío [16 oz]</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL251-13748</td><td>IRO IRO TÉ NEGRO INFUSIÓN [12 OZ]</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL251-13772</td><td>IRO IRO TÉ NEGRO MILK TEA [16 OZ]</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL251-13773</td><td>IRO IRO TÉ OOLONG MILK TEA [16 OZ]</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL251-13759</td><td>IRO IRO TÉ OOLONG COLD BREW [16 oz]</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL251-13754</td><td>IRO IRO TÉ OOLONG Frío [16 oz]</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL251-13749</td><td>IRO IRO TÉ OOLONG INFUSIÓN [12 OZ]</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL251-13771</td><td>IRO IRO TÉ VERDE MILK TEA [16 OZ]</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL251-13757</td><td>IRO IRO TÉ VERDE COLD BREW [16 OZ]</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL251-13752</td><td>IRO IRO TÉ VERDE FRÍO [16 OZ]</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL251-13747</td><td>IRO IRO TÉ VERDE INFUSIÓN [12 OZ]</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB151-13040</td><td>ISEKADO GOHAN LAGER 330 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB151-13039</td><td>ISEKADO HIME WHITE 330 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB151-13038</td><td>ISEKADO PALE ALE 330 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB156-13229</td><td>ISHIKOSHI JOZO AMATERASUNO JIHI YUZU 200 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-11173</td><td>KAGATOBI KISSHO JUNMAI DAIGINJO 720 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB156-11204</td><td>KAGATOBI GINJO UMESHU 300 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB156-11205</td><td>KAGATOBI GINJO UMESHU 720 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-11201</td><td>KAGATOBI GOKKAN JUNMAI KARAKUCHI 1800 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-11197</td><td>KAGATOBI GOKKAN JUNMAI KARAKUCHI 300 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-11198</td><td>KAGATOBI GOKKAN JUNMAI KARAKUCHI 720 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-11191</td><td>KAGATOBI JUNMAI DAIGINJO AI 300 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-11192</td><td>KAGATOBI JUNMAI DAIGINJO AI 720 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-11190</td><td>KAGATOBI JUNMAI DAIGINJO SENNICHI KAKOI NISHIKIE LABEL 720 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-11193</td><td>KAGATOBI JUNMAI GINJO 300 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-11194</td><td>KAGATOBI JUNMAI GINJO 720 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-11203</td><td>KAGATOBI JUNMAI NIGORI 720 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-11202</td><td>KAGATOBI ORGANIC JUNMAI 720 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-11195</td><td>KAGATOBI YAMAHAI JUNMAI CHO KARAKUCHI 300 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-11196</td><td>KAGATOBI YAMAHAI JUNMAI CHO KARAKUCHI 720 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB156-0784</td><td>KIKKOMAN PLUM WINE 750 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL250-13893</td><td>KITCHEN ESPECIAL 1</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL250-13894</td><td>KITCHEN ESPECIAL 2</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL250-13895</td><td>KITCHEN ESPECIAL 3</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL250-13723</td><td>KITCHEN ONIGIRI ATÚN MAYO</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL250-13927</td><td>KITCHEN ONIGIRI BUTA KIMCHI -SALTEADO DE CERDO Y KIMCHI-</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL250-13721</td><td>KITCHEN ONIGIRI CURRY</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL250-13722</td><td>KITCHEN ONIGIRI EBI CHILI</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL250-13926</td><td>KITCHEN ONIGIRI HOJUELAS DE BONITO</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL250-13928</td><td>KITCHEN ONIGIRI KARAAGE -POLLO FRITO-</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL250-13922</td><td>KITCHEN ONIGIRI MENTAI QUESO</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL250-13923</td><td>KITCHEN ONIGIRI MENTAIKO -CAVIAR JAPONES-</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL250-13720</td><td>KITCHEN ONIGIRI SALMÓN</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL250-13924</td><td>KITCHEN ONIGIRI VEGETARIANO -UME&amp;EDAMAME&amp;KOMBU-</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL250-13925</td><td>KITCHEN ONIGIRI YAKI ONIGIRI -A LA PARRILLA-</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL250-13724</td><td>KITCHEN PLATILLO EBI CHILI</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL250-13930</td><td>KITCHEN PLATILLO GYOZA</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL250-13929</td><td>KITCHEN PLATILLO KARAAGE</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL250-14080</td><td>KITCHEN PLATILLO KARAAGE DE PULPO</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL250-13725</td><td>KITCHEN PLATILLO MENCHI KATSU</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL250-13931</td><td>KITCHEN PLATILLO ROLLITOS PRIMAVERA</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL250-13933</td><td>KITCHEN PLATILLO TEMPURA DE CAMARÓN</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL250-13932</td><td>KITCHEN PLATILLO TONKATSU</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DGB313-12719</td><td>KUZE FUKU MERMELADA DE ARÁNDANO 312 G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DGB313-12720</td><td>KUZE FUKU MERMELADA DE CEREZA 312 G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DGB313-12718</td><td>KUZE FUKU MERMELADA DE FRESA 312 G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DGB313-12721</td><td>KUZE FUKU MERMELADA DE MANZANA 283 G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-SYE599-12630</td><td>KUZE FUKU PASTA DE CAMOTE MORADO 215.5 G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB158-12994</td><td>LOTTE CHUM CHURUM SAERO APRICOT 375 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB158-12995</td><td>LOTTE CHUM CHURUM SAERO LYCHEE 375 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB158-12212</td><td>LOTTE CHUM CHURUM 360 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB158-12213</td><td>LOTTE CHUM CHURUM SAERO 375 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB158-12211</td><td>LOTTE SOON HARI CITRICO 360 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB158-12204</td><td>LOTTE SOON HARI DURAZNO 360 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB158-12209</td><td>LOTTE SOON HARI FRESA 360 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB158-12208</td><td>LOTTE SOON HARI MANZANA 360 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB158-12205</td><td>LOTTE SOON HARI MORA AZUL 360 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB158-12206</td><td>LOTTE SOON HARI UVA 360 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB158-12210</td><td>LOTTE SOON HARI YOGURT 360 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB151-0920</td><td>LUCKY BUDDHA BEER 330 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB158-11871</td><td>MAKGEOLLI CASTAÑA 750 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB158-0715</td><td>MAKGEOLLI FRESA 750 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB158-11867</td><td>MAKGEOLLI ORIGINAL 750 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB158-11870</td><td>MAKGEOLLI PLATANO 750 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-7820</td><td>NAKANO JUNMAI DOBUROKU 720 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB156-7822</td><td>NAKANO KUNIZAKARI BUDO NO OSAKE 720 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB156-7819</td><td>NAKANO KUNIZAKARI MOMO NO OSAKE 720 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-7816</td><td>NAKANO KUNIZAKARI NIGORI SAKE 300 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB156-7821</td><td>NAKANO KUNIZAKARI RINGO NO OSAKE 720 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB156-7818</td><td>NAKANO KUNIZAKARI ZAKURO NO OSAKE 720 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB156-7824</td><td>NAKANO NASHI NO OSAKE 720 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-7817</td><td>NAKANO NIGORI SAKE 720 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-7815</td><td>NAKANO NIGORI SAKE CUP 200 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB199-11576</td><td>NIKKA VODKA COFFEY 700 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB199-11580</td><td>NIKKA WHISKY FROM THE BARREL 500 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB199-11579</td><td>NIKKA WHISKY MIYAGIKYO SINGLE MALT 700 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB158-11121</td><td>NISHIYOSHIDA SYUZO TSUKUSHI KURO 720ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB159-10909</td><td>OKF JUGO DE SANDIA CON ALOE 500 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB150-10917</td><td>OKF PREMIUM BLACK COFFEE 390 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB150-10918</td><td>OKF PREMIUM SWEETENED COFFEE 390 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB199-8467</td><td>OTSUKA POCARI SWEAT 500 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>PX-DEL307-13934</td><td>PAN 28 SAL CON AJONJOLI</td><td><input type="number" min="0"></td></tr>
+<tr><td>PX-DEL307-13945</td><td>PAN 28 ROLLO CANELA</td><td><input type="number" min="0"></td></tr>
+<tr><td>PX-DEL307-13935</td><td>PAN 28 SAL CON AJO</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB160-1336</td><td>POKKA OOLONG TEA 300 ML.</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB160-5533</td><td>SANGARIA ANATA NO HATOMUGI BLEND CHA 500 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB160-10989</td><td>SANGARIA ANATA NO KOUBASHII MUGICHA 600 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB160-11341</td><td>SANGARIA ANATANO HOUJICHA PET 600 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB160-4912</td><td>SANGARIA ANATANO KOI OCHA TE VERDE 500 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB160-7920</td><td>SANGARIA ANATANO MATCHA IRI GENMAICHA 500 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB160-1400</td><td>SANGARIA ANATANO OCHA 190G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB160-4910</td><td>SANGARIA ANATANO OCHA TE VERDE 500 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB160-4911</td><td>SANGARIA ANATANO OOLONGCHA 500 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB154-10016</td><td>SANGARIA KAORI SAWAYAKA UME SODA 190 G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB159-10096</td><td>SANGARIA NATA DE COCO 280 G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB159-1406</td><td>SANGARIA TSUBU TSUBU MI ORANGE 280 G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB158-5324</td><td>SANWA IICHIKO 900 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB158-13330</td><td>SANWA IICHIKO PACK 1.8 L</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB151-1429</td><td>SAPPORO BEER LIGHT BOTELLA 355 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB151-1430</td><td>SAPPORO BEER PRE&#x27;M 355 BOTELLA ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB151-11268</td><td>SAPPORO BEER PREMIUM LATA 473 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB151-1431</td><td>SAPPORO BEER RESERVE BOTELLA 355 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-11912</td><td>SAWANOTSURU HYAKUNINNO KIKIZAKESHI 720 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-7982</td><td>SAWANOTSURU JITSURAKU YAMADANISHIKI 1.8L</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-7980</td><td>SAWANOTSURU JITSURAKU YAMADANISHIKI 300ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-7981</td><td>SAWANOTSURU JITSURAKU YAMADANISHIKI 720ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-11037</td><td>SAWANOTSURU JUNMAI GINJO ZUICHO 180 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-8779</td><td>SAWANOTSURU JUNMAI TARU SAKE 180 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-2336</td><td>SAWANOTSURU JUNMAIDAIGINJO MINUME 720ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-3982</td><td>SAWANOTSURU JUNMAISHU KOME DAKE NO SAKE 1.8 L</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-2338</td><td>SAWANOTSURU JUNMAISHU YAMADANISHIKI 300ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-5270</td><td>SAWANOTSURU JUNMAISHU YAMADANISHIKI 720 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-11913</td><td>SAWANOTSURU JYOSEN HONJOZO NAMA 300 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB156-8781</td><td>SAWANOTSURU KOSHUJIKOMI UMESHU LICOR DE CIRUELA 300 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB156-5655</td><td>SAWANOTSURU KOSHUJIKOMI UMESHU LICOR DE CIRUELA 720 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-11914</td><td>SAWANOTSURU SHU SHU LIGHT 180 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-11915</td><td>SAWANOTSURU TAMANIWAYOITAI YORUMOARU 180 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-11916</td><td>SAWANOTSURU TANCHO 1.5 CUP 270 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-9958</td><td>SEKAIITTO CHOKARA MINAKATA JUNMAI 720 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB158-4962</td><td>SENGETSU KOME SHOCHU SENGETSU 720 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB156-4961</td><td>SENGETSU SHISO LICOR KOISHISO 500 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB158-7248</td><td>SENGETSU SHOCHU TARU SENGETSU 720 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-6068</td><td>SHIRATAKI SHUZO JUNMAI-DAIGINJO JOZEN MIZUNOGOTOSHI (AZUL) 300 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-5994</td><td>SHIRATAKI SHUZO JUNMAI-DAIGINJO JOZEN MIZUNOGOTOSHI (AZUL) 720 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-6066</td><td>SHIRATAKI SHUZO JUNMAI-GINJO JOZEN MIZUNOGOTOSHI (BLANCO) 300 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-5995</td><td>SHIRATAKI SHUZO JUNMAI-GINJO JOZEN MIZUNOGOTOSHI (BLANCO) 720 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-6067</td><td>SHIRATAKI SHUZO JUNMAI-GINJO JUKUSEI JOZEN MIZUNOGOTOSHI (ROSADO) 300 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-5997</td><td>SHIRATAKI SHUZO JUNMAI-GINJO JUKUSEI JOZEN MIZUNOGOTOSHI (ROSADO) 720 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-9997</td><td>SHIRATAKI SHUZO JOZEN MIZUNOGOTOSHI ESPUMOSO 360 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>OT-UTE810-13424</td><td>SM SET DE SAKE BD7-KY</td><td><input type="number" min="0"></td></tr>
+<tr><td>OT-UTE810-13425</td><td>SM SET DE SAKE BD7-N</td><td><input type="number" min="0"></td></tr>
+<tr><td>OT-UTE810-13419</td><td>SM SET DE SAKE SF92-5092</td><td><input type="number" min="0"></td></tr>
+<tr><td>OT-UTE810-13422</td><td>SM SET DE SAKE SF92-6599</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-7891</td><td>SUEHIRO DAIGINJO 300 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB199-12253</td><td>SUNTORY GIN ROKU 700 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB199-12252</td><td>SUNTORY WHISKY TOKI 750 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DGB305-12800</td><td>TAIMATSU KAGAMI MOCHI 160 G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-8110</td><td>TAKASHIMIZU DESSERT JUNGIN 500 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-2333</td><td>TAKASHIMIZU JUNMAI DAIGINJO 300ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-5411</td><td>TAKASHIMIZU JUNMAISHU SAKENOKUNI 1.8 L</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-2334</td><td>TAKASHIMIZU JUNMAISHU SAKENOKUNI 300ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-5412</td><td>TAKASHIMIZU JUNMAISHU SAKENOKUNI 720 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-8111</td><td>TAKASHIMIZU JYOSEN HONJOZO CUP 200 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-2335</td><td>TAKASHIMIZU KARAKUCHI JUNMAI 720ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL252-7212</td><td>TOYO KOSHIAN PAN</td><td><input type="number" min="0"></td></tr>
+<tr><td>RE-DEL250-7782</td><td>TOYO MAKUNOUCHI BENTOU TAKE</td><td><input type="number" min="0"></td></tr>
+<tr><td>RE-DEL250-7781</td><td>TOYO MAKUNOUCHI BENTOU UME</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL252-6091</td><td>TOYO MELON PAN</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL252-11877</td><td>TOYO MELON PAN DE TEMPORADA</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL252-6092</td><td>TOYO MELON PAN MATCHA</td><td><input type="number" min="0"></td></tr>
+<tr><td>PX-PAN901-13372</td><td>TOYO MILLIE CREPA 2P</td><td><input type="number" min="0"></td></tr>
+<tr><td>PX-PAN901-13370</td><td>TOYO MILLIE CREPA FRESA 2 P</td><td><input type="number" min="0"></td></tr>
+<tr><td>PX-PAN901-13371</td><td>TOYO MILLIE CREPA MATCHA 2P</td><td><input type="number" min="0"></td></tr>
+<tr><td>PX-PAN901-13232</td><td>TOYO MINI WAFFLE CREAM SAND</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL252-13197</td><td>TOYO MOCHI AN PAN</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL250-9584</td><td>TOYO NAMA SHOKU PAN</td><td><input type="number" min="0"></td></tr>
+<tr><td>RE-DEL250-1918</td><td>TOYO ONIGUIRI ATUN</td><td><input type="number" min="0"></td></tr>
+<tr><td>RE-DEL250-6806</td><td>TOYO ONIGUIRI BIBINBA PZA</td><td><input type="number" min="0"></td></tr>
+<tr><td>RE-DEL250-1919</td><td>TOYO ONIGUIRI CAMARON</td><td><input type="number" min="0"></td></tr>
+<tr><td>RE-DEL250-1920</td><td>TOYO ONIGUIRI CARNE DE RES MOLIDA</td><td><input type="number" min="0"></td></tr>
+<tr><td>RE-DEL250-1921</td><td>TOYO ONIGUIRI KANIKAMA</td><td><input type="number" min="0"></td></tr>
+<tr><td>RE-DEL250-1923</td><td>TOYO ONIGUIRI POLLO TERIYAKI</td><td><input type="number" min="0"></td></tr>
+<tr><td>RE-DEL250-2831</td><td>TOYO ONIGUIRI SALMON</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL250-5613</td><td>TOYO PAN ARANDANO</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL252-9057</td><td>TOYO PAN CON ELOTE Y MAYONESA</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL252-9058</td><td>TOYO PAN CON JAMON Y HUEVO</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL252-9054</td><td>TOYO PAN CON SALCHICHA</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL252-9633</td><td>TOYO PAN DE CREMA CUSTARD</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL252-7065</td><td>TOYO PAN DE CURRY</td><td><input type="number" min="0"></td></tr>
+<tr><td>RE-DEL250-12554</td><td>TOYO PAN DE MENTAI</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL252-11814</td><td>TOYO PAN DE MUERTO</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL252-11815</td><td>TOYO PAN DE MUERTO RELLENO</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL250-5618</td><td>TOYO PAN DE NUEZ CON DULCE DE LECHE</td><td><input type="number" min="0"></td></tr>
+<tr><td>RE-DEL250-13194</td><td>TOYO PAN DE SAL ROSA</td><td><input type="number" min="0"></td></tr>
+<tr><td>RE-DEL250-13193</td><td>TOYO PAN DE TARO</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-PAN902-13511</td><td>TOYO PAN DE TARO</td><td><input type="number" min="0"></td></tr>
+<tr><td>RE-DEL250-11697</td><td>TOYO PAN KANIKAMA</td><td><input type="number" min="0"></td></tr>
+<tr><td>RE-DEL250-13196</td><td>TOYO PAN TOSTADO DE MIEL</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL252-8363</td><td>TOYO PASTEL DE ROLLO CHOCOLATE UNO</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL252-6192</td><td>TOYO PASTEL DE ROLLO FLAN UNO</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL252-8364</td><td>TOYO PASTEL DE ROLLO FRESA UNO</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL252-8365</td><td>TOYO PASTEL DE ROLLO MATCHA UNO</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL252-8361</td><td>TOYO PASTEL DECORADO 18 CM</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL252-7213</td><td>TOYO SAKURA AN PAN</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL252-9934</td><td>TOYO SANDWICH DE ATUN PZA</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL252-9935</td><td>TOYO SANDWICH DE HUEVO</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL252-9937</td><td>TOYO SANDWICH DE JAMON EMPANIZADO PZA</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL252-9936</td><td>TOYO SANDWICH DE JAMON Y LECHUGA PZA</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL252-9990</td><td>TOYO SANDWICH MIX HANA PZA</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL252-9993</td><td>TOYO SANDWICH MIX TSUKI PZA</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL252-9991</td><td>TOYO SANDWICH MIX YUKI PZA</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL250-5614</td><td>TOYO SHOKU PAN</td><td><input type="number" min="0"></td></tr>
+<tr><td>RE-DEL250-1967</td><td>TOYO TEMAKI EBI FRY</td><td><input type="number" min="0"></td></tr>
+<tr><td>RE-DEL250-1968</td><td>TOYO TEMAKI KANI MAYO</td><td><input type="number" min="0"></td></tr>
+<tr><td>RE-DEL250-1969</td><td>TOYO TEMAKI UME</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL252-7161</td><td>TOYO TSUBUAN PAN</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL252-11473</td><td>TOYO UZUMAKI DENISH PAN</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DEL250-5615</td><td>TOYO YAMAGATA PAN</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB151-9946</td><td>TSINGTAO CERVEZA BOTELLA 330 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB158-8372</td><td>UNKAI HYUGA KOBIKI 900 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB158-8373</td><td>UNKAI HYUGA KOBIKI KURO 900 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>RE-BEB159-2042</td><td>YAKULT 3 PACK</td><td><input type="number" min="0"></td></tr>
+<tr><td>OT-UTE899-10920</td><td>YARKON BOLSA ECOLOGICA BEIGE TOYO GATITO PZA</td><td><input type="number" min="0"></td></tr>
+</table>
+</div>
+
+<button class="btn" onclick="descargarPedido()">Descargar pedido</button>
+
+<script>
+function filtrar(){
+  let f=document.getElementById("buscador").value.toUpperCase();
+  document.querySelectorAll("#tabla tr").forEach((r,i)=>{
+    if(i===0)return;
+    r.style.display=r.innerText.toUpperCase().includes(f)?"":"none";
+  });
+}
+
+// Fecha y hora automática
+(function(){
+  let d=new Date();
+  document.getElementById("fechaHora").value =
+    d.toLocaleDateString("es-MX")+" "+
+    d.toLocaleTimeString("es-MX",{hour:'2-digit',minute:'2-digit'});
+})();
+
+function descargarPedido(){
+  const cliente = document.getElementById("cliente").value;
+  const codigo = document.getElementById("codigo").value;
+  const vendedor = document.getElementById("vendedor").value || "-";
+  const formaPago = document.getElementById("formaPago").value || "-";
+  const comentarios = document.getElementById("comentarios").value || "-";
+
+  const ahora = new Date();
+  const fechaHora = ahora.toLocaleDateString("es-MX")+" "+
+                    ahora.toLocaleTimeString("es-MX",{hour:'2-digit',minute:'2-digit'});
+
+  let html = `
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pedido Toyo Foods</title>
+<style>
+:root{--blue:#0B4CCB;--bg:#F5F7FA;--card:#ffffff;--border:#D1D5DB;--text:#111827}
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:var(--text)}
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;gap:12px;flex-wrap:wrap}
+.header h1{color:var(--blue);margin:0}
+.badge{border:1px solid #c7dbff;color:var(--blue);padding:8px 14px;border-radius:20px;font-weight:700;background:#eef4ff}
+.card{background:var(--card);border-radius:18px;padding:24px;margin-bottom:22px;box-shadow:0 10px 25px rgba(0,0,0,.06)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+label{font-weight:800;color:#0b3c91;display:block;margin-bottom:6px;font-size:13px}
+.field{padding:10px 12px;border-radius:12px;border:1px solid var(--border);background:#f9fafb;font-size:14px}
+table{width:100%;border-collapse:collapse}
+th{background:var(--blue);color:#fff;padding:8px 10px;text-align:left;font-size:13px}
+td{padding:6px 10px;border-bottom:1px solid #e5e7eb;font-size:13px}
+.empty{text-align:center;color:#6b7280;padding:20px}
+.footer{display:flex;gap:14px;flex-wrap:wrap}
+.pill{background:#eef4ff;border:1px solid #c7dbff;color:var(--blue);padding:10px 18px;border-radius:20px;font-weight:700}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>Pedido Toyo Foods</h1>
+    <div style="color:#6b7280">Generado desde formato de pedido</div>
+  </div>
+  <div class="badge">Confirmación</div>
+</div>
+
+<div class="card">
+  <div class="grid">
+    <div><label>Cliente</label><div class="field">${cliente}</div></div>
+    <div><label>Número de cliente</label><div class="field">${codigo}</div></div>
+    <div><label>Vendedor</label><div class="field">${vendedor}</div></div>
+    <div><label>Fecha y hora</label><div class="field">${fechaHora}</div></div>
+    <div><label>Forma de pago</label><div class="field">${formaPago}</div></div>
+  </div>
+
+  <label style="margin-top:18px;">Comentarios / Producto Nuevo</label>
+  <div class="field">${comentarios}</div>
+</div>
+
+<div class="card">
+<table>
+<tr><th>Código</th><th>Descripción</th><th>Piezas</th></tr>
+`;
+
+  let items=0, piezas=0;
+  document.querySelectorAll("#tabla tr").forEach((r,i)=>{
+    if(i===0)return;
+    const input=r.querySelector("input");
+    if(input && Number(input.value)>0){
+      items++;
+      piezas += parseInt(input.value,10);
+      html += `<tr><td>${r.children[0].innerText}</td><td>${r.children[1].innerText}</td><td>${input.value}</td></tr>`;
+    }
+  });
+
+  if(items===0){
+    html += `<tr><td colspan="3" class="empty">Sin productos capturados</td></tr>`;
+  }
+
+  html += `
+</table>
+</div>
+
+<div class="footer">
+  <div class="pill">Ítems: ${items}</div>
+  <div class="pill">Piezas: ${piezas}</div>
+</div>
+
+</body>
+</html>
+`;
+
+  const blob = new Blob([html], {type:"text/html;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "PEDIDO_" + codigo + ".html";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+
+  setTimeout(()=>URL.revokeObjectURL(url), 800);
+}
+</script>
+
+</body>
+</html>
