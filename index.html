@@ -13,599 +13,752 @@
       --border:#D1D5DB;
       --text:#111827;
       --muted:#6b7280;
-      --shadow:0 10px 28px rgba(0,0,0,.08);
-      --r:18px;
+      --shadow:0 10px 25px rgba(0,0,0,.06);
+      --radius:18px;
+      --safe-b: env(safe-area-inset-bottom, 0px);
+      --safe-t: env(safe-area-inset-top, 0px);
     }
     *{box-sizing:border-box}
     body{
       margin:0;
-      background:linear-gradient(180deg,#f7f9ff 0%, var(--bg) 100%);
+      background:var(--bg);
       font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
       color:var(--text);
+      padding-bottom: calc(84px + var(--safe-b));
     }
-    a{color:inherit}
-    .wrap{max-width:1100px;margin:0 auto;padding:16px 14px 90px}
-    .top{
+
+    /* Top App Bar */
+    .topbar{
       position:sticky; top:0; z-index:50;
-      background:rgba(243,245,247,.76);
+      background:linear-gradient(180deg, rgba(243,245,247,.96) 0%, rgba(243,245,247,.86) 65%, rgba(243,245,247,0) 100%);
       backdrop-filter: blur(10px);
-      border-bottom:1px solid rgba(17,24,39,.08);
+      padding: calc(14px + var(--safe-t)) 14px 10px;
     }
-    .topin{max-width:1100px;margin:0 auto;padding:12px 14px;display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap}
-    .brand{display:flex;align-items:center;gap:12px}
+    .brandRow{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      margin-bottom:10px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px; min-width:0;
+    }
     .logo{
-      width:40px;height:40px;border-radius:14px;
-      background:linear-gradient(135deg,#083aa0,#0B4CCB 60%, #8fb3ff);
-      box-shadow:0 10px 22px rgba(11,76,203,.25);
+      width:34px; height:34px; border-radius:12px;
+      background: linear-gradient(135deg,#0B4CCB,#0a3aa1);
+      box-shadow: 0 10px 22px rgba(11,76,203,.25);
+      flex:0 0 auto;
     }
-    h1{font-size:20px;margin:0;color:var(--blue);letter-spacing:.2px}
-    .sub{font-size:13px;color:var(--muted);margin-top:2px}
+    .titleWrap{min-width:0}
+    h1{
+      margin:0;
+      font-size:18px;
+      letter-spacing:.2px;
+      color:var(--blue);
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .sub{
+      margin-top:3px;
+      font-size:12px;
+      color:var(--muted);
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
     .pill{
-      display:inline-flex;gap:8px;align-items:center;
-      background:#eef4ff;border:1px solid #c7dbff;color:var(--blue);
-      padding:9px 12px;border-radius:999px;font-weight:800;font-size:12px;
+      border:1px solid #c7dbff;
+      color:var(--blue);
+      padding:8px 10px;
+      border-radius:999px;
+      font-weight:900;
+      background:#eef4ff;
+      font-size:12px;
+      white-space:nowrap;
+      flex:0 0 auto;
+    }
+
+    /* Search */
+    .searchCard{
+      background:var(--card);
+      border-radius:16px;
+      padding:12px;
+      box-shadow:var(--shadow);
+      border:1px solid rgba(0,0,0,.03);
+    }
+    .searchRow{
+      display:flex; gap:10px; align-items:center;
+    }
+    .searchRow input{
+      width:100%;
+      padding:12px 12px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      font-size:15px;
+      outline:none;
+    }
+    .iconBtn{
+      border:1px solid var(--border);
+      background:#fff;
+      border-radius:12px;
+      padding:11px 12px;
+      font-weight:900;
+      cursor:pointer;
+      min-width:44px;
+    }
+    .chips{
+      display:flex; gap:8px; flex-wrap:wrap;
+      margin-top:10px;
+    }
+    .chip{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid rgba(11,76,203,.20);
+      background:#f3f7ff;
+      color:#0a3aa1;
+      font-weight:900;
+      font-size:12px;
+      cursor:pointer;
+      max-width:100%;
+    }
+    .chip span{
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+      max-width:190px;
+      display:inline-block;
+    }
+    .chip.active{
+      background:var(--blue);
+      color:#fff;
+      border-color:transparent;
+    }
+
+    /* Main */
+    .wrap{max-width:920px;margin:0 auto;padding:10px 14px 20px}
+    .sectionTitle{
+      margin:14px 2px 10px;
+      display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;
+    }
+    .sectionTitle h2{
+      margin:0;
+      font-size:16px;
+      color:#0b3c91;
+      letter-spacing:.1px;
+    }
+    .metaLine{
+      color:var(--muted);
+      font-size:12px;
+      font-weight:800;
+    }
+
+    /* Cards list */
+    .list{display:flex; flex-direction:column; gap:10px}
+    .cardItem{
+      background:var(--card);
+      border-radius:16px;
+      padding:12px;
+      box-shadow:var(--shadow);
+      border:1px solid rgba(0,0,0,.03);
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+    }
+    .left{min-width:0}
+    .name{
+      margin:0;
+      font-weight:950;
+      font-size:14px;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+      max-width:100%;
+    }
+    .details{
+      margin-top:4px;
+      font-size:12px;
+      color:var(--muted);
+      font-weight:700;
+    }
+    .actions{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      align-items:flex-end;
+      flex:0 0 auto;
+    }
+    .btn{
+      border:1px solid #c7dbff;
+      background:#eef4ff;
+      color:var(--blue);
+      font-weight:900;
+      border-radius:12px;
+      padding:9px 12px;
+      cursor:pointer;
+      font-size:12px;
       white-space:nowrap;
     }
-    .content{padding-top:14px}
-    .grid{display:grid;grid-template-columns:1.2fr .8fr;gap:14px;align-items:start}
-    @media(max-width:980px){ .grid{grid-template-columns:1fr} }
-    .card{
-      background:var(--card);
-      border:1px solid rgba(17,24,39,.10);
-      border-radius:var(--r);
-      box-shadow:var(--shadow);
-      overflow:hidden;
-    }
-    .hd{padding:16px 16px 12px;border-bottom:1px solid rgba(17,24,39,.08);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
-    .title{font-weight:900}
-    .bd{padding:14px 16px 16px}
-    label{display:block;font-weight:900;font-size:12px;color:#0b3c91;margin-bottom:6px}
-    input,select{
-      width:100%; padding:13px 14px; border-radius:14px;
-      border:1px solid var(--border); font-size:15px;
+    .btn.secondary{
+      border:1px solid #e5e7eb;
       background:#fff;
+      color:#0b3c91;
     }
-    .row{display:flex;gap:12px;flex-wrap:wrap}
-    .col{flex:1;min-width:220px}
-    .note{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.35}
-    .btnbar{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
-    .btn{
-      border:1px solid rgba(17,24,39,.12);
+    .star{
+      border:1px solid #e5e7eb;
       background:#fff;
-      padding:11px 14px;border-radius:14px;
-      font-weight:900;cursor:pointer;
+      border-radius:12px;
+      padding:9px 10px;
+      cursor:pointer;
+      font-weight:950;
+      font-size:12px;
+      color:#0b3c91;
+      min-width:42px;
+      text-align:center;
     }
-    .btn.primary{background:var(--blue);color:#fff;border-color:transparent}
-    .btn.ghost{background:#f8fafc}
-    .stats{display:flex;gap:10px;flex-wrap:wrap}
-    .stat{
-      background:#f8fafc;border:1px solid rgba(17,24,39,.08);
-      padding:10px 12px;border-radius:14px;
-      font-size:12px;color:var(--muted)
-    }
-    .stat b{color:var(--text);font-size:14px}
-    .list{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    @media(max-width:720px){ .list{grid-template-columns:1fr} }
-    .item{
-      border:1px solid rgba(17,24,39,.10);
-      border-radius:16px;
-      padding:14px;
-      display:flex;align-items:center;justify-content:space-between;gap:12px;
-      background:#fff;
-    }
-    .name{font-weight:950}
-    .meta{font-size:12px;color:var(--muted);margin-top:4px}
-    .open{background:#eef4ff;border:1px solid #c7dbff;color:var(--blue);padding:10px 12px;border-radius:14px;font-weight:950;cursor:pointer;white-space:nowrap}
-    .fav{
-      width:40px;height:40px;border-radius:14px;
-      border:1px solid rgba(17,24,39,.12);
-      display:grid;place-items:center;cursor:pointer;
-      background:#fff;
-    }
-    .fav.on{background:#fff7ed;border-color:#fed7aa}
-    .muted{color:var(--muted)}
+    .star.on{ background:#fff7ed; border-color:#fed7aa; color:#9a3412; }
     .empty{
-      padding:14px;border:1px dashed rgba(17,24,39,.18);border-radius:16px;
-      color:var(--muted);background:#fff;grid-column:1/-1
+      padding:14px 6px;
+      color:var(--muted);
+      font-weight:800;
+      font-size:13px;
     }
+
+    /* Compact mode */
+    .compact .cardItem{ padding:10px; }
+    .compact .name{ font-size:13px; }
+    .compact .details{ font-size:11px; }
+    .compact .actions{ gap:6px; }
+    .compact .btn, .compact .star{ padding:8px 10px; }
+
     /* Bottom nav */
     .nav{
-      position:fixed;left:0;right:0;bottom:0;z-index:60;
-      background:rgba(255,255,255,.86);
-      backdrop-filter: blur(10px);
+      position:fixed; left:0; right:0; bottom:0;
+      padding:10px 10px calc(10px + var(--safe-b));
+      background:rgba(255,255,255,.92);
       border-top:1px solid rgba(17,24,39,.10);
+      backdrop-filter: blur(10px);
+      z-index:60;
     }
-    .navin{max-width:1100px;margin:0 auto;padding:10px 14px;display:flex;gap:10px;justify-content:space-between}
+    .navRow{
+      max-width:920px;margin:0 auto;
+      display:grid; grid-template-columns: repeat(4,1fr);
+      gap:8px;
+    }
     .tab{
-      flex:1;
       border:1px solid rgba(17,24,39,.10);
       background:#fff;
-      padding:10px 12px;border-radius:16px;
-      display:flex;align-items:center;justify-content:center;gap:8px;
-      font-weight:900;cursor:pointer;
-      color:var(--muted);
+      border-radius:16px;
+      padding:10px 10px;
+      font-weight:950;
+      cursor:pointer;
+      font-size:12px;
+      display:flex; flex-direction:column; align-items:center; gap:4px;
+      color:#0b3c91;
     }
-    .tab.active{color:#fff;background:var(--blue);border-color:transparent;box-shadow:0 10px 20px rgba(11,76,203,.22)}
-    .mini{font-size:11px}
-    .skeleton{
-      height:58px;border-radius:16px;
-      background:linear-gradient(90deg,#f1f5f9 25%,#e5e7eb 37%,#f1f5f9 63%);
-      background-size:400% 100%;
-      animation:shimmer 1.2s infinite;
-      border:1px solid rgba(17,24,39,.06)
+    .tab.active{
+      background:var(--blue);
+      color:#fff;
+      border-color:transparent;
     }
-    @keyframes shimmer{0%{background-position:100% 0}100%{background-position:0 0}}
-    .chips{display:flex;gap:8px;flex-wrap:wrap}
-    .chip{
-      padding:7px 10px;border-radius:999px;
-      background:#f8fafc;border:1px solid rgba(17,24,39,.10);
-      font-weight:900;font-size:12px;color:var(--muted);cursor:pointer;
+    .ico{font-size:16px; line-height:1}
+    .toast{
+      position:fixed;
+      left:50%;
+      bottom: calc(92px + var(--safe-b));
+      transform:translateX(-50%);
+      background:rgba(17,24,39,.92);
+      color:#fff;
+      padding:10px 12px;
+      border-radius:999px;
+      font-weight:900;
+      font-size:12px;
+      box-shadow:0 18px 40px rgba(0,0,0,.22);
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .2s ease, transform .2s ease;
+      z-index:9999;
     }
-    .chip.active{background:#eef4ff;border-color:#c7dbff;color:var(--blue)}
+    .toast.show{opacity:1; transform:translateX(-50%) translateY(-2px);}
+    .diag{
+      margin-top:10px;
+      border-top:1px dashed #d1d5db;
+      padding-top:10px;
+      display:none;
+    }
+    .diag pre{
+      white-space:pre-wrap;
+      background:#0b1220;
+      color:#e5e7eb;
+      padding:12px;
+      border-radius:12px;
+      font-size:12px;
+      overflow:auto;
+    }
   </style>
 </head>
+
 <body>
-  <header class="top">
-    <div class="topin">
+  <div class="topbar">
+    <div class="brandRow">
       <div class="brand">
         <div class="logo" aria-hidden="true"></div>
-        <div>
+        <div class="titleWrap">
           <h1>Pedidos Toyo MX</h1>
-          <div class="sub">Buscador general por cliente · GitHub Pages</div>
+          <div class="sub" id="subtitle">Cargando clientes…</div>
         </div>
       </div>
-      <div class="pill" id="pillStatus">Cargando…</div>
+      <div class="pill" id="pillCount">0</div>
     </div>
-  </header>
 
-  <main class="wrap">
-    <div class="content grid">
-      <!-- Left -->
-      <section class="card">
-        <div class="hd">
-          <div class="title" id="panelTitle">Clientes</div>
-          <div class="stats" id="stats">
-            <div class="stat"><b id="stClients">—</b><div>clientes</div></div>
-            <div class="stat"><b id="stVendors">—</b><div>vendedores</div></div>
-          </div>
-        </div>
-        <div class="bd">
-          <div id="panelClientes">
-            <div class="row">
-              <div class="col">
-                <label>Buscar cliente (nombre o código)</label>
-                <input id="q" placeholder="Ej. ALTAMESE o C020669" autocomplete="off" />
-                <div class="note">Tip: pega el código y abre el HTML directo.</div>
-              </div>
-              <div class="col">
-                <label>Filtrar por vendedor</label>
-                <select id="vendorSel">
-                  <option value="ALL">Todos</option>
-                </select>
-                <div class="note">Este index lee <b>clients.json</b> en la raíz del repo.</div>
-              </div>
-            </div>
-
-            <div class="btnbar">
-              <button class="btn primary" id="btnAll">Ver todos</button>
-              <button class="btn ghost" id="btnClear">Limpiar</button>
-              <button class="btn" id="btnDiag">Diagnóstico</button>
-            </div>
-
-            <div class="hr" style="height:1px;background:rgba(17,24,39,.08);margin:14px 0"></div>
-
-            <div class="list" id="list">
-              <div class="skeleton"></div>
-              <div class="skeleton"></div>
-              <div class="skeleton"></div>
-              <div class="skeleton"></div>
-            </div>
-          </div>
-
-          <div id="panelVendedores" style="display:none">
-            <div class="chips" id="vendorChips"></div>
-            <div class="note" style="margin-top:10px">Toca un vendedor para ver sus clientes.</div>
-            <div class="hr" style="height:1px;background:rgba(17,24,39,.08);margin:14px 0"></div>
-            <div class="list" id="vendorList"></div>
-          </div>
-
-          <div id="panelRecientes" style="display:none">
-            <div class="note">Aquí aparecen los últimos clientes que abriste (en este dispositivo).</div>
-            <div class="hr" style="height:1px;background:rgba(17,24,39,.08);margin:14px 0"></div>
-            <div class="list" id="recentList"></div>
-          </div>
-
-          <div id="panelFavs" style="display:none">
-            <div class="note">Marca ⭐ para guardar clientes favoritos (en este dispositivo).</div>
-            <div class="hr" style="height:1px;background:rgba(17,24,39,.08);margin:14px 0"></div>
-            <div class="list" id="favList"></div>
-          </div>
-
-          <div id="panelDiag" style="display:none">
-            <div class="note">Si no aparecen clientes, aquí te dice por qué.</div>
-            <div class="hr" style="height:1px;background:rgba(17,24,39,.08);margin:14px 0"></div>
-            <div class="card" style="box-shadow:none;border-radius:16px">
-              <div class="bd">
-                <div class="mini muted">URL detectada de clients.json</div>
-                <div style="font-weight:900;margin-top:6px" id="diagUrl">—</div>
-                <div class="hr" style="height:1px;background:rgba(17,24,39,.08);margin:12px 0"></div>
-                <div class="mini muted">Resultado</div>
-                <pre id="diagOut" style="white-space:pre-wrap;margin:6px 0 0;background:#0f172a;color:#e5e7eb;padding:12px;border-radius:14px;overflow:auto"></pre>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      <!-- Right -->
-      <aside class="card">
-        <div class="hd">
-          <div class="title">Accesos rápidos</div>
-          <div class="pill" style="background:#f8fafc;border-color:rgba(17,24,39,.10);color:var(--muted)">App style</div>
-        </div>
-        <div class="bd">
-          <div class="note">
-            • Para que siempre cargue lo nuevo, abre con <b>?v=2</b> (cambia el número cuando actualices).<br>
-            • Si abres un cliente y da 404, normalmente es porque el <b>nombre del archivo</b> no coincide con el path.
-          </div>
-
-          <div class="hr" style="height:1px;background:rgba(17,24,39,.08);margin:14px 0"></div>
-
-          <div class="stats">
-            <div class="stat"><b id="stShown">—</b><div>mostrados</div></div>
-            <div class="stat"><b id="stFav">—</b><div>favoritos</div></div>
-            <div class="stat"><b id="stRec">—</b><div>recientes</div></div>
-          </div>
-
-          <div class="hr" style="height:1px;background:rgba(17,24,39,.08);margin:14px 0"></div>
-
-          <div class="btnbar">
-            <button class="btn" id="btnOpenClientsJson">Abrir clients.json</button>
-            <button class="btn" id="btnHardReload">Refrescar (sin caché)</button>
-          </div>
-
-          <div class="note" style="margin-top:10px">
-            Sugerencia: comparte links directos así:<br>
-            <span style="font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono','Courier New', monospace">
-              /carpeta/cliente_codigo.html
-            </span>
-          </div>
-        </div>
-      </aside>
+    <div class="searchCard">
+      <div class="searchRow">
+        <input id="q" placeholder="Buscar por cliente o código (ej. C012345)" autocomplete="off" />
+        <button class="iconBtn" id="btnClear" title="Limpiar">✕</button>
+        <button class="iconBtn" id="btnCompact" title="Vista compacta">≡</button>
+      </div>
+      <div class="chips" id="chips"></div>
+      <div class="diag" id="diagBox">
+        <pre id="diagText">—</pre>
+      </div>
     </div>
-  </main>
+  </div>
 
-  <nav class="nav">
-    <div class="navin">
-      <button class="tab active" data-tab="clientes">🔎 <span>Clientes</span></button>
-      <button class="tab" data-tab="vendedores">🧑‍💼 <span>Vendedores</span></button>
-      <button class="tab" data-tab="recientes">🕘 <span>Recientes</span></button>
-      <button class="tab" data-tab="favs">⭐ <span>Favoritos</span></button>
+  <div class="wrap" id="wrap">
+    <div class="sectionTitle">
+      <h2 id="sectionH">Resultados</h2>
+      <div class="metaLine" id="scope">Mostrando: todos</div>
     </div>
-  </nav>
+
+    <div class="list" id="list"></div>
+    <div class="empty" id="empty" style="display:none">Sin resultados.</div>
+  </div>
+
+  <div class="nav">
+    <div class="navRow">
+      <button class="tab active" id="tabSearch" type="button"><span class="ico">🔎</span><span>Buscar</span></button>
+      <button class="tab" id="tabVendors" type="button"><span class="ico">🧑‍💼</span><span>Vendedores</span></button>
+      <button class="tab" id="tabFav" type="button"><span class="ico">⭐</span><span>Favoritos</span></button>
+      <button class="tab" id="tabRec" type="button"><span class="ico">🕘</span><span>Recientes</span></button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Listo</div>
 
 <script>
 (() => {
-  const qs = new URLSearchParams(location.search);
-  const bust = qs.get("v") || String(Date.now()); // si no pones ?v=, cache-bust automático
-  const base = location.pathname.replace(/\/+$/,"/"); // .../Toyo-MX/
-  const CLIENTS_URL = base + "clients.json?v=" + encodeURIComponent(bust);
+  const $ = (q)=>document.querySelector(q);
+  const wrap = $("#wrap");
+  const q = $("#q");
+  const btnClear = $("#btnClear");
+  const btnCompact = $("#btnCompact");
+  const chips = $("#chips");
+  const list = $("#list");
+  const empty = $("#empty");
+  const subtitle = $("#subtitle");
+  const pillCount = $("#pillCount");
+  const scope = $("#scope");
+  const sectionH = $("#sectionH");
+  const toastEl = $("#toast");
+  const diagBox = $("#diagBox");
+  const diagText = $("#diagText");
 
-  const $ = (id)=>document.getElementById(id);
+  const tabSearch = $("#tabSearch");
+  const tabVendors = $("#tabVendors");
+  const tabFav = $("#tabFav");
+  const tabRec = $("#tabRec");
 
-  const pillStatus = $("pillStatus");
-  const q = $("q");
-  const vendorSel = $("vendorSel");
-  const list = $("list");
-  const stClients = $("stClients");
-  const stVendors = $("stVendors");
-  const stShown = $("stShown");
-  const stFav = $("stFav");
-  const stRec = $("stRec");
+  const LS_FAV = "toyo_index_favs_v1";
+  const LS_REC = "toyo_index_recent_v1";
+  const LS_COMPACT = "toyo_index_compact_v1";
 
-  const panelTitle = $("panelTitle");
-  const panelClientes = $("panelClientes");
-  const panelVendedores = $("panelVendedores");
-  const panelRecientes = $("panelRecientes");
-  const panelFavs = $("panelFavs");
-  const panelDiag = $("panelDiag");
+  let ALL = [];
+  let VENDORS = []; // {folder,label,count}
+  let ACTIVE_VENDOR = "ALL";
+  let MODE = "search"; // search | vendors | fav | rec
+  let compact = (localStorage.getItem(LS_COMPACT) === "1");
 
-  const vendorChips = $("vendorChips");
-  const vendorList = $("vendorList");
-  const recentList = $("recentList");
-  const favList = $("favList");
-
-  const diagUrl = $("diagUrl");
-  const diagOut = $("diagOut");
-
-  const KEY_FAV = "toyo_mx_favs_v1";
-  const KEY_REC = "toyo_mx_recent_v1";
-
-  let clients = [];
-  let filtered = [];
-
-  function normalize(s){
-    return (s||"").toString().trim().toLowerCase()
-      .normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+  function showToast(msg){
+    toastEl.textContent = msg;
+    toastEl.classList.add("show");
+    setTimeout(()=>toastEl.classList.remove("show"), 1600);
   }
 
-  function loadArr(key){
-    try{ return JSON.parse(localStorage.getItem(key)||"[]"); }catch(e){ return []; }
-  }
-  function saveArr(key, arr){
-    localStorage.setItem(key, JSON.stringify(arr||[]));
-  }
-  function getFavs(){ return new Set(loadArr(KEY_FAV)); }
-  function toggleFav(id){
-    const favs = loadArr(KEY_FAV);
-    const idx = favs.indexOf(id);
-    if(idx>=0) favs.splice(idx,1); else favs.push(id);
-    saveArr(KEY_FAV, favs);
-    renderMeta();
-    renderLists();
-  }
-  function pushRecent(id){
-    const rec = loadArr(KEY_REC).filter(x=>x!==id);
-    rec.unshift(id);
-    saveArr(KEY_REC, rec.slice(0,30));
-    renderMeta();
-  }
-
-  function makeId(c){
-    return (c.vendor_folder||"") + "|" + (c.client_code||"") + "|" + (c.path||"");
-  }
-
-  function openClient(c){
-    if(!c || !c.path) return;
-    pushRecent(makeId(c));
-    // abrir en la misma pestaña para móvil (mejor UX). Cambia a window.open(...) si quieres.
-    location.href = base + c.path;
-  }
-
-  function uniqueVendors(arr){
-    const map = new Map();
-    arr.forEach(c=>{
-      const k = c.vendor_folder || "sin_vendedor";
-      if(!map.has(k)){
-        map.set(k, {
-          folder:k,
-          label:c.vendor_label || k,
-          count:0
-        });
-      }
-      map.get(k).count++;
-    });
-    return [...map.values()].sort((a,b)=> a.label.localeCompare(b.label));
-  }
-
-  function renderMeta(){
-    stClients.textContent = clients.length.toLocaleString("es-MX");
-    stVendors.textContent = uniqueVendors(clients).length.toLocaleString("es-MX");
-    stShown.textContent = filtered.length.toLocaleString("es-MX");
-    stFav.textContent = loadArr(KEY_FAV).length.toLocaleString("es-MX");
-    stRec.textContent = loadArr(KEY_REC).length.toLocaleString("es-MX");
-  }
-
-  function cardHtml(c){
-    const id = makeId(c);
-    const favs = getFavs();
-    const isFav = favs.has(id);
-    return `
-      <div class="item">
-        <div style="min-width:0">
-          <div class="name" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(c.client_name || "—")}</div>
-          <div class="meta">${escapeHtml(c.client_code || "—")} · <span class="muted">${escapeHtml(c.vendor_label || c.vendor_folder || "—")}</span></div>
-        </div>
-        <div style="display:flex;gap:10px;align-items:center;flex:0 0 auto">
-          <button class="fav ${isFav?"on":""}" title="Favorito" data-fav="${encodeAttr(id)}">${isFav?"⭐":"☆"}</button>
-          <button class="open" data-open="${encodeAttr(id)}">Abrir</button>
-        </div>
-      </div>
-    `;
-  }
-
-  function escapeHtml(s){
+  function esc(s){
     return (s ?? "").toString()
       .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
       .replaceAll('"',"&quot;").replaceAll("'","&#039;");
   }
-  function encodeAttr(s){
-    return encodeURIComponent(s||"");
-  }
-  function decodeAttr(s){
-    try{ return decodeURIComponent(s||""); }catch(e){ return s; }
+
+  function norm(s){
+    return (s||"").toString().trim().toLowerCase()
+      .normalize("NFD").replace(/[\u0300-\u036f]/g,"");
   }
 
-  function renderClientsList(){
-    if(!filtered.length){
-      list.innerHTML = `<div class="empty">Sin resultados. Prueba buscar por <b>código</b> o cambia el vendedor.</div>`;
-      return;
+  function loadJSON(key, fallback){
+    try{ return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback)); }
+    catch(e){ return fallback; }
+  }
+  function saveJSON(key, obj){
+    localStorage.setItem(key, JSON.stringify(obj));
+  }
+
+  function isFav(path){
+    const favs = loadJSON(LS_FAV, []);
+    return favs.includes(path);
+  }
+  function toggleFav(path){
+    let favs = loadJSON(LS_FAV, []);
+    if(favs.includes(path)){
+      favs = favs.filter(x=>x!==path);
+      saveJSON(LS_FAV, favs);
+      showToast("Quitado de favoritos");
+    }else{
+      favs.unshift(path);
+      favs = [...new Set(favs)].slice(0, 200);
+      saveJSON(LS_FAV, favs);
+      showToast("Agregado a favoritos");
     }
-    const slice = filtered.slice(0, 600); // evita DOM enorme
-    list.innerHTML = slice.map(cardHtml).join("") + (filtered.length>slice.length ? `<div class="empty">Mostrando ${slice.length} de ${filtered.length}. Usa búsqueda o filtro para acotar.</div>`:"");
-    bindCardButtons(list, slice);
+  }
+  function pushRecent(path){
+    let rec = loadJSON(LS_REC, []);
+    rec.unshift(path);
+    rec = [...new Set(rec)].slice(0, 30);
+    saveJSON(LS_REC, rec);
   }
 
-  function bindCardButtons(container, arr){
-    const byId = new Map(arr.map(c=>[makeId(c), c]));
-    container.querySelectorAll("[data-open]").forEach(btn=>{
-      btn.addEventListener("click", ()=>{
-        const id = decodeAttr(btn.getAttribute("data-open"));
-        openClient(byId.get(id));
-      });
-    });
-    container.querySelectorAll("[data-fav]").forEach(btn=>{
-      btn.addEventListener("click", ()=>{
-        const id = decodeAttr(btn.getAttribute("data-fav"));
-        toggleFav(id);
-      });
-    });
+  function setDiag(obj){
+    diagText.textContent = (typeof obj === "string") ? obj : JSON.stringify(obj, null, 2);
   }
 
-  function applyFilters(){
-    const text = normalize(q.value);
-    const v = vendorSel.value || "ALL";
-    filtered = clients.filter(c=>{
-      if(v!=="ALL" && (c.vendor_folder||"")!==v) return false;
-      if(!text) return true;
-      return normalize(c.client_name).includes(text) || normalize(c.client_code).includes(text);
-    });
-    renderMeta();
-    renderClientsList();
+  function setCompact(on){
+    compact = !!on;
+    localStorage.setItem(LS_COMPACT, compact ? "1" : "0");
+    wrap.classList.toggle("compact", compact);
+    showToast(compact ? "Vista compacta" : "Vista normal");
   }
 
-  function fillVendorSelect(){
-    const vs = uniqueVendors(clients);
-    vendorSel.innerHTML = `<option value="ALL">Todos</option>` + vs.map(v=>`<option value="${escapeHtml(v.folder)}">${escapeHtml(v.label)} (${v.count})</option>`).join("");
-  }
-
-  function renderVendorsPanel(){
-    const vs = uniqueVendors(clients);
-    vendorChips.innerHTML = vs.map((v,i)=>`<button class="chip" data-chip="${escapeHtml(v.folder)}">${escapeHtml(v.label)} <span class="mini">(${v.count})</span></button>`).join("");
-    vendorList.innerHTML = `<div class="empty">Toca un vendedor arriba para ver su lista.</div>`;
-
-    vendorChips.querySelectorAll("[data-chip]").forEach(btn=>{
-      btn.addEventListener("click", ()=>{
-        vendorChips.querySelectorAll(".chip").forEach(x=>x.classList.remove("active"));
-        btn.classList.add("active");
-        const folder = btn.getAttribute("data-chip");
-        const arr = clients.filter(c=>(c.vendor_folder||"")===folder);
-        vendorList.innerHTML = arr.slice(0, 600).map(cardHtml).join("") + (arr.length>600?`<div class="empty">Mostrando 600 de ${arr.length}. Usa búsqueda en “Clientes” si necesitas uno específico.</div>`:"");
-        bindCardButtons(vendorList, arr.slice(0,600));
-      });
-    });
-  }
-
-  function renderRecentPanel(){
-    const ids = loadArr(KEY_REC);
-    const map = new Map(clients.map(c=>[makeId(c), c]));
-    const arr = ids.map(id=>map.get(id)).filter(Boolean);
-    if(!arr.length){
-      recentList.innerHTML = `<div class="empty">Aún no has abierto clientes en este dispositivo.</div>`;
-      return;
-    }
-    recentList.innerHTML = arr.map(cardHtml).join("");
-    bindCardButtons(recentList, arr);
-  }
-
-  function renderFavsPanel(){
-    const favs = loadArr(KEY_FAV);
-    const map = new Map(clients.map(c=>[makeId(c), c]));
-    const arr = favs.map(id=>map.get(id)).filter(Boolean);
-    if(!arr.length){
-      favList.innerHTML = `<div class="empty">No tienes favoritos. Marca ⭐ en cualquier cliente.</div>`;
-      return;
-    }
-    favList.innerHTML = arr.map(cardHtml).join("");
-    bindCardButtons(favList, arr);
-  }
-
-  function renderLists(){
-    // re-render panel actual
-    if(panelClientes.style.display!=="none"){ renderClientsList(); }
-    if(panelVendedores.style.display!=="none"){ renderVendorsPanel(); }
-    if(panelRecientes.style.display!=="none"){ renderRecentPanel(); }
-    if(panelFavs.style.display!=="none"){ renderFavsPanel(); }
-  }
-
-  function setTab(tab){
-    document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active", b.dataset.tab===tab));
-    panelClientes.style.display = (tab==="clientes") ? "" : "none";
-    panelVendedores.style.display = (tab==="vendedores") ? "" : "none";
-    panelRecientes.style.display = (tab==="recientes") ? "" : "none";
-    panelFavs.style.display = (tab==="favs") ? "" : "none";
-    panelDiag.style.display = "none";
-
-    panelTitle.textContent =
-      tab==="clientes" ? "Clientes" :
-      tab==="vendedores" ? "Vendedores" :
-      tab==="recientes" ? "Recientes" :
-      "Favoritos";
-
-    // render
-    if(tab==="clientes"){ applyFilters(); }
-    if(tab==="vendedores"){ renderVendorsPanel(); }
-    if(tab==="recientes"){ renderRecentPanel(); }
-    if(tab==="favs"){ renderFavsPanel(); }
-  }
-
-  async function runDiag(err){
-    diagUrl.textContent = CLIENTS_URL;
-    const out = {
-      clients_url: CLIENTS_URL,
-      base_path: base,
-      error: err ? (err.message || String(err)) : null,
-      hint: "Verifica que clients.json esté en la RAÍZ del repo (misma altura que index.html)."
-    };
-    diagOut.textContent = JSON.stringify(out, null, 2);
-    panelClientes.style.display="none";
-    panelVendedores.style.display="none";
-    panelRecientes.style.display="none";
-    panelFavs.style.display="none";
-    panelDiag.style.display="";
-    panelTitle.textContent="Diagnóstico";
-  }
-
-  async function load(){
-    pillStatus.textContent = "Cargando…";
+  async function loadClients(){
+    // cache bust fuerte
+    const url = "clients.json?v=" + Date.now();
     try{
-      const res = await fetch(CLIENTS_URL, {cache:"no-store"});
-      if(!res.ok) throw new Error("No se pudo cargar clients.json (HTTP "+res.status+")");
-      const data = await res.json();
-      if(!Array.isArray(data)) throw new Error("clients.json no es un array JSON");
-      clients = data.map(c=>({
-        vendor_folder: (c.vendor_folder||"").toString().trim(),
-        vendor_label: (c.vendor_label||c.vendor_folder||"").toString().trim(),
-        client_name: (c.client_name||"").toString().trim(),
-        client_code: (c.client_code||"").toString().trim(),
-        path: (c.path||"").toString().trim()
-      })).filter(c=>c.path && c.client_code);
+      setDiag({status:"fetching", url});
+      const res = await fetch(url, {cache:"no-store"});
+      const text = await res.text();
+      if(!res.ok){
+        setDiag({status:"error", http:res.status, body:text.slice(0,500)});
+        throw new Error("No se pudo cargar clients.json (" + res.status + ")");
+      }
+      let data;
+      try{ data = JSON.parse(text); }
+      catch(e){
+        setDiag({status:"error", msg:"clients.json no es JSON válido", sample:text.slice(0,600)});
+        throw e;
+      }
 
-      // Orden por nombre
-      clients.sort((a,b)=>(a.client_name||"").localeCompare((b.client_name||""),"es",{sensitivity:"base"}));
+      // Acepta 2 estructuras:
+      //  A) { clients:[{vendor_folder,vendor_label,client_name,client_code,path}] }
+      //  B) { clients:[{vendor_folder,vendor_name,client_name,client_code,file}] } (o array directo)
+      const arr = Array.isArray(data) ? data : (Array.isArray(data.clients) ? data.clients : []);
 
-      fillVendorSelect();
-      filtered = clients.slice();
-      renderMeta();
-      applyFilters();
+      ALL = arr.map(x=>{
+        const vendor_folder = (x.vendor_folder || x.seller || "").toString().trim();
+        const vendor_label = (x.vendor_label || x.vendor_name || x.seller_name || vendor_folder).toString().trim();
+        const client_name  = (x.client_name  || x.client || "").toString().trim();
+        const client_code  = (x.client_code  || x.code   || "").toString().trim();
+        let path = (x.path || "").toString().trim();
+        if(!path){
+          const file = (x.file || "").toString().trim();
+          if(vendor_folder && file) path = vendor_folder + "/" + file;
+        }
+        return {vendor_folder, vendor_label, client_name, client_code, path};
+      }).filter(x=>x.vendor_folder && x.path && x.client_name);
 
-      pillStatus.textContent = "Listo · " + clients.length.toLocaleString("es-MX") + " clientes";
+      // Vendors
+      const map = new Map();
+      ALL.forEach(c=>{
+        if(!map.has(c.vendor_folder)){
+          map.set(c.vendor_folder, {folder:c.vendor_folder, label:c.vendor_label || c.vendor_folder, count:0});
+        }
+        map.get(c.vendor_folder).count++;
+      });
+      VENDORS = [...map.values()].sort((a,b)=>a.label.localeCompare(b.label, "es"));
+
+      subtitle.textContent = `${VENDORS.length} vendedor(es) · ${ALL.length} cliente(s)`;
+      pillCount.textContent = String(ALL.length);
+
+      // chips (top 8)
+      renderChips();
+
+      // apply compact
+      wrap.classList.toggle("compact", compact);
+
+      // render default
+      render();
+      setDiag({status:"ok", total_clients:ALL.length, total_vendors:VENDORS.length, sample:ALL[0]});
+      // oculta diagnóstico por defecto
+      diagBox.style.display = "none";
     }catch(e){
-      pillStatus.textContent = "Error";
-      list.innerHTML = `<div class="empty"><b>No pude leer clients.json.</b><br><span class="muted">${escapeHtml(e.message||e)}</span><br><br>Abre “Diagnóstico”.</div>`;
-      renderMeta();
-      await runDiag(e);
+      subtitle.textContent = "No se pudo cargar clients.json";
+      pillCount.textContent = "0";
+      diagBox.style.display = "block";
+      setDiag({status:"fatal", error: e?.message || String(e)});
+      MODE = "search";
+      render();
     }
+  }
+
+  function renderChips(){
+    chips.innerHTML = "";
+    // Chip "Todos"
+    const chipAll = document.createElement("div");
+    chipAll.className = "chip" + (ACTIVE_VENDOR==="ALL" ? " active" : "");
+    chipAll.innerHTML = `<span>Todos</span>`;
+    chipAll.addEventListener("click", ()=>{
+      ACTIVE_VENDOR = "ALL";
+      MODE = "search";
+      applyTabs();
+      renderChips();
+      render();
+    });
+    chips.appendChild(chipAll);
+
+    const top = VENDORS.slice(0, 8);
+    top.forEach(v=>{
+      const el = document.createElement("div");
+      el.className = "chip" + (ACTIVE_VENDOR===v.folder ? " active" : "");
+      el.innerHTML = `<span>${esc(v.label)}</span>`;
+      el.title = `${v.label} (${v.count})`;
+      el.addEventListener("click", ()=>{
+        ACTIVE_VENDOR = v.folder;
+        MODE = "search";
+        applyTabs();
+        renderChips();
+        render();
+      });
+      chips.appendChild(el);
+    });
+
+    // Chip "Ver todos"
+    const chipMore = document.createElement("div");
+    chipMore.className = "chip";
+    chipMore.innerHTML = `<span>Ver todos</span>`;
+    chipMore.addEventListener("click", ()=>{
+      MODE = "vendors";
+      applyTabs();
+      render();
+      showToast("Lista de vendedores");
+    });
+    chips.appendChild(chipMore);
+  }
+
+  function currentBaseList(){
+    let base = ALL.slice();
+
+    if(MODE === "fav"){
+      const favs = loadJSON(LS_FAV, []);
+      const set = new Set(favs);
+      base = base.filter(c=>set.has(c.path));
+    } else if(MODE === "rec"){
+      const rec = loadJSON(LS_REC, []);
+      // ordena por recencia
+      const pos = new Map(rec.map((p,i)=>[p,i]));
+      base = base.filter(c=>pos.has(c.path)).sort((a,b)=>pos.get(a.path)-pos.get(b.path));
+    } else if(MODE === "vendors"){
+      base = []; // vendors screen
+    }
+
+    // vendor filter (solo para búsqueda, favoritos, recientes)
+    if(MODE !== "vendors" && ACTIVE_VENDOR !== "ALL"){
+      base = base.filter(c=>c.vendor_folder === ACTIVE_VENDOR);
+    }
+
+    return base;
+  }
+
+  function applyQuery(list){
+    const raw = q.value || "";
+    const s = norm(raw);
+    if(!s) return list;
+
+    // Heurística: si empieza con C o tiene números, prioriza por código
+    const looksCode = /^c?\d/.test(s.replace(/\s+/g,"")) || /\d{3,}/.test(s);
+    if(looksCode){
+      return list.filter(c=> norm(c.client_code).includes(s) || norm(c.client_name).includes(s));
+    }
+    return list.filter(c=> norm(c.client_name).includes(s) || norm(c.client_code).includes(s));
+  }
+
+  function renderVendorsScreen(){
+    sectionH.textContent = "Vendedores";
+    scope.textContent = "Elige un vendedor";
+    list.innerHTML = "";
+    empty.style.display = "none";
+
+    const vendors = VENDORS.slice();
+    if(!vendors.length){
+      list.innerHTML = `<div class="empty">No hay vendedores (clients.json no cargó o está vacío).</div>`;
+      return;
+    }
+
+    vendors.forEach(v=>{
+      const el = document.createElement("div");
+      el.className = "cardItem";
+      el.innerHTML = `
+        <div class="left">
+          <p class="name">${esc(v.label)}</p>
+          <div class="details">${esc(v.folder)} · ${v.count} cliente(s)</div>
+        </div>
+        <div class="actions">
+          <button class="btn" type="button">Ver clientes</button>
+        </div>
+      `;
+      el.querySelector("button").addEventListener("click", ()=>{
+        ACTIVE_VENDOR = v.folder;
+        MODE = "search";
+        q.value = "";
+        applyTabs();
+        renderChips();
+        render();
+        showToast("Filtrado por vendedor");
+        window.scrollTo({top:0, behavior:"smooth"});
+      });
+      list.appendChild(el);
+    });
+  }
+
+  function renderClientsScreen(){
+    let base = currentBaseList();
+    base = applyQuery(base);
+
+    // orden alfabético (excepto recientes ya viene ordenado)
+    if(MODE !== "rec"){
+      base.sort((a,b)=> (a.client_name||"").localeCompare((b.client_name||""), "es"));
+    }
+
+    // Titles
+    if(MODE === "fav"){
+      sectionH.textContent = "Favoritos";
+      scope.textContent = (ACTIVE_VENDOR==="ALL") ? "Todos los vendedores" : ("Vendedor: " + (VENDORS.find(v=>v.folder===ACTIVE_VENDOR)?.label || ACTIVE_VENDOR));
+    } else if(MODE === "rec"){
+      sectionH.textContent = "Recientes";
+      scope.textContent = "Últimos abiertos";
+    } else {
+      sectionH.textContent = "Resultados";
+      scope.textContent = (ACTIVE_VENDOR==="ALL") ? "Mostrando: todos" : ("Mostrando: " + (VENDORS.find(v=>v.folder===ACTIVE_VENDOR)?.label || ACTIVE_VENDOR));
+    }
+
+    list.innerHTML = "";
+    empty.style.display = base.length ? "none" : "block";
+    empty.textContent = (MODE==="fav" && !base.length) ? "Aún no tienes favoritos. Abre un cliente y toca ⭐." :
+                      (MODE==="rec" && !base.length) ? "Aún no hay recientes. Abre un cliente desde Buscar." :
+                      "Sin resultados.";
+
+    const MAX = 250;
+    const view = base.slice(0, MAX);
+
+    view.forEach(c=>{
+      const el = document.createElement("div");
+      el.className = "cardItem";
+      const favOn = isFav(c.path);
+      el.innerHTML = `
+        <div class="left">
+          <p class="name" title="${esc(c.client_name)}">${esc(c.client_name)}</p>
+          <div class="details">${esc(c.client_code || "—")} · ${esc(c.vendor_label || c.vendor_folder)}</div>
+        </div>
+        <div class="actions">
+          <button class="star ${favOn ? "on":""}" type="button">${favOn ? "★" : "☆"}</button>
+          <button class="btn" type="button">Abrir</button>
+          <button class="btn secondary" type="button">Copiar link</button>
+        </div>
+      `;
+
+      const starBtn = el.querySelector(".star");
+      const openBtn = el.querySelectorAll("button")[1];
+      const copyBtn = el.querySelectorAll("button")[2];
+
+      starBtn.addEventListener("click", ()=>{
+        toggleFav(c.path);
+        starBtn.classList.toggle("on", isFav(c.path));
+        starBtn.textContent = isFav(c.path) ? "★" : "☆";
+      });
+
+      openBtn.addEventListener("click", ()=>{
+        pushRecent(c.path);
+        window.open(c.path, "_blank");
+      });
+
+      copyBtn.addEventListener("click", async ()=>{
+        const full = new URL(c.path, window.location.href).href;
+        try{
+          await navigator.clipboard.writeText(full);
+          showToast("Link copiado");
+        }catch(e){
+          // fallback
+          const ta = document.createElement("textarea");
+          ta.value = full;
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand("copy");
+          ta.remove();
+          showToast("Link copiado");
+        }
+      });
+
+      list.appendChild(el);
+    });
+
+    if(base.length > MAX){
+      const more = document.createElement("div");
+      more.className = "empty";
+      more.textContent = `Mostrando ${MAX} de ${base.length}. Escribe más letras o filtra por vendedor.`;
+      list.appendChild(more);
+    }
+  }
+
+  function applyTabs(){
+    tabSearch.classList.toggle("active", MODE==="search");
+    tabVendors.classList.toggle("active", MODE==="vendors");
+    tabFav.classList.toggle("active", MODE==="fav");
+    tabRec.classList.toggle("active", MODE==="rec");
+  }
+
+  function render(){
+    applyTabs();
+    if(MODE === "vendors"){
+      renderVendorsScreen();
+      return;
+    }
+    renderClientsScreen();
   }
 
   // Events
-  q.addEventListener("input", ()=>applyFilters());
-  vendorSel.addEventListener("change", ()=>applyFilters());
-
-  $("btnAll").addEventListener("click", ()=>{
-    q.value="";
-    vendorSel.value="ALL";
-    applyFilters();
-  });
-  $("btnClear").addEventListener("click", ()=>{
-    q.value="";
-    applyFilters();
-  });
-  $("btnDiag").addEventListener("click", ()=>runDiag(null));
-
-  $("btnOpenClientsJson").addEventListener("click", ()=> window.open(base+"clients.json", "_blank"));
-  $("btnHardReload").addEventListener("click", ()=>{
-    const next = (parseInt(qs.get("v")||"1",10) || 1) + 1;
-    location.href = base + "?v=" + next;
+  q.addEventListener("input", ()=>{
+    if(MODE !== "search") MODE = "search";
+    applyTabs();
+    renderClientsScreen();
   });
 
-  document.querySelectorAll(".tab").forEach(b=>{
-    b.addEventListener("click", ()=>setTab(b.dataset.tab));
+  btnClear.addEventListener("click", ()=>{
+    q.value = "";
+    if(MODE !== "search") MODE = "search";
+    applyTabs();
+    render();
+    q.focus();
   });
 
-  // Load!
-  load();
+  btnCompact.addEventListener("click", ()=>setCompact(!compact));
+
+  tabSearch.addEventListener("click", ()=>{ MODE="search"; applyTabs(); render(); window.scrollTo({top:0, behavior:"smooth"}); });
+  tabVendors.addEventListener("click", ()=>{ MODE="vendors"; applyTabs(); render(); window.scrollTo({top:0, behavior:"smooth"}); });
+  tabFav.addEventListener("click", ()=>{ MODE="fav"; applyTabs(); render(); window.scrollTo({top:0, behavior:"smooth"}); });
+  tabRec.addEventListener("click", ()=>{ MODE="rec"; applyTabs(); render(); window.scrollTo({top:0, behavior:"smooth"}); });
+
+  // Long press to show diagnostics (also quick toggle)
+  let pressTimer;
+  subtitle.addEventListener("touchstart", ()=>{
+    pressTimer = setTimeout(()=>{
+      diagBox.style.display = (diagBox.style.display==="block") ? "none" : "block";
+      showToast(diagBox.style.display==="block" ? "Diagnóstico ON" : "Diagnóstico OFF");
+    }, 700);
+  }, {passive:true});
+  subtitle.addEventListener("touchend", ()=>{ clearTimeout(pressTimer); }, {passive:true});
+
+  // Init
+  setCompact(compact);
+  loadClients();
 })();
 </script>
 </body>
