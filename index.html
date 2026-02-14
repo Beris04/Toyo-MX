@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Pedidos Toyo MX · Index</title>
+  <title>Pedidos Toyo MX</title>
+  <meta name="theme-color" content="#0B4CCB" />
   <style>
     :root{
       --blue:#0B4CCB;
@@ -12,320 +13,599 @@
       --border:#D1D5DB;
       --text:#111827;
       --muted:#6b7280;
+      --shadow:0 10px 28px rgba(0,0,0,.08);
+      --r:18px;
     }
     *{box-sizing:border-box}
-    body{margin:0;padding:28px;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:var(--text)}
-    .wrap{max-width:1200px;margin:0 auto}
-    .header{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;margin-bottom:18px}
-    .header h1{margin:0;color:var(--blue);font-size:42px;letter-spacing:-.5px}
-    .sub{margin-top:6px;color:var(--muted);font-size:16px}
-    .badge{border:1px solid #c7dbff;color:var(--blue);padding:10px 16px;border-radius:999px;font-weight:800;background:#eef4ff;white-space:nowrap}
-    .card{background:var(--card);border-radius:18px;padding:18px 18px 14px;margin:16px 0;box-shadow:0 10px 25px rgba(0,0,0,.06);border:1px solid rgba(0,0,0,.03)}
-    .row{display:grid;grid-template-columns: 1.1fr .9fr;gap:14px;align-items:start}
-    @media(max-width:900px){.row{grid-template-columns:1fr}}
-    label{display:block;font-weight:800;margin-bottom:8px;color:#0b3c91}
-    input,select{width:100%;padding:14px;border-radius:14px;border:1px solid var(--border);font-size:16px;background:#fff}
-    .hint{margin-top:10px;color:var(--muted);font-size:14px;line-height:1.35}
-    .btnbar{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
-    .btn{padding:12px 16px;border-radius:14px;border:1px solid var(--border);background:#fff;font-weight:800;cursor:pointer}
-    .pill{display:inline-flex;align-items:center;gap:10px;padding:10px 14px;border-radius:999px;background:#f1f5f9;border:1px solid #e5e7eb;font-weight:800}
-    .grid3{display:grid;grid-template-columns: repeat(3,1fr);gap:14px}
-    @media(max-width:980px){.grid3{grid-template-columns:1fr}}
-    .vendorCard,.clientCard{
-      border:1px solid #e5e7eb;border-radius:18px;background:#fff;
-      padding:16px 16px;display:flex;justify-content:space-between;gap:12px;align-items:center;
+    body{
+      margin:0;
+      background:linear-gradient(180deg,#f7f9ff 0%, var(--bg) 100%);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+      color:var(--text);
     }
-    .vendorTitle{font-size:18px;font-weight:900;margin:0}
-    .vendorMeta{color:var(--muted);font-size:13px;margin-top:6px}
-    .clientName{font-size:18px;font-weight:900;margin:0}
-    .clientMeta{color:var(--muted);font-size:13px;margin-top:6px}
-    .openBtn{padding:10px 14px;border-radius:14px;border:1px solid #c7dbff;background:#eef4ff;color:var(--blue);font-weight:900;cursor:pointer}
-    .sectionTitle{font-size:26px;font-weight:950;margin:0 0 6px;color:#0b3c91}
-    .sectionSub{margin:0 0 14px;color:var(--muted)}
-    .rightTag{margin-left:auto}
-    .tiny{font-size:12px;color:var(--muted)}
-    .diag{display:none;margin-top:10px;border-top:1px dashed #d1d5db;padding-top:10px}
-    .diag pre{white-space:pre-wrap;background:#0b1220;color:#e5e7eb;padding:12px;border-radius:12px;font-size:12px;overflow:auto}
-    .warn{color:#b45309;font-weight:900}
-    .ok{color:#166534;font-weight:900}
+    a{color:inherit}
+    .wrap{max-width:1100px;margin:0 auto;padding:16px 14px 90px}
+    .top{
+      position:sticky; top:0; z-index:50;
+      background:rgba(243,245,247,.76);
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid rgba(17,24,39,.08);
+    }
+    .topin{max-width:1100px;margin:0 auto;padding:12px 14px;display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{
+      width:40px;height:40px;border-radius:14px;
+      background:linear-gradient(135deg,#083aa0,#0B4CCB 60%, #8fb3ff);
+      box-shadow:0 10px 22px rgba(11,76,203,.25);
+    }
+    h1{font-size:20px;margin:0;color:var(--blue);letter-spacing:.2px}
+    .sub{font-size:13px;color:var(--muted);margin-top:2px}
+    .pill{
+      display:inline-flex;gap:8px;align-items:center;
+      background:#eef4ff;border:1px solid #c7dbff;color:var(--blue);
+      padding:9px 12px;border-radius:999px;font-weight:800;font-size:12px;
+      white-space:nowrap;
+    }
+    .content{padding-top:14px}
+    .grid{display:grid;grid-template-columns:1.2fr .8fr;gap:14px;align-items:start}
+    @media(max-width:980px){ .grid{grid-template-columns:1fr} }
+    .card{
+      background:var(--card);
+      border:1px solid rgba(17,24,39,.10);
+      border-radius:var(--r);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .hd{padding:16px 16px 12px;border-bottom:1px solid rgba(17,24,39,.08);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+    .title{font-weight:900}
+    .bd{padding:14px 16px 16px}
+    label{display:block;font-weight:900;font-size:12px;color:#0b3c91;margin-bottom:6px}
+    input,select{
+      width:100%; padding:13px 14px; border-radius:14px;
+      border:1px solid var(--border); font-size:15px;
+      background:#fff;
+    }
+    .row{display:flex;gap:12px;flex-wrap:wrap}
+    .col{flex:1;min-width:220px}
+    .note{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.35}
+    .btnbar{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .btn{
+      border:1px solid rgba(17,24,39,.12);
+      background:#fff;
+      padding:11px 14px;border-radius:14px;
+      font-weight:900;cursor:pointer;
+    }
+    .btn.primary{background:var(--blue);color:#fff;border-color:transparent}
+    .btn.ghost{background:#f8fafc}
+    .stats{display:flex;gap:10px;flex-wrap:wrap}
+    .stat{
+      background:#f8fafc;border:1px solid rgba(17,24,39,.08);
+      padding:10px 12px;border-radius:14px;
+      font-size:12px;color:var(--muted)
+    }
+    .stat b{color:var(--text);font-size:14px}
+    .list{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media(max-width:720px){ .list{grid-template-columns:1fr} }
+    .item{
+      border:1px solid rgba(17,24,39,.10);
+      border-radius:16px;
+      padding:14px;
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+      background:#fff;
+    }
+    .name{font-weight:950}
+    .meta{font-size:12px;color:var(--muted);margin-top:4px}
+    .open{background:#eef4ff;border:1px solid #c7dbff;color:var(--blue);padding:10px 12px;border-radius:14px;font-weight:950;cursor:pointer;white-space:nowrap}
+    .fav{
+      width:40px;height:40px;border-radius:14px;
+      border:1px solid rgba(17,24,39,.12);
+      display:grid;place-items:center;cursor:pointer;
+      background:#fff;
+    }
+    .fav.on{background:#fff7ed;border-color:#fed7aa}
+    .muted{color:var(--muted)}
+    .empty{
+      padding:14px;border:1px dashed rgba(17,24,39,.18);border-radius:16px;
+      color:var(--muted);background:#fff;grid-column:1/-1
+    }
+    /* Bottom nav */
+    .nav{
+      position:fixed;left:0;right:0;bottom:0;z-index:60;
+      background:rgba(255,255,255,.86);
+      backdrop-filter: blur(10px);
+      border-top:1px solid rgba(17,24,39,.10);
+    }
+    .navin{max-width:1100px;margin:0 auto;padding:10px 14px;display:flex;gap:10px;justify-content:space-between}
+    .tab{
+      flex:1;
+      border:1px solid rgba(17,24,39,.10);
+      background:#fff;
+      padding:10px 12px;border-radius:16px;
+      display:flex;align-items:center;justify-content:center;gap:8px;
+      font-weight:900;cursor:pointer;
+      color:var(--muted);
+    }
+    .tab.active{color:#fff;background:var(--blue);border-color:transparent;box-shadow:0 10px 20px rgba(11,76,203,.22)}
+    .mini{font-size:11px}
+    .skeleton{
+      height:58px;border-radius:16px;
+      background:linear-gradient(90deg,#f1f5f9 25%,#e5e7eb 37%,#f1f5f9 63%);
+      background-size:400% 100%;
+      animation:shimmer 1.2s infinite;
+      border:1px solid rgba(17,24,39,.06)
+    }
+    @keyframes shimmer{0%{background-position:100% 0}100%{background-position:0 0}}
+    .chips{display:flex;gap:8px;flex-wrap:wrap}
+    .chip{
+      padding:7px 10px;border-radius:999px;
+      background:#f8fafc;border:1px solid rgba(17,24,39,.10);
+      font-weight:900;font-size:12px;color:var(--muted);cursor:pointer;
+    }
+    .chip.active{background:#eef4ff;border-color:#c7dbff;color:var(--blue)}
   </style>
 </head>
-
 <body>
-<div class="wrap">
-  <div class="header">
-    <div>
-      <h1>Pedidos Toyo MX</h1>
-      <div class="sub">Selecciona vendedor o busca un cliente para abrir su HTML.</div>
-    </div>
-    <div class="badge">Versión corporativa</div>
-  </div>
-
-  <div class="card">
-    <div class="row">
-      <div>
-        <label>Buscar cliente (nombre o código)</label>
-        <input id="q" placeholder="Ej. ALTAMESE o C020669" autocomplete="off" />
-        <div class="hint">Tip: puedes pegar el código de cliente. El resultado abre el HTML directo (GitHub Pages).</div>
-        <div class="btnbar">
-          <button class="btn" id="btnAll">Ver todos</button>
-          <span class="pill" id="countClients">0 clientes</span>
+  <header class="top">
+    <div class="topin">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <h1>Pedidos Toyo MX</h1>
+          <div class="sub">Buscador general por cliente · GitHub Pages</div>
         </div>
       </div>
-      <div>
-        <label>Filtrar por vendedor</label>
-        <select id="vendorFilter">
-          <option value="ALL">Todos</option>
-        </select>
-        <div class="hint">Nota: este index usa un archivo <b>clients.json</b> en la raíz del repo.</div>
-        <div class="btnbar">
-          <button class="btn" id="btnDiag">Ver diagnóstico</button>
-          <span class="pill" id="countVendors">0 vendedores</span>
+      <div class="pill" id="pillStatus">Cargando…</div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="content grid">
+      <!-- Left -->
+      <section class="card">
+        <div class="hd">
+          <div class="title" id="panelTitle">Clientes</div>
+          <div class="stats" id="stats">
+            <div class="stat"><b id="stClients">—</b><div>clientes</div></div>
+            <div class="stat"><b id="stVendors">—</b><div>vendedores</div></div>
+          </div>
         </div>
-      </div>
-    </div>
+        <div class="bd">
+          <div id="panelClientes">
+            <div class="row">
+              <div class="col">
+                <label>Buscar cliente (nombre o código)</label>
+                <input id="q" placeholder="Ej. ALTAMESE o C020669" autocomplete="off" />
+                <div class="note">Tip: pega el código y abre el HTML directo.</div>
+              </div>
+              <div class="col">
+                <label>Filtrar por vendedor</label>
+                <select id="vendorSel">
+                  <option value="ALL">Todos</option>
+                </select>
+                <div class="note">Este index lee <b>clients.json</b> en la raíz del repo.</div>
+              </div>
+            </div>
 
-    <div class="diag" id="diagBox">
-      <div class="tiny"><span class="warn">Si ves error aquí</span>, es 100% por ruta/caché/permisos de GitHub Pages (no por tus HTML).</div>
-      <pre id="diagText">Cargando…</pre>
-    </div>
-  </div>
+            <div class="btnbar">
+              <button class="btn primary" id="btnAll">Ver todos</button>
+              <button class="btn ghost" id="btnClear">Limpiar</button>
+              <button class="btn" id="btnDiag">Diagnóstico</button>
+            </div>
 
-  <div class="card">
-    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:space-between">
-      <div>
-        <div class="sectionTitle">Vendedores</div>
-        <div class="sectionSub">Click en un vendedor para ver su lista.</div>
-      </div>
-      <span class="pill" id="vendorsShown">0 vendedores</span>
-    </div>
-    <div class="grid3" id="vendorsGrid"></div>
-  </div>
+            <div class="hr" style="height:1px;background:rgba(17,24,39,.08);margin:14px 0"></div>
 
-  <div class="card">
-    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:space-between">
-      <div>
-        <div class="sectionTitle">Clientes</div>
-        <div class="sectionSub" id="clientsLabel">Mostrando: todos</div>
-      </div>
-      <span class="pill" id="clientsShown">0 mostrados</span>
-    </div>
-    <div class="grid3" id="clientsGrid"></div>
-  </div>
+            <div class="list" id="list">
+              <div class="skeleton"></div>
+              <div class="skeleton"></div>
+              <div class="skeleton"></div>
+              <div class="skeleton"></div>
+            </div>
+          </div>
 
-  <div class="tiny">Tip rápido: si actualizas archivos y no se refleja, abre el sitio con <b>?v=2</b> (o incógnito) para romper caché.</div>
-</div>
+          <div id="panelVendedores" style="display:none">
+            <div class="chips" id="vendorChips"></div>
+            <div class="note" style="margin-top:10px">Toca un vendedor para ver sus clientes.</div>
+            <div class="hr" style="height:1px;background:rgba(17,24,39,.08);margin:14px 0"></div>
+            <div class="list" id="vendorList"></div>
+          </div>
+
+          <div id="panelRecientes" style="display:none">
+            <div class="note">Aquí aparecen los últimos clientes que abriste (en este dispositivo).</div>
+            <div class="hr" style="height:1px;background:rgba(17,24,39,.08);margin:14px 0"></div>
+            <div class="list" id="recentList"></div>
+          </div>
+
+          <div id="panelFavs" style="display:none">
+            <div class="note">Marca ⭐ para guardar clientes favoritos (en este dispositivo).</div>
+            <div class="hr" style="height:1px;background:rgba(17,24,39,.08);margin:14px 0"></div>
+            <div class="list" id="favList"></div>
+          </div>
+
+          <div id="panelDiag" style="display:none">
+            <div class="note">Si no aparecen clientes, aquí te dice por qué.</div>
+            <div class="hr" style="height:1px;background:rgba(17,24,39,.08);margin:14px 0"></div>
+            <div class="card" style="box-shadow:none;border-radius:16px">
+              <div class="bd">
+                <div class="mini muted">URL detectada de clients.json</div>
+                <div style="font-weight:900;margin-top:6px" id="diagUrl">—</div>
+                <div class="hr" style="height:1px;background:rgba(17,24,39,.08);margin:12px 0"></div>
+                <div class="mini muted">Resultado</div>
+                <pre id="diagOut" style="white-space:pre-wrap;margin:6px 0 0;background:#0f172a;color:#e5e7eb;padding:12px;border-radius:14px;overflow:auto"></pre>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Right -->
+      <aside class="card">
+        <div class="hd">
+          <div class="title">Accesos rápidos</div>
+          <div class="pill" style="background:#f8fafc;border-color:rgba(17,24,39,.10);color:var(--muted)">App style</div>
+        </div>
+        <div class="bd">
+          <div class="note">
+            • Para que siempre cargue lo nuevo, abre con <b>?v=2</b> (cambia el número cuando actualices).<br>
+            • Si abres un cliente y da 404, normalmente es porque el <b>nombre del archivo</b> no coincide con el path.
+          </div>
+
+          <div class="hr" style="height:1px;background:rgba(17,24,39,.08);margin:14px 0"></div>
+
+          <div class="stats">
+            <div class="stat"><b id="stShown">—</b><div>mostrados</div></div>
+            <div class="stat"><b id="stFav">—</b><div>favoritos</div></div>
+            <div class="stat"><b id="stRec">—</b><div>recientes</div></div>
+          </div>
+
+          <div class="hr" style="height:1px;background:rgba(17,24,39,.08);margin:14px 0"></div>
+
+          <div class="btnbar">
+            <button class="btn" id="btnOpenClientsJson">Abrir clients.json</button>
+            <button class="btn" id="btnHardReload">Refrescar (sin caché)</button>
+          </div>
+
+          <div class="note" style="margin-top:10px">
+            Sugerencia: comparte links directos así:<br>
+            <span style="font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono','Courier New', monospace">
+              /carpeta/cliente_codigo.html
+            </span>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <nav class="nav">
+    <div class="navin">
+      <button class="tab active" data-tab="clientes">🔎 <span>Clientes</span></button>
+      <button class="tab" data-tab="vendedores">🧑‍💼 <span>Vendedores</span></button>
+      <button class="tab" data-tab="recientes">🕘 <span>Recientes</span></button>
+      <button class="tab" data-tab="favs">⭐ <span>Favoritos</span></button>
+    </div>
+  </nav>
 
 <script>
 (() => {
-  const $ = (q)=>document.querySelector(q);
-  const q = $("#q");
-  const vendorFilter = $("#vendorFilter");
-  const vendorsGrid = $("#vendorsGrid");
-  const clientsGrid = $("#clientsGrid");
-  const countClients = $("#countClients");
-  const countVendors = $("#countVendors");
-  const vendorsShown = $("#vendorsShown");
-  const clientsShown = $("#clientsShown");
-  const clientsLabel = $("#clientsLabel");
-  const btnAll = $("#btnAll");
-  const btnDiag = $("#btnDiag");
-  const diagBox = $("#diagBox");
-  const diagText = $("#diagText");
+  const qs = new URLSearchParams(location.search);
+  const bust = qs.get("v") || String(Date.now()); // si no pones ?v=, cache-bust automático
+  const base = location.pathname.replace(/\/+$/,"/"); // .../Toyo-MX/
+  const CLIENTS_URL = base + "clients.json?v=" + encodeURIComponent(bust);
 
-  let ALL = [];
-  let VENDORS = [];
+  const $ = (id)=>document.getElementById(id);
 
-  function esc(s){
+  const pillStatus = $("pillStatus");
+  const q = $("q");
+  const vendorSel = $("vendorSel");
+  const list = $("list");
+  const stClients = $("stClients");
+  const stVendors = $("stVendors");
+  const stShown = $("stShown");
+  const stFav = $("stFav");
+  const stRec = $("stRec");
+
+  const panelTitle = $("panelTitle");
+  const panelClientes = $("panelClientes");
+  const panelVendedores = $("panelVendedores");
+  const panelRecientes = $("panelRecientes");
+  const panelFavs = $("panelFavs");
+  const panelDiag = $("panelDiag");
+
+  const vendorChips = $("vendorChips");
+  const vendorList = $("vendorList");
+  const recentList = $("recentList");
+  const favList = $("favList");
+
+  const diagUrl = $("diagUrl");
+  const diagOut = $("diagOut");
+
+  const KEY_FAV = "toyo_mx_favs_v1";
+  const KEY_REC = "toyo_mx_recent_v1";
+
+  let clients = [];
+  let filtered = [];
+
+  function normalize(s){
+    return (s||"").toString().trim().toLowerCase()
+      .normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+  }
+
+  function loadArr(key){
+    try{ return JSON.parse(localStorage.getItem(key)||"[]"); }catch(e){ return []; }
+  }
+  function saveArr(key, arr){
+    localStorage.setItem(key, JSON.stringify(arr||[]));
+  }
+  function getFavs(){ return new Set(loadArr(KEY_FAV)); }
+  function toggleFav(id){
+    const favs = loadArr(KEY_FAV);
+    const idx = favs.indexOf(id);
+    if(idx>=0) favs.splice(idx,1); else favs.push(id);
+    saveArr(KEY_FAV, favs);
+    renderMeta();
+    renderLists();
+  }
+  function pushRecent(id){
+    const rec = loadArr(KEY_REC).filter(x=>x!==id);
+    rec.unshift(id);
+    saveArr(KEY_REC, rec.slice(0,30));
+    renderMeta();
+  }
+
+  function makeId(c){
+    return (c.vendor_folder||"") + "|" + (c.client_code||"") + "|" + (c.path||"");
+  }
+
+  function openClient(c){
+    if(!c || !c.path) return;
+    pushRecent(makeId(c));
+    // abrir en la misma pestaña para móvil (mejor UX). Cambia a window.open(...) si quieres.
+    location.href = base + c.path;
+  }
+
+  function uniqueVendors(arr){
+    const map = new Map();
+    arr.forEach(c=>{
+      const k = c.vendor_folder || "sin_vendedor";
+      if(!map.has(k)){
+        map.set(k, {
+          folder:k,
+          label:c.vendor_label || k,
+          count:0
+        });
+      }
+      map.get(k).count++;
+    });
+    return [...map.values()].sort((a,b)=> a.label.localeCompare(b.label));
+  }
+
+  function renderMeta(){
+    stClients.textContent = clients.length.toLocaleString("es-MX");
+    stVendors.textContent = uniqueVendors(clients).length.toLocaleString("es-MX");
+    stShown.textContent = filtered.length.toLocaleString("es-MX");
+    stFav.textContent = loadArr(KEY_FAV).length.toLocaleString("es-MX");
+    stRec.textContent = loadArr(KEY_REC).length.toLocaleString("es-MX");
+  }
+
+  function cardHtml(c){
+    const id = makeId(c);
+    const favs = getFavs();
+    const isFav = favs.has(id);
+    return `
+      <div class="item">
+        <div style="min-width:0">
+          <div class="name" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(c.client_name || "—")}</div>
+          <div class="meta">${escapeHtml(c.client_code || "—")} · <span class="muted">${escapeHtml(c.vendor_label || c.vendor_folder || "—")}</span></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;flex:0 0 auto">
+          <button class="fav ${isFav?"on":""}" title="Favorito" data-fav="${encodeAttr(id)}">${isFav?"⭐":"☆"}</button>
+          <button class="open" data-open="${encodeAttr(id)}">Abrir</button>
+        </div>
+      </div>
+    `;
+  }
+
+  function escapeHtml(s){
     return (s ?? "").toString()
       .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
       .replaceAll('"',"&quot;").replaceAll("'","&#039;");
   }
-
-  function setDiag(obj){
-    const txt = typeof obj === "string" ? obj : JSON.stringify(obj, null, 2);
-    diagText.textContent = txt;
+  function encodeAttr(s){
+    return encodeURIComponent(s||"");
+  }
+  function decodeAttr(s){
+    try{ return decodeURIComponent(s||""); }catch(e){ return s; }
   }
 
-  async function loadClients(){
-    // Cache-busting fuerte para GitHub Pages
-    const url = "clients.json?v=" + Date.now();
+  function renderClientsList(){
+    if(!filtered.length){
+      list.innerHTML = `<div class="empty">Sin resultados. Prueba buscar por <b>código</b> o cambia el vendedor.</div>`;
+      return;
+    }
+    const slice = filtered.slice(0, 600); // evita DOM enorme
+    list.innerHTML = slice.map(cardHtml).join("") + (filtered.length>slice.length ? `<div class="empty">Mostrando ${slice.length} de ${filtered.length}. Usa búsqueda o filtro para acotar.</div>`:"");
+    bindCardButtons(list, slice);
+  }
 
+  function bindCardButtons(container, arr){
+    const byId = new Map(arr.map(c=>[makeId(c), c]));
+    container.querySelectorAll("[data-open]").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const id = decodeAttr(btn.getAttribute("data-open"));
+        openClient(byId.get(id));
+      });
+    });
+    container.querySelectorAll("[data-fav]").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const id = decodeAttr(btn.getAttribute("data-fav"));
+        toggleFav(id);
+      });
+    });
+  }
+
+  function applyFilters(){
+    const text = normalize(q.value);
+    const v = vendorSel.value || "ALL";
+    filtered = clients.filter(c=>{
+      if(v!=="ALL" && (c.vendor_folder||"")!==v) return false;
+      if(!text) return true;
+      return normalize(c.client_name).includes(text) || normalize(c.client_code).includes(text);
+    });
+    renderMeta();
+    renderClientsList();
+  }
+
+  function fillVendorSelect(){
+    const vs = uniqueVendors(clients);
+    vendorSel.innerHTML = `<option value="ALL">Todos</option>` + vs.map(v=>`<option value="${escapeHtml(v.folder)}">${escapeHtml(v.label)} (${v.count})</option>`).join("");
+  }
+
+  function renderVendorsPanel(){
+    const vs = uniqueVendors(clients);
+    vendorChips.innerHTML = vs.map((v,i)=>`<button class="chip" data-chip="${escapeHtml(v.folder)}">${escapeHtml(v.label)} <span class="mini">(${v.count})</span></button>`).join("");
+    vendorList.innerHTML = `<div class="empty">Toca un vendedor arriba para ver su lista.</div>`;
+
+    vendorChips.querySelectorAll("[data-chip]").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        vendorChips.querySelectorAll(".chip").forEach(x=>x.classList.remove("active"));
+        btn.classList.add("active");
+        const folder = btn.getAttribute("data-chip");
+        const arr = clients.filter(c=>(c.vendor_folder||"")===folder);
+        vendorList.innerHTML = arr.slice(0, 600).map(cardHtml).join("") + (arr.length>600?`<div class="empty">Mostrando 600 de ${arr.length}. Usa búsqueda en “Clientes” si necesitas uno específico.</div>`:"");
+        bindCardButtons(vendorList, arr.slice(0,600));
+      });
+    });
+  }
+
+  function renderRecentPanel(){
+    const ids = loadArr(KEY_REC);
+    const map = new Map(clients.map(c=>[makeId(c), c]));
+    const arr = ids.map(id=>map.get(id)).filter(Boolean);
+    if(!arr.length){
+      recentList.innerHTML = `<div class="empty">Aún no has abierto clientes en este dispositivo.</div>`;
+      return;
+    }
+    recentList.innerHTML = arr.map(cardHtml).join("");
+    bindCardButtons(recentList, arr);
+  }
+
+  function renderFavsPanel(){
+    const favs = loadArr(KEY_FAV);
+    const map = new Map(clients.map(c=>[makeId(c), c]));
+    const arr = favs.map(id=>map.get(id)).filter(Boolean);
+    if(!arr.length){
+      favList.innerHTML = `<div class="empty">No tienes favoritos. Marca ⭐ en cualquier cliente.</div>`;
+      return;
+    }
+    favList.innerHTML = arr.map(cardHtml).join("");
+    bindCardButtons(favList, arr);
+  }
+
+  function renderLists(){
+    // re-render panel actual
+    if(panelClientes.style.display!=="none"){ renderClientsList(); }
+    if(panelVendedores.style.display!=="none"){ renderVendorsPanel(); }
+    if(panelRecientes.style.display!=="none"){ renderRecentPanel(); }
+    if(panelFavs.style.display!=="none"){ renderFavsPanel(); }
+  }
+
+  function setTab(tab){
+    document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active", b.dataset.tab===tab));
+    panelClientes.style.display = (tab==="clientes") ? "" : "none";
+    panelVendedores.style.display = (tab==="vendedores") ? "" : "none";
+    panelRecientes.style.display = (tab==="recientes") ? "" : "none";
+    panelFavs.style.display = (tab==="favs") ? "" : "none";
+    panelDiag.style.display = "none";
+
+    panelTitle.textContent =
+      tab==="clientes" ? "Clientes" :
+      tab==="vendedores" ? "Vendedores" :
+      tab==="recientes" ? "Recientes" :
+      "Favoritos";
+
+    // render
+    if(tab==="clientes"){ applyFilters(); }
+    if(tab==="vendedores"){ renderVendorsPanel(); }
+    if(tab==="recientes"){ renderRecentPanel(); }
+    if(tab==="favs"){ renderFavsPanel(); }
+  }
+
+  async function runDiag(err){
+    diagUrl.textContent = CLIENTS_URL;
+    const out = {
+      clients_url: CLIENTS_URL,
+      base_path: base,
+      error: err ? (err.message || String(err)) : null,
+      hint: "Verifica que clients.json esté en la RAÍZ del repo (misma altura que index.html)."
+    };
+    diagOut.textContent = JSON.stringify(out, null, 2);
+    panelClientes.style.display="none";
+    panelVendedores.style.display="none";
+    panelRecientes.style.display="none";
+    panelFavs.style.display="none";
+    panelDiag.style.display="";
+    panelTitle.textContent="Diagnóstico";
+  }
+
+  async function load(){
+    pillStatus.textContent = "Cargando…";
     try{
-      setDiag({status:"fetching", url});
-      const res = await fetch(url, {cache:"no-store"});
-      const text = await res.text();
-      if(!res.ok){
-        setDiag({status:"error", http:res.status, body:text.slice(0,500)});
-        throw new Error("No se pudo cargar clients.json (" + res.status + ")");
-      }
-      let data;
-      try{ data = JSON.parse(text); }
-      catch(e){
-        setDiag({status:"error", msg:"clients.json no es JSON válido", sample:text.slice(0,600)});
-        throw e;
-      }
+      const res = await fetch(CLIENTS_URL, {cache:"no-store"});
+      if(!res.ok) throw new Error("No se pudo cargar clients.json (HTTP "+res.status+")");
+      const data = await res.json();
+      if(!Array.isArray(data)) throw new Error("clients.json no es un array JSON");
+      clients = data.map(c=>({
+        vendor_folder: (c.vendor_folder||"").toString().trim(),
+        vendor_label: (c.vendor_label||c.vendor_folder||"").toString().trim(),
+        client_name: (c.client_name||"").toString().trim(),
+        client_code: (c.client_code||"").toString().trim(),
+        path: (c.path||"").toString().trim()
+      })).filter(c=>c.path && c.client_code);
 
-      // Acepta ambos formatos:
-      // 1) [ {...}, {...} ]
-      // 2) { "clients": [ ... ] }
-      const arr = Array.isArray(data) ? data : (Array.isArray(data.clients) ? data.clients : []);
-      if(!arr.length){
-        setDiag({status:"warn", msg:"Se cargó JSON pero viene vacío o con forma distinta", keys:Object.keys(data||{}).slice(0,20)});
-      }else{
-        setDiag({status:"ok", msg:"clients.json cargado", total:arr.length, sample:arr[0]});
-      }
+      // Orden por nombre
+      clients.sort((a,b)=>(a.client_name||"").localeCompare((b.client_name||""),"es",{sensitivity:"base"}));
 
-      // Limpieza mínima (por si viene raro)
-      ALL = arr
-        .filter(x=>x && x.path && x.vendor_folder)
-        .map(x=>({
-          vendor_folder: (x.vendor_folder||"").trim(),
-          vendor_label: (x.vendor_label||x.vendor_folder||"").trim(),
-          client_name: (x.client_name||"").trim(),
-          client_code: (x.client_code||"").trim(),
-          path: (x.path||"").trim()
-        }));
+      fillVendorSelect();
+      filtered = clients.slice();
+      renderMeta();
+      applyFilters();
 
-      // Vendors
-      const map = new Map();
-      ALL.forEach(c=>{
-        if(!map.has(c.vendor_folder)){
-          map.set(c.vendor_folder, {folder:c.vendor_folder, label:c.vendor_label || c.vendor_folder, count:0});
-        }
-        map.get(c.vendor_folder).count++;
-      });
-      VENDORS = [...map.values()].sort((a,b)=>a.label.localeCompare(b.label, "es"));
-
-      // Fill vendor filter
-      vendorFilter.innerHTML = `<option value="ALL">Todos</option>` + VENDORS.map(v=>(
-        `<option value="${esc(v.folder)}">${esc(v.label)} (${v.count})</option>`
-      )).join("");
-
-      countClients.textContent = `${ALL.length} clientes`;
-      countVendors.textContent = `${VENDORS.length} vendedores`;
-
-      renderVendors();
-      renderClients();
-    }catch(err){
-      // deja el diagnóstico visible si falla
-      diagBox.style.display = "block";
-      setDiag({status:"fatal", error: (err && err.message) ? err.message : String(err)});
-      countClients.textContent = `0 clientes`;
-      countVendors.textContent = `0 vendedores`;
-      vendorsGrid.innerHTML = `<div class="vendorCard"><div><p class="vendorTitle">No se pudo cargar clients.json</p><div class="vendorMeta">Abre el diagnóstico y revisa la ruta del JSON.</div></div></div>`;
-      clientsGrid.innerHTML = `<div class="clientCard"><div><p class="clientName">Sin resultados</p><div class="clientMeta">clients.json no se cargó.</div></div></div>`;
-    }
-  }
-
-  function getFiltered(){
-    const text = (q.value||"").trim().toUpperCase();
-    const vf = vendorFilter.value || "ALL";
-    let list = ALL.slice();
-
-    if(vf !== "ALL"){
-      list = list.filter(c=>c.vendor_folder === vf);
-      clientsLabel.textContent = "Mostrando: " + (VENDORS.find(v=>v.folder===vf)?.label || vf);
-    }else{
-      clientsLabel.textContent = "Mostrando: todos";
-    }
-
-    if(text){
-      list = list.filter(c=>{
-        return (c.client_name||"").toUpperCase().includes(text) ||
-               (c.client_code||"").toUpperCase().includes(text);
-      });
-    }
-    return list;
-  }
-
-  function renderVendors(){
-    vendorsGrid.innerHTML = "";
-    vendorsShown.textContent = `${VENDORS.length} vendedores`;
-
-    if(!VENDORS.length){
-      vendorsGrid.innerHTML = `<div class="vendorCard"><div><p class="vendorTitle">Sin vendedores</p><div class="vendorMeta">clients.json está vacío o no se cargó.</div></div></div>`;
-      return;
-    }
-
-    VENDORS.forEach(v=>{
-      const el = document.createElement("div");
-      el.className = "vendorCard";
-      el.innerHTML = `
-        <div>
-          <p class="vendorTitle">${esc(v.label)}</p>
-          <div class="vendorMeta">${esc(v.folder)} · ${v.count} cliente(s)</div>
-        </div>
-        <button class="openBtn">Ver</button>
-      `;
-      el.querySelector("button").addEventListener("click", ()=>{
-        vendorFilter.value = v.folder;
-        q.value = "";
-        renderClients();
-        window.scrollTo({top: document.body.scrollHeight * 0.25, behavior:"smooth"});
-      });
-      vendorsGrid.appendChild(el);
-    });
-  }
-
-  function renderClients(){
-    const list = getFiltered();
-    clientsGrid.innerHTML = "";
-    clientsShown.textContent = `${list.length} mostrados`;
-
-    if(!list.length){
-      clientsGrid.innerHTML = `<div class="clientCard"><div><p class="clientName">Sin resultados</p><div class="clientMeta">Prueba otro nombre/código o cambia el vendedor.</div></div></div>`;
-      return;
-    }
-
-    // limita para que sea rápido
-    const MAX = 300;
-    const view = list.slice(0, MAX);
-
-    view.forEach(c=>{
-      const el = document.createElement("div");
-      el.className = "clientCard";
-      el.innerHTML = `
-        <div>
-          <p class="clientName">${esc(c.client_name || "—")}</p>
-          <div class="clientMeta">${esc(c.client_code || "—")} · ${esc(c.vendor_label || c.vendor_folder)}</div>
-        </div>
-        <button class="openBtn">Abrir</button>
-      `;
-      el.querySelector("button").addEventListener("click", ()=>{
-        // Abre el HTML dentro del repo
-        window.open(c.path, "_blank");
-      });
-      clientsGrid.appendChild(el);
-    });
-
-    if(list.length > MAX){
-      const more = document.createElement("div");
-      more.className = "clientCard";
-      more.innerHTML = `
-        <div>
-          <p class="clientName">Mostrando ${MAX} de ${list.length}</p>
-          <div class="clientMeta">Escribe más letras o filtra por vendedor para afinar.</div>
-        </div>
-      `;
-      clientsGrid.appendChild(more);
+      pillStatus.textContent = "Listo · " + clients.length.toLocaleString("es-MX") + " clientes";
+    }catch(e){
+      pillStatus.textContent = "Error";
+      list.innerHTML = `<div class="empty"><b>No pude leer clients.json.</b><br><span class="muted">${escapeHtml(e.message||e)}</span><br><br>Abre “Diagnóstico”.</div>`;
+      renderMeta();
+      await runDiag(e);
     }
   }
 
   // Events
-  q.addEventListener("input", ()=>renderClients());
-  vendorFilter.addEventListener("change", ()=>renderClients());
-  btnAll.addEventListener("click", ()=>{
-    vendorFilter.value = "ALL";
-    q.value = "";
-    renderClients();
+  q.addEventListener("input", ()=>applyFilters());
+  vendorSel.addEventListener("change", ()=>applyFilters());
+
+  $("btnAll").addEventListener("click", ()=>{
+    q.value="";
+    vendorSel.value="ALL";
+    applyFilters();
   });
-  btnDiag.addEventListener("click", ()=>{
-    diagBox.style.display = (diagBox.style.display==="block") ? "none" : "block";
+  $("btnClear").addEventListener("click", ()=>{
+    q.value="";
+    applyFilters();
+  });
+  $("btnDiag").addEventListener("click", ()=>runDiag(null));
+
+  $("btnOpenClientsJson").addEventListener("click", ()=> window.open(base+"clients.json", "_blank"));
+  $("btnHardReload").addEventListener("click", ()=>{
+    const next = (parseInt(qs.get("v")||"1",10) || 1) + 1;
+    location.href = base + "?v=" + next;
   });
 
-  // Start
-  loadClients();
+  document.querySelectorAll(".tab").forEach(b=>{
+    b.addEventListener("click", ()=>setTab(b.dataset.tab));
+  });
+
+  // Load!
+  load();
 })();
 </script>
 </body>
