@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "generated_at": "2026-02-14 19:04",
+  "clients": [
+    {
+      "vendor_folder": "agente_clave_gdl",
+      "vendor_name": "Agente Clave GDL",
+      "client_name": "ALTAMESE",
+      "client_code": "C020669",
+      "file": "ALTAMESE_C020669.html"
+    },
+    {
+      "vendor_folder": "cdmx_javier",
+      "vendor_name": "CDMX Javier",
+      "client_name": "UNION STRANA",
+      "client_code": "C012072",
+      "file": "UNION_STRANA_C012072.html"
+    }
+  ]
+}

@@ -2,37 +2,358 @@
 <html lang="es">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Toyo MX · Pedidos</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Pedidos Toyo MX</title>
   <style>
-    body{font-family:Arial,Helvetica,sans-serif;margin:0;background:#f5f7fb}
-    .wrap{max-width:980px;margin:0 auto;padding:24px}
-    h1{margin:0 0 6px;color:#0B4CCB}
-    p{margin:0 0 18px;color:#6b7280}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
-    a{display:block;padding:16px 18px;border-radius:14px;background:#fff;border:1px solid #e5e7eb;
-      text-decoration:none;color:#111827;font-weight:700}
-    a:hover{border-color:#0B4CCB}
+    :root{
+      --blue:#0B4CCB;
+      --bg:#F3F5F7;
+      --card:#ffffff;
+      --border:#D1D5DB;
+      --text:#111827;
+      --muted:#6b7280;
+      --shadow:0 10px 25px rgba(0,0,0,.06);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      padding:24px;
+      background:var(--bg);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+      color:var(--text);
+    }
+    .header{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+      margin-bottom:18px;
+      flex-wrap:wrap;
+    }
+    h1{margin:0;color:var(--blue);font-size:34px;letter-spacing:.2px}
+    .sub{color:var(--muted);margin-top:6px;font-size:14px}
+    .badge{
+      border:1px solid #c7dbff;
+      color:var(--blue);
+      padding:8px 14px;
+      border-radius:20px;
+      font-weight:700;
+      background:#eef4ff;
+      white-space:nowrap;
+      align-self:flex-start;
+    }
+    .card{
+      background:var(--card);
+      border-radius:var(--radius);
+      padding:18px;
+      box-shadow:var(--shadow);
+      margin-bottom:16px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:14px;
+      align-items:start;
+    }
+    @media(max-width:900px){ .grid{grid-template-columns:1fr} }
+    label{
+      display:block;
+      font-weight:700;
+      margin-bottom:6px;
+      color:#0b3c91;
+      font-size:13px;
+    }
+    input, select{
+      width:100%;
+      padding:12px 12px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      font-size:15px;
+      background:#fff;
+    }
+    .hint{margin-top:10px;color:var(--muted);font-size:12px;line-height:1.35}
+    .vendors{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:12px;
+    }
+    @media(max-width:980px){ .vendors{grid-template-columns:repeat(2,1fr)} }
+    @media(max-width:620px){ .vendors{grid-template-columns:1fr} }
+    .vCard{
+      border:1px solid #e5e7eb;
+      background:#fff;
+      border-radius:16px;
+      padding:14px;
+      cursor:pointer;
+      transition:transform .05s ease, box-shadow .05s ease;
+    }
+    .vCard:hover{ transform:translateY(-1px); box-shadow:0 12px 26px rgba(0,0,0,.06); }
+    .vName{font-weight:900;font-size:16px;color:#0b3c91;margin:0}
+    .vMeta{color:var(--muted);font-size:12px;margin-top:6px}
+    .clients{
+      margin-top:12px;
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap:10px;
+    }
+    @media(max-width:780px){ .clients{grid-template-columns:1fr} }
+    .cCard{
+      border:1px solid #e5e7eb;
+      background:#fff;
+      border-radius:16px;
+      padding:12px 12px;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+    }
+    .cLeft{min-width:0}
+    .cName{font-weight:900;font-size:14px;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+    .cCode{color:var(--muted);font-size:12px;margin-top:4px}
+    .openBtn{
+      border:1px solid #c7dbff;
+      background:#eef4ff;
+      color:var(--blue);
+      font-weight:900;
+      border-radius:12px;
+      padding:9px 12px;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    .empty{
+      color:var(--muted);
+      font-size:13px;
+      padding:10px 2px;
+    }
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .smallBtn{
+      border:1px solid #e5e7eb;
+      background:#fff;
+      border-radius:12px;
+      padding:10px 12px;
+      cursor:pointer;
+      font-weight:800;
+      color:#0b3c91;
+    }
+    .pill{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:6px 10px;border-radius:999px;
+      background:#f1f5f9;border:1px solid #e5e7eb;
+      color:#334155;font-weight:800;font-size:12px;
+    }
   </style>
 </head>
-<body>
-  <div class="wrap">
-    <h1>Pedidos Toyo MX</h1>
-    <p>Selecciona la carpeta del vendedor para abrir los formatos.</p>
 
-    <div class="grid">
-      <a href="./agente_clave_gdl/">agente_clave_gdl</a>
-      <a href="./agente_clave_japones_cdmx/">agente_clave_japones_cdmx</a>
-      <a href="./aguascalientes_sur/">aguascalientes_sur</a>
-      <a href="./cdmx_eduardo/">cdmx_eduardo</a>
-      <a href="./cdmx_javier/">cdmx_javier</a>
-      <a href="./cdmx_jesus/">cdmx_jesus</a>
-      <a href="./cdmx_ricardo/">cdmx_ricardo</a>
+<body>
+  <div class="header">
+    <div>
+      <h1>Pedidos Toyo MX</h1>
+      <div class="sub">Selecciona vendedor o busca un cliente para abrir su HTML.</div>
+    </div>
+    <div class="badge">Versión corporativa</div>
+  </div>
+
+  <div class="card grid">
+    <div>
+      <label>Buscar cliente (nombre o código)</label>
+      <input id="q" placeholder="Ej. ALTAMESE o C020669" />
+      <div class="hint">
+        Tip: puedes pegar el código de cliente. El resultado te abre el HTML directo (GitHub Pages).
+      </div>
+      <div class="row" style="margin-top:12px">
+        <button class="smallBtn" id="btnAll">Ver todos</button>
+        <span class="pill" id="pillCount">0 clientes</span>
+      </div>
     </div>
 
-    <p style="margin-top:18px;color:#6b7280;font-size:12px">
-      Nota: GitHub Pages no lista archivos automáticamente dentro de carpetas. Abre un cliente con su link directo.
-    </p>
+    <div>
+      <label>Filtrar por vendedor</label>
+      <select id="vendorSel">
+        <option value="ALL">Todos</option>
+      </select>
+      <div class="hint">
+        Nota: este index usa un archivo <b>clients.json</b> en la raíz del repo.
+      </div>
+    </div>
   </div>
+
+  <div class="card">
+    <div class="row" style="justify-content:space-between">
+      <div>
+        <div style="font-weight:900;color:#0b3c91">Vendedores</div>
+        <div class="hint" style="margin-top:4px">Click en un vendedor para ver su lista.</div>
+      </div>
+      <div class="pill" id="pillVendors">0 vendedores</div>
+    </div>
+    <div style="height:12px"></div>
+    <div class="vendors" id="vendors"></div>
+  </div>
+
+  <div class="card">
+    <div class="row" style="justify-content:space-between">
+      <div>
+        <div style="font-weight:900;color:#0b3c91">Clientes</div>
+        <div class="hint" style="margin-top:4px" id="scopeLbl">Mostrando: todos</div>
+      </div>
+      <div class="pill" id="pillShown">0 mostrados</div>
+    </div>
+    <div class="clients" id="clients"></div>
+    <div class="empty" id="empty" style="display:none">Sin resultados.</div>
+  </div>
+
+<script>
+(async function(){
+  const $ = (q)=>document.querySelector(q);
+  const q = $("#q");
+  const vendorsDiv = $("#vendors");
+  const clientsDiv = $("#clients");
+  const empty = $("#empty");
+  const vendorSel = $("#vendorSel");
+  const btnAll = $("#btnAll");
+  const pillCount = $("#pillCount");
+  const pillShown = $("#pillShown");
+  const pillVendors = $("#pillVendors");
+  const scopeLbl = $("#scopeLbl");
+
+  function norm(s){
+    return (s||"").toString().trim().toLowerCase()
+      .normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+  }
+
+  let data;
+  try{
+    const res = await fetch("./clients.json", {cache:"no-store"});
+    if(!res.ok) throw new Error("No se pudo cargar clients.json");
+    data = await res.json();
+  }catch(e){
+    vendorsDiv.innerHTML = `<div class="empty">❌ No se pudo leer <b>clients.json</b>. Asegúrate de subirlo a la raíz del repo.</div>`;
+    return;
+  }
+
+  const items = Array.isArray(data?.clients) ? data.clients : [];
+  pillCount.textContent = `${items.length} clientes`;
+
+  const vendorsMap = new Map();
+  items.forEach(it=>{
+    const key = it.vendor_folder || "SIN_VENDEDOR";
+    if(!vendorsMap.has(key)){
+      vendorsMap.set(key, {folder:key, name: it.vendor_name || key, count:0});
+    }
+    vendorsMap.get(key).count++;
+  });
+  const vendors = Array.from(vendorsMap.values()).sort((a,b)=>a.name.localeCompare(b.name, "es"));
+  pillVendors.textContent = `${vendors.length} vendedores`;
+
+  vendors.forEach(v=>{
+    const opt = document.createElement("option");
+    opt.value = v.folder;
+    opt.textContent = `${v.name} (${v.count})`;
+    vendorSel.appendChild(opt);
+  });
+
+  function openFile(path){
+    window.open(path, "_blank");
+  }
+
+  function renderVendors(activeFolder){
+    vendorsDiv.innerHTML = "";
+    vendors.forEach(v=>{
+      const el = document.createElement("div");
+      el.className = "vCard";
+      el.innerHTML = `
+        <p class="vName">${escapeHtml(v.name)}</p>
+        <div class="vMeta">${escapeHtml(v.folder)} · ${v.count} cliente(s)</div>
+      `;
+      el.style.outline = (activeFolder===v.folder) ? "2px solid #0B4CCB" : "none";
+      el.addEventListener("click", ()=>{
+        vendorSel.value = v.folder;
+        applyFilters();
+        window.scrollTo({top: document.body.scrollHeight * 0.35, behavior:"smooth"});
+      });
+      vendorsDiv.appendChild(el);
+    });
+  }
+
+  function escapeHtml(s){
+    return (s ?? "").toString()
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+
+  function renderClients(list){
+    clientsDiv.innerHTML = "";
+    empty.style.display = list.length ? "none" : "";
+    pillShown.textContent = `${list.length} mostrados`;
+
+    list.slice(0, 600).forEach(it=>{
+      const path = `${it.vendor_folder}/${it.file}`;
+      const el = document.createElement("div");
+      el.className = "cCard";
+      el.innerHTML = `
+        <div class="cLeft">
+          <p class="cName" title="${escapeHtml(it.client_name)}">${escapeHtml(it.client_name)}</p>
+          <div class="cCode">${escapeHtml(it.client_code)} · <span style="color:#94a3b8">${escapeHtml(it.vendor_name||it.vendor_folder)}</span></div>
+        </div>
+        <button class="openBtn" type="button">Abrir</button>
+      `;
+      el.querySelector(".openBtn").addEventListener("click", ()=>openFile(path));
+      el.addEventListener("dblclick", ()=>openFile(path));
+      clientsDiv.appendChild(el);
+    });
+
+    if(list.length > 600){
+      const warn = document.createElement("div");
+      warn.className = "empty";
+      warn.textContent = `Mostrando 600 de ${list.length}. Usa el buscador para acotar.`;
+      clientsDiv.appendChild(warn);
+    }
+  }
+
+  function applyFilters(){
+    const query = norm(q.value);
+    const v = vendorSel.value || "ALL";
+
+    let list = items.slice();
+
+    if(v !== "ALL"){
+      list = list.filter(it => (it.vendor_folder||"") === v);
+      const vobj = vendors.find(x=>x.folder===v);
+      scopeLbl.textContent = vobj ? `Mostrando: ${vobj.name}` : `Mostrando: ${v}`;
+    }else{
+      scopeLbl.textContent = "Mostrando: todos";
+    }
+
+    if(query){
+      list = list.filter(it=>{
+        const a = norm(it.client_name);
+        const b = norm(it.client_code);
+        return a.includes(query) || b.includes(query);
+      });
+      scopeLbl.textContent = "Mostrando: búsqueda";
+    }
+
+    list.sort((a,b)=> (a.client_name||"").localeCompare((b.client_name||""), "es"));
+
+    renderVendors(v !== "ALL" ? v : null);
+    renderClients(list);
+  }
+
+  q.addEventListener("input", ()=>applyFilters());
+  vendorSel.addEventListener("change", ()=>applyFilters());
+  btnAll.addEventListener("click", ()=>{
+    q.value = "";
+    vendorSel.value = "ALL";
+    applyFilters();
+    window.scrollTo({top:0, behavior:"smooth"});
+  });
+
+  renderVendors(null);
+  applyFilters();
+})();
+</script>
 </body>
 </html>
