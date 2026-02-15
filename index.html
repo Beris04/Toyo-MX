@@ -287,6 +287,12 @@
       font-size:12px;
       overflow:auto;
     }
+  
+    .filterRow{margin-top:10px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .filterLabel{font-weight:900;color:var(--muted);font-size:12px}
+    .filterSelect{flex:1;min-width:180px;max-width:520px}
+    @media (max-width:520px){.filterRow{flex-direction:column;align-items:stretch}.filterSelect{min-width:unset;max-width:unset}}
+
   </style>
 </head>
 
@@ -300,7 +306,6 @@
           <div class="sub" id="subtitle">Cargando clientes…</div>
         </div>
       </div>
-      <div class="pill" id="pillCount">0</div>
     </div>
 
     <div class="searchCard">
@@ -309,7 +314,13 @@
         <button class="iconBtn" id="btnClear" title="Limpiar">✕</button>
         <button class="iconBtn" id="btnCompact" title="Vista compacta">≡</button>
       </div>
-      <div class="chips" id="chips"></div>
+      
+        <div class="filterRow">
+          <div class="filterLabel">Filtrar por vendedor</div>
+          <select id="vendorFilter" class="filterSelect"></select>
+        </div>
+        <div class="chips" id="chips" style="display:none"></div>
+
       <div class="diag" id="diagBox">
         <pre id="diagText">—</pre>
       </div>
@@ -330,7 +341,6 @@
     <div class="navRow">
       <button class="tab active" id="tabSearch" type="button"><span class="ico">🔎</span><span>Buscar</span></button>
       <button class="tab" id="tabVendors" type="button"><span class="ico">🧑‍💼</span><span>Vendedores</span></button>
-      <button class="tab" id="tabFav" type="button"><span class="ico">⭐</span><span>Favoritos</span></button>
       <button class="tab" id="tabRec" type="button"><span class="ico">🕘</span><span>Recientes</span></button>
     </div>
   </div>
@@ -345,6 +355,7 @@
   const btnClear = $("#btnClear");
   const btnCompact = $("#btnCompact");
   const chips = $("#chips");
+  const vendorFilter = $("#vendorFilter");
   const list = $("#list");
   const empty = $("#empty");
   const subtitle = $("#subtitle");
@@ -357,17 +368,14 @@
 
   const tabSearch = $("#tabSearch");
   const tabVendors = $("#tabVendors");
-  const tabFav = $("#tabFav");
-  const tabRec = $("#tabRec");
-
-  const LS_FAV = "toyo_index_favs_v1";
-  const LS_REC = "toyo_index_recent_v1";
+const tabRec = $("#tabRec");
+const LS_REC = "toyo_index_recent_v1";
   const LS_COMPACT = "toyo_index_compact_v1";
 
   let ALL = [];
   let VENDORS = []; // {folder,label,count}
   let ACTIVE_VENDOR = "ALL";
-  let MODE = "search"; // search | vendors | fav | rec
+  let MODE = "search"; // search | vendors | rec
   let compact = (localStorage.getItem(LS_COMPACT) === "1");
 
   function showToast(msg){
@@ -393,24 +401,6 @@
   }
   function saveJSON(key, obj){
     localStorage.setItem(key, JSON.stringify(obj));
-  }
-
-  function isFav(path){
-    const favs = loadJSON(LS_FAV, []);
-    return favs.includes(path);
-  }
-  function toggleFav(path){
-    let favs = loadJSON(LS_FAV, []);
-    if(favs.includes(path)){
-      favs = favs.filter(x=>x!==path);
-      saveJSON(LS_FAV, favs);
-      showToast("Quitado de favoritos");
-    }else{
-      favs.unshift(path);
-      favs = [...new Set(favs)].slice(0, 200);
-      saveJSON(LS_FAV, favs);
-      showToast("Agregado a favoritos");
-    }
   }
   function pushRecent(path){
     let rec = loadJSON(LS_REC, []);
@@ -476,10 +466,8 @@
       });
       VENDORS = [...map.values()].sort((a,b)=>a.label.localeCompare(b.label, "es"));
 
-      subtitle.textContent = `${VENDORS.length} vendedor(es) · ${ALL.length} cliente(s)`;
-      pillCount.textContent = String(ALL.length);
-
-      // chips (top 8)
+      subtitle.textContent = 'Busca por cliente o filtra por vendedor';
+// chips (top 8)
       renderChips();
 
       // apply compact
@@ -492,66 +480,35 @@
       diagBox.style.display = "none";
     }catch(e){
       subtitle.textContent = "No se pudo cargar clients.json";
-      pillCount.textContent = "0";
-      diagBox.style.display = "block";
+diagBox.style.display = "block";
       setDiag({status:"fatal", error: e?.message || String(e)});
       MODE = "search";
       render();
     }
   }
 
+  
   function renderChips(){
-    chips.innerHTML = "";
-    // Chip "Todos"
-    const chipAll = document.createElement("div");
-    chipAll.className = "chip" + (ACTIVE_VENDOR==="ALL" ? " active" : "");
-    chipAll.innerHTML = `<span>Todos</span>`;
-    chipAll.addEventListener("click", ()=>{
-      ACTIVE_VENDOR = "ALL";
+    // Quitamos las pestañas (chips) para que no estorben en celular.
+    // Ahora usamos un select para filtrar por vendedor.
+    chips.style.display = "none";
+    if(!vendorFilter) return;
+
+    const opts = [{folder:"ALL", label:"Todos"}].concat(VENDORS);
+    vendorFilter.innerHTML = opts.map(v=>`<option value="${String(v.folder)}">${esc(v.label)}</option>`).join("");
+    vendorFilter.value = opts.some(v=>v.folder===ACTIVE_VENDOR) ? ACTIVE_VENDOR : "ALL";
+
+    vendorFilter.onchange = ()=>{
+      ACTIVE_VENDOR = vendorFilter.value || "ALL";
       MODE = "search";
       applyTabs();
-      renderChips();
       render();
-    });
-    chips.appendChild(chipAll);
-
-    const top = VENDORS.slice(0, 8);
-    top.forEach(v=>{
-      const el = document.createElement("div");
-      el.className = "chip" + (ACTIVE_VENDOR===v.folder ? " active" : "");
-      el.innerHTML = `<span>${esc(v.label)}</span>`;
-      el.title = `${v.label} (${v.count})`;
-      el.addEventListener("click", ()=>{
-        ACTIVE_VENDOR = v.folder;
-        MODE = "search";
-        applyTabs();
-        renderChips();
-        render();
-      });
-      chips.appendChild(el);
-    });
-
-    // Chip "Ver todos"
-    const chipMore = document.createElement("div");
-    chipMore.className = "chip";
-    chipMore.innerHTML = `<span>Ver todos</span>`;
-    chipMore.addEventListener("click", ()=>{
-      MODE = "vendors";
-      applyTabs();
-      render();
-      showToast("Lista de vendedores");
-    });
-    chips.appendChild(chipMore);
+    };
   }
 
-  function currentBaseList(){
+function currentBaseList(){
     let base = ALL.slice();
-
-    if(MODE === "fav"){
-      const favs = loadJSON(LS_FAV, []);
-      const set = new Set(favs);
-      base = base.filter(c=>set.has(c.path));
-    } else if(MODE === "rec"){
+    if(MODE === "rec"){
       const rec = loadJSON(LS_REC, []);
       // ordena por recencia
       const pos = new Map(rec.map((p,i)=>[p,i]));
@@ -560,7 +517,7 @@
       base = []; // vendors screen
     }
 
-    // vendor filter (solo para búsqueda, favoritos, recientes)
+    // vendor filter (solo para búsqueda y recientes)
     if(MODE !== "vendors" && ACTIVE_VENDOR !== "ALL"){
       base = base.filter(c=>c.vendor_folder === ACTIVE_VENDOR);
     }
@@ -599,7 +556,7 @@
       el.innerHTML = `
         <div class="left">
           <p class="name">${esc(v.label)}</p>
-          <div class="details">${esc(v.folder)} · ${v.count} cliente(s)</div>
+          <div class="details">${esc(v.folder)} · </div>
         </div>
         <div class="actions">
           <button class="btn" type="button">Ver clientes</button>
@@ -629,10 +586,7 @@
     }
 
     // Titles
-    if(MODE === "fav"){
-      sectionH.textContent = "Favoritos";
-      scope.textContent = (ACTIVE_VENDOR==="ALL") ? "Todos los vendedores" : ("Vendedor: " + (VENDORS.find(v=>v.folder===ACTIVE_VENDOR)?.label || ACTIVE_VENDOR));
-    } else if(MODE === "rec"){
+    if(MODE === "rec"){
       sectionH.textContent = "Recientes";
       scope.textContent = "Últimos abiertos";
     } else {
@@ -642,8 +596,7 @@
 
     list.innerHTML = "";
     empty.style.display = base.length ? "none" : "block";
-    empty.textContent = (MODE==="fav" && !base.length) ? "Aún no tienes favoritos. Abre un cliente y toca ⭐." :
-                      (MODE==="rec" && !base.length) ? "Aún no hay recientes. Abre un cliente desde Buscar." :
+    empty.textContent = (MODE==="rec" && !base.length) ? "Aún no hay clientes recientes. Abre un cliente para que aparezca aquí." : (MODE==="rec" && !base.length) ? "Aún no hay recientes. Abre un cliente desde Buscar." :
                       "Sin resultados.";
 
     const MAX = 250;
@@ -652,27 +605,8 @@
     view.forEach(c=>{
       const el = document.createElement("div");
       el.className = "cardItem";
-      const favOn = isFav(c.path);
-      el.innerHTML = `
-        <div class="left">
-          <p class="name" title="${esc(c.client_name)}">${esc(c.client_name)}</p>
-          <div class="details">${esc(c.client_code || "—")} · ${esc(c.vendor_label || c.vendor_folder)}</div>
-        </div>
-        <div class="actions">
-          <button class="star ${favOn ? "on":""}" type="button">${favOn ? "★" : "☆"}</button>
-          <button class="btn" type="button">Abrir</button>
-          <button class="btn secondary" type="button">Copiar link</button>
-        </div>
-      `;
-
-      const starBtn = el.querySelector(".star");
-      const openBtn = el.querySelectorAll("button")[1];
-      const copyBtn = el.querySelectorAll("button")[2];
-
-      starBtn.addEventListener("click", ()=>{
-        toggleFav(c.path);
-        starBtn.classList.toggle("on", isFav(c.path));
-        starBtn.textContent = isFav(c.path) ? "★" : "☆";
+      const openBtn = el.querySelectorAll("button")[0];
+      const copyBtn = el.querySelectorAll("button")[1];
       });
 
       openBtn.addEventListener("click", ()=>{
@@ -703,7 +637,7 @@
     if(base.length > MAX){
       const more = document.createElement("div");
       more.className = "empty";
-      more.textContent = `Mostrando ${MAX} de ${base.length}. Escribe más letras o filtra por vendedor.`;
+      more.textContent = `Escribe más letras o filtra por vendedor.`;
       list.appendChild(more);
     }
   }
@@ -711,7 +645,6 @@
   function applyTabs(){
     tabSearch.classList.toggle("active", MODE==="search");
     tabVendors.classList.toggle("active", MODE==="vendors");
-    tabFav.classList.toggle("active", MODE==="fav");
     tabRec.classList.toggle("active", MODE==="rec");
   }
 
@@ -743,7 +676,7 @@
 
   tabSearch.addEventListener("click", ()=>{ MODE="search"; applyTabs(); render(); window.scrollTo({top:0, behavior:"smooth"}); });
   tabVendors.addEventListener("click", ()=>{ MODE="vendors"; applyTabs(); render(); window.scrollTo({top:0, behavior:"smooth"}); });
-  tabFav.addEventListener("click", ()=>{ MODE="fav"; applyTabs(); render(); window.scrollTo({top:0, behavior:"smooth"}); });
+render(); window.scrollTo({top:0, behavior:"smooth"}); });
   tabRec.addEventListener("click", ()=>{ MODE="rec"; applyTabs(); render(); window.scrollTo({top:0, behavior:"smooth"}); });
 
   // Long press to show diagnostics (also quick toggle)
