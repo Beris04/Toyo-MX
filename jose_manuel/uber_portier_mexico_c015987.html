@@ -1,10 +1,10 @@
 <!DOCTYPE html>
+
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Solicitud de Pedido | Toyo Foods</title>
-
 <style>
 :root{
   --blue:#0B4CCB;
@@ -12,193 +12,204 @@
   --card:#ffffff;
   --border:#D1D5DB;
   --text:#111827;
-  --muted:#6b7280;
 }
 *{box-sizing:border-box}
-body{margin:0;padding:24px;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:var(--text);}
-.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;gap:12px;flex-wrap:wrap;}
-.header h1{color:var(--blue);margin:0}
-.badge{border:1px solid #c7dbff;color:var(--blue);padding:8px 14px;border-radius:20px;font-weight:700;background:#eef4ff;}
-.sub{color:var(--muted);margin-top:4px}
-.card{background:var(--card);border-radius:18px;padding:24px;margin-bottom:22px;box-shadow:0 10px 25px rgba(0,0,0,.06);}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+body{
+  margin:0;
+  padding:24px;
+  background:var(--bg);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  color:var(--text);
+}
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+.header h1{
+  color:var(--blue);
+  margin:0;
+}
+.badge{
+  border:1px solid #c7dbff;
+  color:var(--blue);
+  padding:8px 14px;
+  border-radius:20px;
+  font-weight:700;
+  background:#eef4ff;
+}
+.sub{
+  color:#6b7280;
+  margin-top:4px;
+}
+.card{
+  background:var(--card);
+  border-radius:18px;
+  padding:24px;
+  margin-bottom:22px;
+  box-shadow:0 10px 25px rgba(0,0,0,.06);
+}
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:22px;
+}
+label{
+  display:block;
+  font-weight:700;
+  margin-bottom:6px;
+  color:#0b3c91;
+}
+input, textarea, select{
+  width:100%;
+  padding:14px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  font-size:16px;
+}
+input[readonly]{
+  background:#f8fafc;
+}
+textarea{
+  resize:none;
+  height:90px;
+}
+.note{
+  margin-top:6px;
+  font-size:14px;
+  color:#6b7280;
+}
+.table-wrap{
+  overflow-x:auto;
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+th{
+  background:var(--blue);
+  color:#fff;
+  padding:14px;
+  text-align:left;
+}
+td{
+  padding:14px;
+  border-bottom:1px solid #e5e7eb;
+}
+td input{
+  width:90px;
+  text-align:center;
+}
+.btn{
+  width:100%;
+  padding:18px;
+  font-size:18px;
+  font-weight:700;
+  background:var(--blue);
+  color:#fff;
+  border:none;
+  border-radius:16px;
+  cursor:pointer;
+}
+@media(max-width:900px){
+  .grid{grid-template-columns:1fr}
+}
 
-/* Campos superiores más compactos */
-.dataFields label{display:block;font-weight:800;margin-bottom:6px;color:#0b3c91;font-size:13px;}
-.dataFields input,.dataFields select,.dataFields textarea{width:100%;border-radius:12px;border:1px solid var(--border);background:#fff;outline:none;}
-.dataFields input,.dataFields select{padding:10px 12px;font-size:14px;}
-.dataFields input[readonly]{background:#f8fafc}
-.dataFields textarea{padding:12px;font-size:14px;resize:none;height:86px;}
-.note{margin-top:6px;font-size:12.5px;color:var(--muted)}
+/* --- Promos / Nuevos (solo recuadro) --- */
+.promo-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:14px}
+.promo-item{border:1px solid var(--border);border-radius:14px;padding:14px;background:#fff}
+.promo-title{font-weight:800;color:#0b3c91;margin-bottom:6px}
+.promo-code{color:#6b7280;font-size:14px;margin-bottom:10px}
+.promo-btn{padding:10px 12px;font-size:14px;border-radius:12px;background:var(--blue);color:#fff;border:none;font-weight:700;cursor:pointer}
+.promo-btn:hover{filter:brightness(0.95)}
+@media(max-width:900px){.promo-grid{grid-template-columns:1fr}}
 
-/* Productos nuevos compactos */
-.promoHead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:12px;}
-.promoTitle{margin:0;color:var(--blue);font-size:16px;font-weight:900;}
-.promoSub{margin-top:6px;color:var(--muted);font-size:12.5px;line-height:1.35;}
-.promoBadge{font-size:11px;font-weight:800;color:var(--blue);background:#eef4ff;border:1px solid #c7dbff;padding:6px 10px;border-radius:999px;white-space:nowrap;}
-.promoGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
-@media(max-width:980px){ .promoGrid{grid-template-columns:repeat(2,1fr)} }
-@media(max-width:560px){ .promoGrid{grid-template-columns:1fr} }
-.promoCard{border:1px solid #e5e7eb;border-radius:14px;padding:10px;background:#ffffff;box-shadow:0 8px 18px rgba(0,0,0,.05);display:flex;flex-direction:column;gap:8px;min-height:88px;}
-.promoTop{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;}
-.promoCode{font-weight:900;font-size:10.5px;color:#0b3c91;background:#f3f7ff;border:1px solid #dbe7ff;padding:5px 7px;border-radius:10px;line-height:1.05;}
-.promoTag{font-size:10px;font-weight:900;padding:5px 8px;border-radius:999px;border:1px solid #e5e7eb;color:#111827;background:#f9fafb;white-space:nowrap;}
-.promoName{font-weight:850;font-size:12px;line-height:1.15;}
-.promoMeta{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:auto;}
-.promoPrice{font-weight:950;color:#111827;font-size:12px;}
-.promoFoot{margin-top:12px;font-size:12px;color:var(--muted);line-height:1.35;background:#f8fafc;border:1px solid #e5e7eb;border-radius:14px;padding:10px 12px;}
 
-/* Tabla productos del cliente más compacta */
-.table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse}
-th{background:var(--blue);color:#fff;padding:8px 10px;text-align:left;font-size:13px;}
-td{padding:6px 10px;border-bottom:1px solid #e5e7eb;font-size:13px;line-height:1.15;}
-td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border:1px solid var(--border);font-size:13px;}
-
-.btn{width:100%;padding:18px;font-size:18px;font-weight:800;background:var(--blue);color:#fff;border:none;border-radius:16px;cursor:pointer;}
-@media(max-width:900px){.grid{grid-template-columns:1fr}}
+/* PROMOS_TYPO_OVERRIDE */
+.promo-grid{gap:12px;margin-top:12px}
+.promo-item{padding:12px}
+.promo-title{font-size:14px;line-height:1.2}
+.promo-code{font-size:12px;line-height:1.2}
 </style>
 </head>
-
 <body>
-
+<!-- HEADER -->
 <div class="header">
-  <div>
-    <h1>Solicitud de Pedido</h1>
-    <div class="sub">Toyo Foods • Formato de pedido</div>
-  </div>
-  <div class="badge">Versión corporativa</div>
+<div>
+<h1>Solicitud de Pedido</h1>
+<div class="sub">Toyo Foods • Formato de pedido</div>
 </div>
-
+<div class="badge">Versión corporativa</div>
+</div>
 <!-- DATOS -->
-<div class="card dataFields">
-  <div class="grid">
-    <div>
-      <label>Nombre del cliente (como factura)</label>
-      <input id="cliente" value="UBER PORTIER MEXICO" readonly>
-    </div>
-
-    <div>
-      <label>Número de cliente</label>
-      <input id="codigo" value="C015987" readonly>
-    </div>
-
-    <div>
-      <label>Vendedor</label>
-      <input id="vendedor" placeholder="Nombre del vendedor (lo coloca el cliente)">
-    </div>
-
-    <div>
-      <label>Fecha y hora del pedido</label>
-      <input id="fechaHora" readonly>
-      <div class="note">📅 Automática, no editable</div>
-    </div>
-  </div>
-
-  <label style="margin-top:18px;">Comentarios / Producto Nuevo</label>
-  <textarea id="comentarios" placeholder="Ej. producto nuevo no listado / instrucciones de entrega"></textarea>
-</div>
-
-<!-- PRODUCTOS NUEVOS -->
 <div class="card">
-  <div class="promoHead">
-    <div>
-      <div class="promoTitle">Productos nuevos</div>
-      <div class="promoSub">
-        Novedades disponibles. Si te interesa alguno, coméntalo con tu vendedor para agendar una
-        <b>cotización</b>, <b>degustación</b> o <b>demostración</b>.
-      </div>
-    </div>
-    <div class="promoBadge">Precios referenciales</div>
-  </div>
-
-  <div class="promoGrid">
-    <div class="promoCard">
-      <div class="promoTop"><div class="promoCode">CO-DGB309-13883</div><div class="promoTag">Helado 5 L</div></div>
-      <div class="promoName">VOGLIA HELADO SABOR SAKE 5 L</div>
-      <div class="promoMeta"><div class="promoPrice">$718.06 MXP</div></div>
-    </div>
-<div class="promoCard">
-      <div class="promoTop"><div class="promoCode">CO-DGB309-13884</div><div class="promoTag">Helado 5 L</div></div>
-      <div class="promoName">VOGLIA HELADO SABOR TARO 5 L</div>
-      <div class="promoMeta"><div class="promoPrice">$862.50 MXP</div></div>
-    </div>
-<div class="promoCard">
-      <div class="promoTop"><div class="promoCode">CO-DGB309-12843</div><div class="promoTag">Helado 5.7 L</div></div>
-      <div class="promoName">MAEDA-EN HELADO DE TE VERDE 5.7 L</div>
-      <div class="promoMeta"><div class="promoPrice">$616.21 MXP</div></div>
-    </div>
-<div class="promoCard">
-      <div class="promoTop"><div class="promoCode">CO-DGB309-12844</div><div class="promoTag">Helado 5.7 L</div></div>
-      <div class="promoName">MAEDA-EN HELADO DE LYCHEE 5.7 L</div>
-      <div class="promoMeta"><div class="promoPrice">$616.21 MXP</div></div>
-    </div>
-<div class="promoCard">
-      <div class="promoTop"><div class="promoCode">CO-DGB309-12845</div><div class="promoTag">Helado 5.7 L</div></div>
-      <div class="promoName">MAEDA-EN HELADO DE YUZU 5.7 L</div>
-      <div class="promoMeta"><div class="promoPrice">$616.21 MXP</div></div>
-    </div>
-<div class="promoCard">
-      <div class="promoTop"><div class="promoCode">SE-BEB151-13887</div><div class="promoTag">Cerveza 500 ml</div></div>
-      <div class="promoName">YOUUS CERVEZA KYEONGBOKGUNG IPA 4.5% 500 ML</div>
-      <div class="promoMeta"><div class="promoPrice">$66.56 MXP</div></div>
-    </div>
-<div class="promoCard">
-      <div class="promoTop"><div class="promoCode">SE-BEB151-13885</div><div class="promoTag">Cerveza 500 ml</div></div>
-      <div class="promoName">YOUUS CERVEZA JEJU BAENGNOKDAM ALE 4.3% 500 ML</div>
-      <div class="promoMeta"><div class="promoPrice">$74.25 MXP</div></div>
-    </div>
-<div class="promoCard">
-      <div class="promoTop"><div class="promoCode">SE-BEB151-13886</div><div class="promoTag">Cerveza 500 ml</div></div>
-      <div class="promoName">YOUUS CERVEZA GWANGHWAMUN ALE 5% 500 ML</div>
-      <div class="promoMeta"><div class="promoPrice">$51.15 MXP</div></div>
-    </div>
-<div class="promoCard">
-      <div class="promoTop"><div class="promoCode">SE-BEB151-13888</div><div class="promoTag">Cerveza 500 ml</div></div>
-      <div class="promoName">YOUUS CERVEZA SEONGSAN ILCHULBONG ALE 5% 500 ML</div>
-      <div class="promoMeta"><div class="promoPrice">$74.25 MXP</div></div>
-    </div>
-  </div>
-
-  <div class="promoFoot">
-    *Precio sujeto a cambios. Si te interesa alguna cotización o degustación, favor de agendarlo con tu vendedor.
-  </div>
+<div class="grid">
+<div>
+<label>Nombre del cliente (como factura)</label>
+<input id="cliente" readonly="" value="UBER PORTIER MEXICO"/>
 </div>
-
+<div>
+<label>Número de cliente</label>
+<input id="codigo" readonly="" value="C015987"/>
+</div>
+<div>
+<label>Vendedor</label>
+<input id="vendedor" placeholder="Nombre del vendedor"/>
+</div>
+<div>
+<label>Fecha y hora del pedido</label>
+<input id="fechaHora" readonly=""/>
+<div class="note">📅 Automática, no editable</div>
+</div>
+</div>
+<label style="margin-top:22px;">Comentarios / Producto Nuevo</label>
+<textarea id="comentarios" placeholder="Ej. producto nuevo no listado / instrucciones de entrega"></textarea>
+</div>
 <!-- PAGO + BUSCADOR -->
-<div class="card dataFields">
-  <div class="grid">
-    <div>
-      <label>Forma de pago</label>
-      <select id="formaPago">
-        <option value="">Selecciona...</option>
-        <option>Contado</option>
-        <option>Transferencia</option>
-        <option>Crédito</option>
-      </select>
-    </div>
+<div class="card">
+<div class="header" style="margin-bottom:0">
+<div>
+<label style="margin:0">Productos nuevos / Promoción</label>
 
-    <div>
-      <label>Buscar producto</label>
-      <input id="buscador" placeholder="Escribe para filtrar (código o descripción)" onkeyup="filtrar()">
-      <div class="note">Tip: escribe “nori”, “arroz”, “salsa”, etc.</div>
-    </div>
-  </div>
 </div>
-
-<!-- PRODUCTOS DEL CLIENTE -->
+<div class="badge" style="font-size:13px">Nuevo</div>
+</div>
+<div class="promo-grid"><div class="promo-item"><div class="promo-title">VOGLIA HELADO SABOR SAKE 5 L</div><div class="promo-code">Código: <b>CO-DGB309-13883</b> • <b>$718.06 MXP</b></div></div><div class="promo-item"><div class="promo-title">VOGLIA HELADO SABOR TARO 5 L</div><div class="promo-code">Código: <b>CO-DGB309-13884</b> • <b>$862.50 MXP</b></div></div><div class="promo-item"><div class="promo-title">MAEDA-EN HELADO DE TE VERDE 5.7 L</div><div class="promo-code">Código: <b>CO-DGB309-12843</b> • <b>$616.21 MXP</b></div></div><div class="promo-item"><div class="promo-title">MAEDA-EN HELADO DE LYCHEE 5.7 L</div><div class="promo-code">Código: <b>CO-DGB309-12844</b> • <b>$616.21 MXP</b></div></div><div class="promo-item"><div class="promo-title">MAEDA-EN HELADO DE YUZU 5.7 L</div><div class="promo-code">Código: <b>CO-DGB309-12845</b> • <b>$616.21 MXP</b></div></div></div>
+<div class="note" style="margin-top:12px">Si te interesan estos productos, favor de mencionarle a tu vendedor para agendar una degustación o demostración.</div>
+</div><div class="card">
+<div class="grid">
+<div>
+<label>Forma de pago</label>
+<select id="formaPago">
+<option value="">Selecciona...</option>
+<option>Contado</option>
+<option>Transferencia</option>
+<option>Crédito</option>
+</select>
+</div>
+<div>
+<label>Buscar producto</label>
+<input id="buscador" onkeyup="filtrar()" placeholder="Escribe para filtrar (código o descripción)"/>
+<div class="note">Tip: escribe “nori”, “arroz”, “salsa”, etc.</div>
+</div>
+</div>
+</div>
+<!-- PROMOS / PRODUCTOS NUEVOS -->
+<!-- PRODUCTOS -->
 <div class="card table-wrap">
 <table id="tabla">
 <tr>
-  <th>Código</th>
-  <th>Descripción</th>
-  <th>Piezas</th>
+<th>Código</th>
+<th>Descripción</th>
+<th>Piezas</th>
 </tr>
+
 <tr><td>SE-SAL504-0002</td><td>ABC SALSA DE SOYA DULCE KECAP 620 ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SFP606-12032</td><td>ACECOOK IPPIN MISO 80 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-ARR100-0012</td><td>AHMAD ARROZ BASMATI SIDDIQUI 1 KG</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-SYE599-0024</td><td>AJINOMOTO GLUTAMATO BOLSA 500G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SYE599-5231</td><td>AJINOMOTO GLUTAMATO BOLSA 1 KG</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-SYE599-0024</td><td>AJINOMOTO GLUTAMATO BOLSA 500G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SYE599-0019</td><td>AJINOMOTO GLUTAMATO FRASCO 100 GRS.</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SYE558-3966</td><td>AJINOMOTO HONDASHI 120 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SYE558-0022</td><td>AJINOMOTO HONDASHI 32G</td><td><input type="number" min="0"></td></tr>
@@ -209,12 +220,12 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>SE-DGB302-13184</td><td>AMOS 4D GUMMY FRESA 65G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB302-13182</td><td>AMOS 4D GUMMY ROBOT 65G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB302-13512</td><td>AMOS GUMMY SUSHI 30 GR</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DGB302-13955</td><td>AMOS PEELERZ PIÑA 65 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB302-12687</td><td>AMOS PEELERZ UVA 65 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-TYE799-1984</td><td>APOLLO PASTA FILLO 454 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-PDM458-9766</td><td>AQUAMAR SURIMI EN BARRITAS 1 KG</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-PDM458-9767</td><td>AQUAMAR SURIMI EN TROCITOS 1 KG</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB151-8538</td><td>ASAHI SUPER DRY BEER BOTELLA 330 ML</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-PDM450-8454</td><td>ASSI ROASTED &amp; SEASONED LAVER 20G X 3</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SYE599-6807</td><td>ASSI CHILE TRITURADO 28G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SFP649-0035</td><td>ASSI ORIENTAL NOODLE 340G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SYE556-0036</td><td>ASSI RED PEPPER POWDER-COARSE ASSI 2LB</td><td><input type="number" min="0"></td></tr>
@@ -222,7 +233,6 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>CO-FVL354-3030</td><td>AZUMA GOKUSHOICHIBAN NATTO 3 PZAS 153.3 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-FVL354-5562</td><td>AZUMA NATTO ORGÁNICO CONGELADO CUP 3 PZAS 135.6 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-FVL354-8388</td><td>AZUMA OROSHIDARE NATTO 51 G X 3 153 G</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-ARR149-12838</td><td>BIBIGO COOKED RICE 210G</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-TYE755-10457</td><td>BIBIGO DUMPLING CHAMPIÑONES 420 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-TYE755-10454</td><td>BIBIGO DUMPLING JAPCHAE 420 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-TYE755-10455</td><td>BIBIGO DUMPLING KIMCHI 420 G</td><td><input type="number" min="0"></td></tr>
@@ -234,7 +244,7 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>SE-DGB303-6686</td><td>BOURBON ALFORT MINI CHOCOLATE VANILLA WHITE 55 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB304-3154</td><td>BOURBON BAUM ROLL 91 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB304-3595</td><td>BOURBON EVERY BURGER 66 G</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-DGB303-10115</td><td>BOURBON GALLETA CHOCOLATE &amp; CAFE 24P 108 G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DGB303-10115</td><td>BOURBON GALLETA CHOCOLATE & CAFE 24P 108 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB304-13670</td><td>BOURBON MINI SABLÉ DE CARAMELO 46 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB304-3151</td><td>BOURBON WHITE ROLLITA GALLETA DULCE 98 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB300-11640</td><td>CALBEE HARVEST SNAPS LIGHTLY SALTED 94 G</td><td><input type="number" min="0"></td></tr>
@@ -242,7 +252,7 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>SE-DGB300-11641</td><td>CALBEE JAGARICO ORIGINAL 60 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB300-11642</td><td>CALBEE JAGARICO UMAMI SEAWEED 52 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB300-9554</td><td>CALBEE POTATO CHIPS HONEY BUTTER 80 G</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-DGB300-9556</td><td>CALBEE POTATO CHIPS HOT &amp; SPICY 80 G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DGB300-9556</td><td>CALBEE POTATO CHIPS HOT & SPICY 80 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB300-9555</td><td>CALBEE POTATO CHIPS SEAWEED SALT 80 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB300-9565</td><td>CALBEE SHRIMP CHIPS HOT GARLIC 94 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB300-9560</td><td>CALBEE SHRIMP CHIPS ORIGINAL 113 G</td><td><input type="number" min="0"></td></tr>
@@ -250,7 +260,6 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>SE-BEB152-0097</td><td>CALPIS CONCENTRADO 1LT</td><td><input type="number" min="0"></td></tr>
 <tr><td>RE-BEB152-0098</td><td>CALPITOYO 1 L</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-FVL359-0103</td><td>CASTAÑA REBANADA 227 GRS.</td><td><input type="number" min="0"></td></tr>
-<tr><td>OT-UTE807-9800</td><td>CATHAY KITCHEN SUNOKO MAKISU MANTEL DE MADERA 24 X 24 CM</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-TYE750-9965</td><td>CATHAY PAPEL DE ARROZ CUADRADO 22 CM 340 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-TYE750-10385</td><td>CATHAY PAPEL DE ARROZ REDONDO 16 CM 340 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-TYE750-10386</td><td>CATHAY PAPEL DE ARROZ REDONDO 22 CM 340 G</td><td><input type="number" min="0"></td></tr>
@@ -276,8 +285,8 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>SE-DGB300-13073</td><td>CROWN SHINZZANG 120G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-ARR103-3526</td><td>DAICHI ARROZ INTEGRAL 2.27 KG</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-ARR149-3450</td><td>DAICHI MOCHIGOME 2.2 KG</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-SYE558-5534</td><td>DAISHO AJISHIO KOSHO 135 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SFP606-3835</td><td>DAISHO 5AJI NO SOUP HARUSAME 164.6 G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-SYE558-5534</td><td>DAISHO AJISHIO KOSHO 135 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SYE558-6904</td><td>DAISHO AJISHIO KOSHO ARABIKI KURO KOSHO 210 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SYE558-4647</td><td>DAISHO ASAZUKE NO MOTO 18 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SYE558-7250</td><td>DAISHO KAISEN CHUKA SALSA PARA EBI CHILI 121 G</td><td><input type="number" min="0"></td></tr>
@@ -312,7 +321,6 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>SE-SAL503-6755</td><td>EBARA YAKINIKUOUEN KOCHUJAN NO TARE 230 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>OT-UTE899-13300</td><td>ECHO VOLTEADOR 0349-394</td><td><input type="number" min="0"></td></tr>
 <tr><td>OT-UTE899-7018</td><td>ECHO VOLTEADOR PARA TAKOYAKI 0318-532</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-DGB302-2845</td><td>EIWA MARSHMALLOW HELLO KITTY MANGO 90G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB302-2843</td><td>EIWA MARSHMALLOW HELLO KITTY STRAWBERRY 90G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-HYE449-10281</td><td>EMPEROR L BLACK TAPIOCA PEARLS 500G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB153-11290</td><td>EMPEROR L BUBBLE BLACK TEA 240G</td><td><input type="number" min="0"></td></tr>
@@ -325,17 +333,14 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>SE-HYE400-0241</td><td>ERAWAN RICE FLOUR RED 454 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-HYE449-0242</td><td>ERAWAN TAPIOCA STARCH 454 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>OT-UTE899-13237</td><td>EZ COOKER BOWL 30 PZ</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-BEB154-11179</td><td>FELICE SODA JAPONESA SABOR MELON 350 ML</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-BEB154-11180</td><td>FELICE SODA JAPONESA SABOR YOGHURT 350ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SAL549-10744</td><td>FLYING GOOSE SALSA SRIRACHA 730 ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SAL505-10747</td><td>FLYING GOOSE SAMBAL OELEK 3.45 L</td><td><input type="number" min="0"></td></tr>
 <tr><td>RE-BEB151-8550</td><td>FORTUNA CERVEZA SAKE ALE 355 ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>OT-UTE899-3444</td><td>FUJI JUEGO DE VAPORERA DE BAMBOO 3 PZAS 30.48 CM #12</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB157-9600</td><td>GEKKEIKAN JUNMAI SAKE 750 ML</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-BEB157-5612</td><td>GEKKEIKAN LIGHT SAKE 1.5 L</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB157-5611</td><td>GEKKEIKAN LIGHT SAKE 750 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-9602</td><td>GEKKEIKAN PINEAPPLE FLAVORED SAKE 750 ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB304-2731</td><td>GLICO BISCO 64.5 G</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-DGB305-5656</td><td>GLICO COMECCO WASABI Y ALGA 39 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB305-4056</td><td>GLICO CRATZ PEPPER BACON 42 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB304-2918</td><td>GLICO CREAM COLLON N 81G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB303-4082</td><td>GLICO PEJOY COOKIES AND CREAM 56G</td><td><input type="number" min="0"></td></tr>
@@ -343,15 +348,15 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>SE-DGB303-2128</td><td>GLICO POCKY CHOCOLATE 40 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB303-0485</td><td>GLICO POCKY CHOCOLATE 70G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB303-4007</td><td>GLICO POCKY CHOCOLATE BANANA 70 G</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-DGB303-4780</td><td>GLICO POCKY COOKIES &amp; CREAM 40 G</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-DGB303-4008</td><td>GLICO POCKY COOKIES &amp; CREAM 70 G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DGB303-4780</td><td>GLICO POCKY COOKIES & CREAM 40 G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DGB303-4008</td><td>GLICO POCKY COOKIES & CREAM 70 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB303-4719</td><td>GLICO POCKY FAMILY PACK CHOCOLATE 9 PZAS 117 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB303-4720</td><td>GLICO POCKY FAMILY PACK FRESA 9 PZAS 108 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB303-3454</td><td>GLICO POCKY FRESA 70 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB304-2127</td><td>GLICO POCKY GREEN TEA 40 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB303-9582</td><td>GLICO POCKY KOI FUKAMI MATCHA 61.6 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB303-13677</td><td>GLICO POCKY MATCHA CHOCOLATE DOBLE 52.2 G</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-DGB303-4721</td><td>GLICO POCKY PACK COOKIES&amp;CREAM 129G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DGB303-4721</td><td>GLICO POCKY PACK COOKIES&CREAM 129G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB304-2126</td><td>GLICO POCKY STRAWBERRY 40 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB303-3456</td><td>GLICO POCKY TE VERDE 70 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-FVL358-7737</td><td>GOLDEN COCK/KYLINS KIKURAGE ENTERO 70G</td><td><input type="number" min="0"></td></tr>
@@ -425,7 +430,6 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>SE-SYE558-6764</td><td>HOUSE OROSHI NAMA SHOGA 40 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-ACE099-0596</td><td>HOUSE RAYU / ACEITE AJONJOLI 31G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SYE558-3848</td><td>HOUSE RYOTEI WASABI 33 G</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-SYE558-5364</td><td>HOUSE SHISOUME 40 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SYE550-0604</td><td>HOUSE VERMONT CURRY HOT 115 GRS.</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SYE550-0605</td><td>HOUSE VERMONT CURRY HOT 230 GRS.</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SYE550-0606</td><td>HOUSE VERMONT CURRY MED HOT 115 G</td><td><input type="number" min="0"></td></tr>
@@ -437,7 +441,6 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>SE-DGB349-11605</td><td>HSU FU CHI CRISPY ROLL FRESA 105 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB302-11607</td><td>HSU FU CHI MARSHMALLOW DURAZNO 64 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB302-11626</td><td>HSU FU CHI MARSHMALLOW MORA AZUL 64 G</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-DGB302-11619</td><td>HSU FU CHI MARSHMALLOW UVA 64 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB349-11603</td><td>HSU FU CHI STRAWBERRY CAKE 184 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SFP602-8094</td><td>IBONOITO TENOBE SOMEN 300 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-PDM499-10736</td><td>ICHIMASA NARUTO MAKI 150 G</td><td><input type="number" min="0"></td></tr>
@@ -459,6 +462,7 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>SE-SFP606-9596</td><td>ITSUKI TOKYO YUZU SHOYU RAMEN 172 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SFP603-7620</td><td>ITSUKI YAKIUDON SAUCE 2 PZAS 406 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SFP603-7621</td><td>ITSUKI YAKIUDON SHOYU 2 PZAS 396 G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB153-11184</td><td>J-BASKET BUBBLE TEA 285 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB153-11185</td><td>J-BASKET BUBBLE TEA TARO 285 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-FVL353-0648</td><td>JACK POT LYCHEES ENTEROS EN ALMIBAR LIGHT 565 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-TE653-8464</td><td>JACK POT TE DE OOLONG 2.268 KG</td><td><input type="number" min="0"></td></tr>
@@ -511,7 +515,7 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>SE-DGB300-9998</td><td>KASUGAI MAME MIX 57G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB302-0758</td><td>KASUGAI MASK MELON 115 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB302-8608</td><td>KASUGAI PEACH CREAM FRAPPE CANDY 76 G</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-DGB302-9999</td><td>KASUGAI QUEEN&#x27;S MILK CANDY 70G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DGB302-9999</td><td>KASUGAI QUEEN'S MILK CANDY 70G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB302-2870</td><td>KASUGAI SUIKA GUMMY 107G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB300-2145</td><td>KASUGAI WASABI GREEN MAME 67G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB302-8612</td><td>KASUGAI XILICRISTAL FRUITS ASSORT NODO AME 67 G</td><td><input type="number" min="0"></td></tr>
@@ -535,17 +539,14 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>SE-SAL502-0795</td><td>KIKKOMAN SOY SAUCE P/B 1.8LTR</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SAL502-0796</td><td>KIKKOMAN SOY SAUCE PL BTL 3.79LTR</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SAL502-0797</td><td>KIKKOMAN SOYA SIN GLUTEN 295.7ML</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-SAL549-0800</td><td>KIKKOMAN SWEET &amp; SOUR SALSA AGRI 326G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-SAL549-0800</td><td>KIKKOMAN SWEET & SOUR SALSA AGRI 326G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SAL502-0801</td><td>KIKKOMAN TAMARI SALSA DE SOYA 296 ML</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-SAL503-0802</td><td>KIKKOMAN TERIYAKI BLASTE&amp;GLAZE 340G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-SAL503-0802</td><td>KIKKOMAN TERIYAKI BLASTE&GLAZE 340G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SAL503-0803</td><td>KIKKOMAN TERIYAKI GLAZE (5LB) 2.27 KG</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SYE559-7848</td><td>KING HINODE HON MIRIN 1 L</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SYE553-7849</td><td>KING HINODE JYUNMAI RYORISHU 1 L</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SYE553-7850</td><td>KING HINODE RYORISHU 400 ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>RE-SAL503-0813</td><td>KINJIRUSHI TUBE KIN NERIUME #U21 250 G</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-DGB301-10288</td><td>KITKAT OTONA NO AMASA 12P 124.3 G / 135.6 G</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-DGB301-10290</td><td>KITKAT OTONA NO AMASA FRESA 11 P 124.3 G</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-DGB301-10289</td><td>KITKAT OTONA NO AMASA KOI MATCHA 11P 135.6 G / 124.3 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>RE-SYE599-0829</td><td>KOCHIJAN HOT PEPPER PASTE 500 GRS.</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-HYE449-6877</td><td>KODA KATAKURIKO 1 KG</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-HYE400-0830</td><td>KODA MOCHIKO 454 G</td><td><input type="number" min="0"></td></tr>
@@ -569,10 +570,10 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>SE-DGB309-7559</td><td>KRACIE POPIN COOKIN RAMEN 32 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB309-7556</td><td>KRACIE POPIN COOKIN SUSHI 28.5 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>OT-UTE899-9806</td><td>KUBOTA KYUEMON FILTRO CON TAZA COLADOR DE CERÁMICA</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-ACE050-9985</td><td>KUKI ACEITE DE AJONJOLI BLANCO 170 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-ACE050-10084</td><td>KUKI ACEITE DE AJONJOLI 1650 ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-ACE050-9983</td><td>KUKI ACEITE DE AJONJOLI 185 ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-ACE050-9984</td><td>KUKI ACEITE DE AJONJOLI 370 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-ACE050-9985</td><td>KUKI ACEITE DE AJONJOLI BLANCO 170 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-TE650-7853</td><td>KUNITARO UJI MATCHA IRI MIZUDASHI RYOKUCHA TB 50 PZAS 175 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-TQO749-7712</td><td>KYOTOAN REITO KIZAMI AGE 150 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SYE555-0880</td><td>LKK CHAR SIU 240 G</td><td><input type="number" min="0"></td></tr>
@@ -583,7 +584,7 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>SE-SAL500-0887</td><td>LKK KUM CHUN OYSTER FLAVORED SAUCE4.85 LB</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SAL500-0888</td><td>LKK KUNG PAO STIR FRY SAUCE 525 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SAL500-0891</td><td>LKK MOS-PANDA MAN ORA CK 227G</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-SAL500-0894</td><td>LKK OYSTER SAUCE &quot;PANDA&quot; &quot; 2.27 KG</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-SAL500-0894</td><td>LKK OYSTER SAUCE "PANDA" " 2.27 KG</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SAL500-0896</td><td>LKK OYSTER SAUCE PANDA 255 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SAL500-0897</td><td>LKK OYSTER SAUCE PANDA 510 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SAL502-0865</td><td>LKK PREMIUM SOY SAUCE 16.9 FL OZ</td><td><input type="number" min="0"></td></tr>
@@ -595,8 +596,7 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>SE-SAL504-0908</td><td>LKK SALSA SABOR CACAHUATE 226 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SAL502-0910</td><td>LKK SALSA SOYA CHAMPIÑON 1.88 L</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SAL502-0911</td><td>LKK SALSA SOYA CHAMPIÑON 500 ML.</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-SAL500-0913</td><td>LKK SWEET &amp; SOUR SAUCE 240 G</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-DGB349-7766</td><td>LOTTE CHOCO PIE SABOR MATCHA (GREEN TEA) 12 PAQ 336 G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-SAL500-0913</td><td>LKK SWEET & SOUR SAUCE 240 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB349-7765</td><td>LOTTE CHOCO PIE SABOR PLATANO 12 PAQ 336 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB349-11699</td><td>LOTTE GHANA MILD CHOCOLATE 70 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB349-11700</td><td>LOTTE GHANA MILK CHOCOLATE 70 G</td><td><input type="number" min="0"></td></tr>
@@ -684,9 +684,8 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>SE-SYE558-5489</td><td>MARUMIYA SOFT FURIKAKE BUTAMISO SOBORO 28 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SYE558-3480</td><td>MARUMIYA TORI KAMAMESHI NO MOTO 134G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB199-4063</td><td>MARUSANAI BEBIDA DE SOYA 1 L</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-BEB199-9160</td><td>MARUSANAI LECHE DE SOYA SIN AZÚCAR 1 L</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-BEB199-4511</td><td>MARUSANAI LECHE DE SOYA CAFE BAKUGA 1 L</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB199-9161</td><td>MARUSANAI LECHE DE SOYA ORGANICA SIN AZÚCAR 1 L</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB199-9160</td><td>MARUSANAI LECHE DE SOYA SIN AZÚCAR 1 L</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SFP606-3849</td><td>MARUTAI NAGASAKI CHANPON 93 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SFP606-5490</td><td>MARUTAI NAGASAKI SARA UDON 140 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SFP606-3850</td><td>MARUTAI RAMEN 164 G</td><td><input type="number" min="0"></td></tr>
@@ -697,7 +696,6 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>OT-UTE810-10222</td><td>MATSUMI PLATO DE CERAMICA M21-39</td><td><input type="number" min="0"></td></tr>
 <tr><td>OT-UTE810-10237</td><td>MATSUMI TAZÓN DE CERAMICA M21-93</td><td><input type="number" min="0"></td></tr>
 <tr><td>OT-UTE810-8842</td><td>MATSUMI TAZÓN DE CERAMICA SP23-009/M19-14 22.5 X 5</td><td><input type="number" min="0"></td></tr>
-<tr><td>OT-UTE810-12319</td><td>MATSUMI TAZÓN DE CERÁMICA M24-79 12.3 X 6</td><td><input type="number" min="0"></td></tr>
 <tr><td>OT-UTE810-10190</td><td>MATSUMI VASO PARA M21-123</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SFP606-1034</td><td>MCHAN NOODLE SOBA MIDORI NO TANUKI 99 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SFP606-1035</td><td>MCHAN NOODLE UDON AKAI KITSUNE 94 G</td><td><input type="number" min="0"></td></tr>
@@ -712,7 +710,6 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>CO-DGB309-2157</td><td>MINATO SEIKA DAIFUKU MORA AZUL CON CREMA 60 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-DGB309-2161</td><td>MINATO SEIKA DAIFUKU TE VERDE CON CREMA 60 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-DGB309-2132</td><td>MINATO SEIKA DAIFUKU VERDE 90 G</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-ACE050-1101</td><td>MIYAKO SESAME OIL 128FLOZ</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-TE654-1103</td><td>MIYAKO TOKUYO GREEN TEA 6OZ</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SFP602-2616</td><td>MIYAKOICHI KK CHUKA SOBA 140G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SFP606-2308</td><td>MIYAKOICHI KK CURRY UDON 642 G</td><td><input type="number" min="0"></td></tr>
@@ -736,16 +733,15 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>SE-PDM499-5278</td><td>MOMOYA GOHAN DESUYO SHITAKE 180 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SYE558-1108</td><td>MOMOYA KIMUCHI NO MOTO 190 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-TQO702-12626</td><td>MORI-NU TOFU (EXTRA FIRME) 308 G</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-TQO702-12625</td><td>MORI-NU TOFU (FIRME) 307 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-TQO702-12624</td><td>MORI-NU TOFU (SUAVE) 305 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB349-4474</td><td>MORINAGA ANGEL PIE MINI 8 PZAS 72 G / 76 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB303-10312</td><td>MORINAGA CHOICE 14P 121.8 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-HYE449-8425</td><td>MORINAGA FUWAFUWA PAN CAKE MIX 170 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB349-3855</td><td>MORINAGA GATEAU CHOCOLA 186G</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-DGB302-9978</td><td>MORINAGA HI CHEW FRUTAS EXOTICAS 90G</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-DGB302-9980</td><td>MORINAGA HI CHEW FRUTAS MIXTAS 80G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB302-10005</td><td>MORINAGA HI CHEW BERRY 90G N</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB302-4497</td><td>MORINAGA HI CHEW CITRICOS MIXTOS 90 G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DGB302-9978</td><td>MORINAGA HI CHEW FRUTAS EXOTICAS 90G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-DGB302-9980</td><td>MORINAGA HI CHEW FRUTAS MIXTAS 80G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB302-1114</td><td>MORINAGA HI CHEW GRAPE 50 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB302-1115</td><td>MORINAGA HI CHEW GREEN APPLE 50 GRS</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB302-6449</td><td>MORINAGA HI CHEW KIWI 50 G</td><td><input type="number" min="0"></td></tr>
@@ -795,16 +791,16 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>SE-BEB156-7824</td><td>NAKANO NASHI NO OSAKE 720 ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB157-7817</td><td>NAKANO NIGORI SAKE 720 ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>RE-FVL355-1183</td><td>NASU (BERENJENA)</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-BEB150-7726</td><td>NESTLE NESCAFE EXCELLA BOTTLE COFFEE MUTOU 900 ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB150-7862</td><td>NESTLE NESCAFE EXCELLA BOTTLE COFFEE AMASA HIKAEME 900 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB150-7726</td><td>NESTLE NESCAFE EXCELLA BOTTLE COFFEE MUTOU 900 ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-ARR149-6201</td><td>NICHIREI EBI PILAF 450 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-ARR149-6202</td><td>NICHIREI EBI TO CHEESE NO DORIA 2 PZAS 380 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-ARR149-8558</td><td>NICHIREI GUZAI TAPPURI GOMOKU CHAHAN 500 G / 530 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-ARR149-6203</td><td>NICHIREI HONKAKU ITAME CHAHAN 450 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-DGB309-6204</td><td>NICHIREI IMAGAWAYAKI AZUKI AN 5 PZAS 400 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-DGB309-6205</td><td>NICHIREI IMAGAWAYAKI CUSTARD CREAM 5 PZAS 325 G</td><td><input type="number" min="0"></td></tr>
-<tr><td>CO-FVL356-10011</td><td>NICHIREI SONOMAMA TSUKAERU KIZANI OKURA 160G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB155-12182</td><td>NICO NICO FRESA CON NATA DE COCO 320 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB155-12181</td><td>NICO NICO LYCHEE CON NATA DE COCO 320 ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB155-12180</td><td>NICO NICO MORA AZUL CON NATA DE COCO 320 ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB155-12739</td><td>NICO NICO PIÑA CON NATA DE COCO 320 ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SYE558-9807</td><td>NINBEN SHIRODASHI GOLD 500ML</td><td><input type="number" min="0"></td></tr>
@@ -845,8 +841,8 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>SE-DGB300-8060</td><td>NONG SHIM TAKO SNACK 60G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SFP600-0246</td><td>NOODLE HOUSE FIDEO DELGADO 454 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SFP600-0247</td><td>NOODLE HOUSE FIDEO GRUESO 454 G</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-SAL501-11843</td><td>O&#x27;FOOD SALSA COREAN BBQ PARA CERDO 280 G</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-SAL501-11842</td><td>O&#x27;FOOD SALSA COREAN BBQ PARA RES 280 G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-SAL501-11843</td><td>O'FOOD SALSA COREAN BBQ PARA CERDO 280 G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-SAL501-11842</td><td>O'FOOD SALSA COREAN BBQ PARA RES 280 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-TQO749-10317</td><td>OK AJITSUKE SUSHI AGE CUADRADO 60 PZAS 900 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-FVL354-4025</td><td>OKAME NATTO GOKU KOTSUBU MINI-3 170.1 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB154-10914</td><td>OKF FRUIT SPARKLING SANDÍA 500 ML</td><td><input type="number" min="0"></td></tr>
@@ -856,6 +852,7 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>SE-BEB159-10910</td><td>OKF JUGO DE MELÓN CON ALOE 500 ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB159-10909</td><td>OKF JUGO DE SANDIA CON ALOE 500 ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB159-10912</td><td>OKF JUGO DE UVA VERDE CON ALOE 500 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB154-13960</td><td>OKF KOMBUCHA PIÑA DURAZNO 500 ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB150-10917</td><td>OKF PREMIUM BLACK COFFEE 390 ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB150-10918</td><td>OKF PREMIUM SWEETENED COFFEE 390 ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB154-10903</td><td>OKF SPARKLING SODA FRESA 350 ML</td><td><input type="number" min="0"></td></tr>
@@ -899,6 +896,7 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>SE-SFP606-13044</td><td>PALDO VOLCANO CARBONARA 130G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-TE699-10452</td><td>PANTAI CHA THAI TÉ EN POLVO 454 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SAL504-1316</td><td>PANTAI SAUCE SPENGRLL 32.5OZ</td><td><input type="number" min="0"></td></tr>
+<tr><td>OT-UTE899-10243</td><td>PEARL SARTEN PARA TAMAGOYAKI VERDE HB-8595</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-TYE752-1323</td><td>PEKING EGG ROLL SKIN 27-30 HJS 907 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-TYE751-1324</td><td>PEKING GYOZA SKIN 283 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-TYE753-1325</td><td>PEKING WONTON SKIN 454 G</td><td><input type="number" min="0"></td></tr>
@@ -947,18 +945,18 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>SE-DGB309-11562</td><td>ROYAL MOCHI THAI TEA 210 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB309-12789</td><td>ROYAL MOCHI VAINILLA 120 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-ARR104-1384</td><td>ROYAL UMBRELLA ARROZ JAZMIN 1KG.</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-SYE550-12025</td><td>S&amp;B GOLDEN CURRY CON VERDURAS INSTANTANEO PICANTE 230G</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-SYE550-6375</td><td>S&amp;B GOLDEN CURRY PASTA HOT 220 G</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-SYE550-6372</td><td>S&amp;B GOLDEN CURRY PASTA HOT 92 G</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-SYE550-6374</td><td>S&amp;B GOLDEN CURRY PASTA MEDIO HOT 220 G</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-SYE550-6371</td><td>S&amp;B GOLDEN CURRY PASTA MEDIO HOT 92 G</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-SYE550-6373</td><td>S&amp;B GOLDEN CURRY PASTA MILD 220 G</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-SYE550-6370</td><td>S&amp;B GOLDEN CURRY PASTA MILD 92 G</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-SYE558-1386</td><td>S&amp;B SHICHIMI TOGARASHI 300 G</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-SYE558-3362</td><td>S&amp;B TOROKERU BEEFSTEW 160G</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-SYE558-3558</td><td>S&amp;B TOROKERU CREAM STEW 160 G</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-SYE558-3361</td><td>S&amp;B TOROKERU HAYASHI 160G</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-SYE558-9720</td><td>S&amp;B UMAMI OKAZU RAYU 110 G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-SYE550-12025</td><td>S&B GOLDEN CURRY CON VERDURAS INSTANTANEO PICANTE 230G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-SYE550-6375</td><td>S&B GOLDEN CURRY PASTA HOT 220 G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-SYE550-6372</td><td>S&B GOLDEN CURRY PASTA HOT 92 G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-SYE550-6374</td><td>S&B GOLDEN CURRY PASTA MEDIO HOT 220 G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-SYE550-6371</td><td>S&B GOLDEN CURRY PASTA MEDIO HOT 92 G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-SYE550-6373</td><td>S&B GOLDEN CURRY PASTA MILD 220 G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-SYE550-6370</td><td>S&B GOLDEN CURRY PASTA MILD 92 G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-SYE558-1386</td><td>S&B SHICHIMI TOGARASHI 300 G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-SYE558-3362</td><td>S&B TOROKERU BEEFSTEW 160G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-SYE558-3558</td><td>S&B TOROKERU CREAM STEW 160 G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-SYE558-3361</td><td>S&B TOROKERU HAYASHI 160G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-SYE558-9720</td><td>S&B UMAMI OKAZU RAYU 110 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SFP601-1389</td><td>SAILING BOAT RICE STICKS 16OZ</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SFP606-7122</td><td>SAMYANG EXTRA PICANTE POLLO 140G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SFP606-7236</td><td>SAMYANG FIDEO INSTANTANEO CUP 2X SPICY HOT 70 G</td><td><input type="number" min="0"></td></tr>
@@ -982,7 +980,6 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>SE-BEB160-1400</td><td>SANGARIA ANATANO OCHA 190G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB160-4910</td><td>SANGARIA ANATANO OCHA TE VERDE 500 ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB160-4911</td><td>SANGARIA ANATANO OOLONGCHA 500 ML</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-BEB150-10397</td><td>SANGARIA BINCHO BAISEN COFFEE BLACK 185 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB154-10016</td><td>SANGARIA KAORI SAWAYAKA UME SODA 190 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB159-10096</td><td>SANGARIA NATA DE COCO 280 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB159-1406</td><td>SANGARIA TSUBU TSUBU MI ORANGE 280 G</td><td><input type="number" min="0"></td></tr>
@@ -995,9 +992,8 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>SE-BEB158-5324</td><td>SANWA IICHIKO 900 ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SFP606-12565</td><td>SANYO SAPPORO ICHIBAN CUP MISO 75 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SFP606-11733</td><td>SANYO SAPPORO ICHIBAN CUP STAR SHOYU 71 G</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-SFP606-10775</td><td>SANYO SAPPORO ICHIBAN JAPÓN SAL 100G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB151-1429</td><td>SAPPORO BEER LIGHT BOTELLA 355 ML</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-BEB151-1430</td><td>SAPPORO BEER PRE&#x27;M 355 BOTELLA ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB151-1430</td><td>SAPPORO BEER PRE'M 355 BOTELLA ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB151-1431</td><td>SAPPORO BEER RESERVE BOTELLA 355 ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SFP606-1434</td><td>SAPPORO ICHI ORI FIDEO INST 100 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SFP606-1438</td><td>SAPPORO ICHIBAN SHIO RAMEN 102 G</td><td><input type="number" min="0"></td></tr>
@@ -1005,7 +1001,6 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>SE-ARR149-1442</td><td>SATO GOHAN GINSHARI 200G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB157-7980</td><td>SAWANOTSURU JITSURAKU YAMADANISHIKI 300ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB157-7981</td><td>SAWANOTSURU JITSURAKU YAMADANISHIKI 720ML</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-BEB157-8779</td><td>SAWANOTSURU JUNMAI TARU SAKE 180 ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB157-2336</td><td>SAWANOTSURU JUNMAIDAIGINJO MINUME 720ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB157-3982</td><td>SAWANOTSURU JUNMAISHU KOME DAKE NO SAKE 1.8 L</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB157-2338</td><td>SAWANOTSURU JUNMAISHU YAMADANISHIKI 300ML</td><td><input type="number" min="0"></td></tr>
@@ -1020,7 +1015,6 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>SE-SYE558-1463</td><td>SB. NERI KARASHI EN TUBO 43 G.</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-FVL398-4442</td><td>SEKIMOTO SHISO UMEBOSHI BLANCO 150 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-FVL398-4445</td><td>SEKIMOTO SHISO UMEBOSHI ROJO 150 G</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-BEB158-4960</td><td>SENGETSU KAWABE 720 ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB156-4961</td><td>SENGETSU SHISO LICOR KOISHISO 500 ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-TYE755-9904</td><td>SEÑOR YOSHI GYOZA DE CARNE Y VERDURA 1 KG</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-TYE755-9905</td><td>SEÑOR YOSHI GYOZA DE CARNE Y VERDURA 500 G</td><td><input type="number" min="0"></td></tr>
@@ -1028,13 +1022,13 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>CO-SFP603-4127</td><td>SHIMADAYA SANUKI UDON 5 PZAS 1.250 KG</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-SFP606-7121</td><td>SHIMADAYA TAIKOBAN RAMEN 5 P 1 KG</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-SFP600-8376</td><td>SHIMADAYA TSUKEMEN SENYOU GOKUBUTO CHUKA MEN 5 PZAS 1.35 KG</td><td><input type="number" min="0"></td></tr>
+<tr><td>CO-SFP605-8379</td><td>SHIMADAYA YUDEAGE NAMA PASTA FETTUCCINE 5 PZAS 1 KG</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-SFP605-8378</td><td>SHIMADAYA YUDEAGE NAMA PASTA LINGUINE 5 PZAS 1 KG</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SYE558-8688</td><td>SHIMAYA KATSUO DASHI KARYU 2 PZAS 1 KG</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SYE558-5370</td><td>SHIMAYA MUTENKA DASHI AWASE 14 PZAS 84 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-HYE449-12519</td><td>SHIMEICHI KATAKURIKO 200 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>OT-UTE807-9691</td><td>SHINE FARM / CATHAY KITCHEN SUNOKO MAKISU MANTEL DE MADERA 21X24</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SAL504-3484</td><td>SHIRAKIKU CONCENTRADO DE COCO 400 ML</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-BEB159-1508</td><td>SHIRAKIKU DRINK JELLY GRAPE 150G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB159-1509</td><td>SHIRAKIKU DRINK JELLY LYCHEE 150G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB159-1510</td><td>SHIRAKIKU DRINK JELLY ORANGE 150G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB159-1511</td><td>SHIRAKIKU DRINK JELLY PEACH 150G</td><td><input type="number" min="0"></td></tr>
@@ -1044,11 +1038,11 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>SE-HYE403-1525</td><td>SHIRAKIKU PANKO CRUMBS 198 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SYE558-1543</td><td>SHIRAKIKU WASABIKO POWDER 1 KG.</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-FVL356-1512</td><td>SHIRAKIKU/NISHIMOTO EDAMAME FRIJOL DE SOYA 400 G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-9997</td><td>SHIRATAKI SHUZO JOZEN MIZUNOGOTOSHI ESPUMOSO 360 ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB157-6068</td><td>SHIRATAKI SHUZO JUNMAI-DAIGINJO JOZEN MIZUNOGOTOSHI (AZUL) 300 ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB157-6066</td><td>SHIRATAKI SHUZO JUNMAI-GINJO JOZEN MIZUNOGOTOSHI (BLANCO) 300 ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB157-5995</td><td>SHIRATAKI SHUZO JUNMAI-GINJO JOZEN MIZUNOGOTOSHI (BLANCO) 720 ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB157-6067</td><td>SHIRATAKI SHUZO JUNMAI-GINJO JUKUSEI JOZEN MIZUNOGOTOSHI (ROSADO) 300 ML</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-BEB157-9997</td><td>SHIRATAKI SHUZO JOZEN MIZUNOGOTOSHI ESPUMOSO 360 ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-FVL358-1547</td><td>SHITAKE REBANADO 3 OZ</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-HYE449-4701</td><td>SHOWA CAKE NO YONA HOT CAKE MIX 400 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-HYE449-9721</td><td>SHOWA HOT CAKE MIX 600 G</td><td><input type="number" min="0"></td></tr>
@@ -1070,7 +1064,6 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>OT-UTE804-9210</td><td>SM SET DE PALILLOS 5 PARES CH165</td><td><input type="number" min="0"></td></tr>
 <tr><td>OT-UTE805-7794</td><td>SM SET DE PALILLOS 5 PARES CH4-S</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SFP604-5309</td><td>SM VERMICELLI 300 G</td><td><input type="number" min="0"></td></tr>
-<tr><td>OT-UTE811-2025</td><td>SM WOK CON MANGO DE HIERRO 40 CM</td><td><input type="number" min="0"></td></tr>
 <tr><td>OT-UTE804-1577</td><td>SM/ANCHANA PALILLO DE BAMBU 64-70 PARES 23 CM</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SAL549-1769</td><td>SRIRACHA CHICA 481 GRS.</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SAL549-1770</td><td>SRIRACHA TAPA VERDE GRANDE 793 GRS.</td><td><input type="number" min="0"></td></tr>
@@ -1125,7 +1118,6 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>OT-UTE807-1946</td><td>TETSUJIN SUNOKO PREMIUM MAKISU MANTEL DE BAMBU 24X24 CM 31113</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-PDM450-4086</td><td>TETSUJIN WAKAME 454 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>OT-UTE810-8187</td><td>THE TOUICHI TAZON PARA RAMEN 47-20-475-63-B 16.5 X 5</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-TYE750-1846</td><td>THREE LADIES PAPEL DE ARROZ REDONDO 22 CM 340 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SFP602-5429</td><td>TOGAKUSHI CHA SOBA 400 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SFP602-1864</td><td>TOGAKUSHI SHINSHU YABUSOBA 450G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SFP602-1866</td><td>TOGAKUSHISOBA SHINSHU SARASHINA SOBA 450 G</td><td><input type="number" min="0"></td></tr>
@@ -1233,7 +1225,9 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>SE-SFP606-11316</td><td>YOPOKKI TOPOKKI CUP MENTAI MAYO 118 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SFP606-11313</td><td>YOPOKKI TOPOKKI CUP PICANTE 120 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SFP606-11312</td><td>YOPOKKI TOPOKKI CUP QUESO 120 G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-SYE554-6914</td><td>YOUKI CHOREGI DRESSING 195 ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SYE555-4775</td><td>YOUKI KASHOFUN 5 G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-SYE558-6750</td><td>YOUKI KIZAMI NINNIKU 120 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SYE556-4145</td><td>YOUKI KOCHIJAN EN TUBO 100 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SYE558-6752</td><td>YOUKI NINNIKU OROSHI 120 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SYE558-6753</td><td>YOUKI OROSHI SHOGA 120 G</td><td><input type="number" min="0"></td></tr>
@@ -1246,9 +1240,7 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>SE-SYE558-4048</td><td>YUZUYA HONTEN JUGO DE YUZU 200 ML</td><td><input type="number" min="0"></td></tr>
 </table>
 </div>
-
 <button class="btn" onclick="descargarPedido()">Descargar pedido</button>
-
 <script>
 function filtrar(){
   let f=document.getElementById("buscador").value.toUpperCase();
@@ -1267,43 +1259,52 @@ function filtrar(){
 })();
 
 function descargarPedido(){
-  const cliente = document.getElementById("cliente").value;
-  const codigo = document.getElementById("codigo").value;
-  const vendedor = document.getElementById("vendedor").value || "-";
-  const formaPago = document.getElementById("formaPago").value || "-";
-  const comentarios = document.getElementById("comentarios").value || "-";
 
-  const ahora = new Date();
-  const fechaHora = ahora.toLocaleDateString("es-MX")+" "+
-                    ahora.toLocaleTimeString("es-MX",{hour:'2-digit',minute:'2-digit'});
+  let cliente = document.getElementById("cliente").value;
+  let codigo = document.getElementById("codigo").value;
+  let vendedor = document.getElementById("vendedor").value || "-";
+  let formaPago = document.getElementById("formaPago").value || "-";
+  let comentarios = document.getElementById("comentarios").value || "-";
+
+  let ahora = new Date();
+  let fechaHora = ahora.toLocaleDateString("es-MX")+" "+
+                  ahora.toLocaleTimeString("es-MX",{hour:'2-digit',minute:'2-digit'});
 
   let html = `
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pedido Toyo Foods</title>
 <style>
-:root{--blue:#0B4CCB;--bg:#F5F7FA;--card:#ffffff;--border:#D1D5DB;--text:#111827}
-*{box-sizing:border-box}
-body{margin:0;padding:24px;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:var(--text)}
-.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;gap:12px;flex-wrap:wrap}
+:root{--blue:#0B4CCB;--bg:#F5F7FA;--card:#ffffff;--border:#D1D5DB}
+body{margin:0;padding:24px;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
 .header h1{color:var(--blue);margin:0}
 .badge{border:1px solid #c7dbff;color:var(--blue);padding:8px 14px;border-radius:20px;font-weight:700;background:#eef4ff}
 .card{background:var(--card);border-radius:18px;padding:24px;margin-bottom:22px;box-shadow:0 10px 25px rgba(0,0,0,.06)}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-label{font-weight:800;color:#0b3c91;display:block;margin-bottom:6px;font-size:13px}
-.field{padding:10px 12px;border-radius:12px;border:1px solid var(--border);background:#f9fafb;font-size:14px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+label{font-weight:700;color:#0b3c91}
+.field{padding:14px;border-radius:12px;border:1px solid var(--border);background:#f9fafb}
 table{width:100%;border-collapse:collapse}
-th{background:var(--blue);color:#fff;padding:8px 10px;text-align:left;font-size:13px}
-td{padding:6px 10px;border-bottom:1px solid #e5e7eb;font-size:13px}
+th{background:var(--blue);color:#fff;padding:14px}
+td{padding:14px;border-bottom:1px solid #e5e7eb}
 .empty{text-align:center;color:#6b7280;padding:20px}
-.footer{display:flex;gap:14px;flex-wrap:wrap}
+.footer{display:flex;gap:14px}
 .pill{background:#eef4ff;border:1px solid #c7dbff;color:var(--blue);padding:10px 18px;border-radius:20px;font-weight:700}
-@media(max-width:900px){.grid{grid-template-columns:1fr}}
+
+/* --- Promos / Nuevos (solo recuadro) --- */
+.promo-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:14px}
+.promo-item{border:1px solid var(--border);border-radius:14px;padding:14px;background:#fff}
+.promo-title{font-weight:800;color:#0b3c91;margin-bottom:6px}
+.promo-code{color:#6b7280;font-size:14px;margin-bottom:10px}
+.promo-btn{padding:10px 12px;font-size:14px;border-radius:12px;background:var(--blue);color:#fff;border:none;font-weight:700;cursor:pointer}
+.promo-btn:hover{filter:brightness(0.95)}
+@media(max-width:900px){.promo-grid{grid-template-columns:1fr}}
+
 </style>
 </head>
+
 <body>
 
 <div class="header">
@@ -1323,7 +1324,7 @@ td{padding:6px 10px;border-bottom:1px solid #e5e7eb;font-size:13px}
     <div><label>Forma de pago</label><div class="field">${formaPago}</div></div>
   </div>
 
-  <label style="margin-top:18px;">Comentarios / Producto Nuevo</label>
+  <label style="margin-top:22px;">Comentarios / Producto Nuevo</label>
   <div class="field">${comentarios}</div>
 </div>
 
@@ -1335,19 +1336,19 @@ td{padding:6px 10px;border-bottom:1px solid #e5e7eb;font-size:13px}
   let items=0, piezas=0;
   document.querySelectorAll("#tabla tr").forEach((r,i)=>{
     if(i===0)return;
-    const input=r.querySelector("input");
-    if(input && Number(input.value)>0){
+    let input=r.querySelector("input");
+    if(input && input.value>0){
       items++;
-      piezas += parseInt(input.value,10);
-      html += `<tr><td>${r.children[0].innerText}</td><td>${r.children[1].innerText}</td><td>${input.value}</td></tr>`;
+      piezas+=parseInt(input.value);
+      html+=`<tr><td>${r.children[0].innerText}</td><td>${r.children[1].innerText}</td><td>${input.value}</td></tr>`;
     }
   });
 
   if(items===0){
-    html += `<tr><td colspan="3" class="empty">Sin productos capturados</td></tr>`;
+    html+=`<tr><td colspan="3" class="empty">Sin productos capturados</td></tr>`;
   }
 
-  html += `
+  html+=`
 </table>
 </div>
 
@@ -1360,19 +1361,109 @@ td{padding:6px 10px;border-bottom:1px solid #e5e7eb;font-size:13px}
 </html>
 `;
 
-  const blob = new Blob([html], {type:"text/html;charset=utf-8"});
-  const url = URL.createObjectURL(blob);
-
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "PEDIDO_" + codigo + ".html";
-  document.body.appendChild(a);
+  let blob=new Blob([html],{type:"text/html"});
+  let a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="PEDIDO_"+codigo+".html";
   a.click();
-  a.remove();
+}
 
-  setTimeout(()=>URL.revokeObjectURL(url), 800);
+// Agrega piezas a un producto por CÓDIGO (busca la fila y suma)
+function agregarPromo(codigo, qty){
+  const rows = document.querySelectorAll("#tabla tr");
+  let found = false;
+
+  rows.forEach((r, i) => {
+    if(i===0) return;
+    const codeCell = (r.children[0]?.innerText || "").trim();
+    if(codeCell === codigo){
+      const input = r.querySelector("input");
+      const actual = parseInt(input.value || "0", 10);
+      input.value = actual + qty;
+      found = true;
+    }
+  });
+
+  if(!found){
+    alert("Este producto no está en la lista del cliente. Pídele a tu vendedor que lo agregue.");
+  }
+}
+
+
+/* --- PROMOS: agregar automáticamente si no existe (sin alertas) --- */
+function agregarPromo(codigo, descripcion, qty){
+  const table = document.getElementById("tabla");
+  if(!table) return;
+
+  const rows = Array.from(table.querySelectorAll("tr")).slice(1); // sin header
+  let foundRow = null;
+
+  for(const r of rows){
+    const codeCell = (r.children[0]?.innerText || "").trim();
+    if(codeCell === codigo){
+      foundRow = r;
+      break;
+    }
+  }
+
+  // Si no existe, crear fila nueva
+  if(!foundRow){
+    const tr = document.createElement("tr");
+
+    const tdCode = document.createElement("td");
+    tdCode.textContent = codigo;
+
+    const tdDesc = document.createElement("td");
+    tdDesc.textContent = descripcion;
+
+    const tdQty = document.createElement("td");
+    const input = document.createElement("input");
+    input.type = "number";
+    input.min = "0";
+    input.value = "0";
+    tdQty.appendChild(input);
+
+    tr.appendChild(tdCode);
+    tr.appendChild(tdDesc);
+    tr.appendChild(tdQty);
+
+    // Insertar ordenado por descripción (A-Z)
+    let inserted = false;
+    const bodyRows = Array.from(table.querySelectorAll("tr")).slice(1); // re-lee por si cambió
+    for(const r of bodyRows){
+      const d = (r.children[1]?.innerText || "").trim().toUpperCase();
+      if(descripcion.trim().toUpperCase().localeCompare(d, 'es') < 0){
+        table.insertBefore(tr, r);
+        inserted = true;
+        break;
+      }
+    }
+    if(!inserted){
+      table.appendChild(tr);
+    }
+    foundRow = tr;
+  }
+
+  // Sumar qty
+  const input = foundRow.querySelector("input");
+  const actual = parseInt(input.value || "0", 10);
+  input.value = actual + qty;
+
+  // Si el usuario tenía un filtro en el buscador, lo limpiamos para que sí vea el producto agregado
+  const buscador = document.getElementById("buscador");
+  if(buscador){
+    buscador.value = "";
+    if(typeof filtrar === "function") filtrar();
+  }
+
+  // Resaltar la fila agregada/actualizada (solo visual)
+  foundRow.style.outline = "3px solid rgba(11,76,203,.35)";
+  foundRow.style.borderRadius = "10px";
+  setTimeout(()=>{ foundRow.style.outline = ""; }, 900);
+
+  // Bajar hacia la tabla para que el usuario lo vea
+  try { foundRow.scrollIntoView({behavior:"smooth", block:"center"}); } catch(e){}
 }
 </script>
-
 </body>
 </html>

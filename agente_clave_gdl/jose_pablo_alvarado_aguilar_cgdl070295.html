@@ -1,10 +1,10 @@
 <!DOCTYPE html>
+
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Solicitud de Pedido | Toyo Foods</title>
-
 <style>
 :root{
   --blue:#0B4CCB;
@@ -12,190 +12,199 @@
   --card:#ffffff;
   --border:#D1D5DB;
   --text:#111827;
-  --muted:#6b7280;
 }
 *{box-sizing:border-box}
-body{margin:0;padding:24px;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:var(--text);}
-.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;gap:12px;flex-wrap:wrap;}
-.header h1{color:var(--blue);margin:0}
-.badge{border:1px solid #c7dbff;color:var(--blue);padding:8px 14px;border-radius:20px;font-weight:700;background:#eef4ff;}
-.sub{color:var(--muted);margin-top:4px}
-.card{background:var(--card);border-radius:18px;padding:24px;margin-bottom:22px;box-shadow:0 10px 25px rgba(0,0,0,.06);}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+body{
+  margin:0;
+  padding:24px;
+  background:var(--bg);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  color:var(--text);
+}
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+.header h1{
+  color:var(--blue);
+  margin:0;
+}
+.badge{
+  border:1px solid #c7dbff;
+  color:var(--blue);
+  padding:8px 14px;
+  border-radius:20px;
+  font-weight:700;
+  background:#eef4ff;
+}
+.sub{
+  color:#6b7280;
+  margin-top:4px;
+}
+.card{
+  background:var(--card);
+  border-radius:18px;
+  padding:24px;
+  margin-bottom:22px;
+  box-shadow:0 10px 25px rgba(0,0,0,.06);
+}
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:22px;
+}
+label{
+  display:block;
+  font-weight:700;
+  margin-bottom:6px;
+  color:#0b3c91;
+}
+input, textarea, select{
+  width:100%;
+  padding:14px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  font-size:16px;
+}
+input[readonly]{
+  background:#f8fafc;
+}
+textarea{
+  resize:none;
+  height:90px;
+}
+.note{
+  margin-top:6px;
+  font-size:14px;
+  color:#6b7280;
+}
+.table-wrap{
+  overflow-x:auto;
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+th{
+  background:var(--blue);
+  color:#fff;
+  padding:14px;
+  text-align:left;
+}
+td{
+  padding:14px;
+  border-bottom:1px solid #e5e7eb;
+}
+td input{
+  width:90px;
+  text-align:center;
+}
+.btn{
+  width:100%;
+  padding:18px;
+  font-size:18px;
+  font-weight:700;
+  background:var(--blue);
+  color:#fff;
+  border:none;
+  border-radius:16px;
+  cursor:pointer;
+}
+@media(max-width:900px){
+  .grid{grid-template-columns:1fr}
+}
 
-/* Campos superiores más compactos */
-.dataFields label{display:block;font-weight:800;margin-bottom:6px;color:#0b3c91;font-size:13px;}
-.dataFields input,.dataFields select,.dataFields textarea{width:100%;border-radius:12px;border:1px solid var(--border);background:#fff;outline:none;}
-.dataFields input,.dataFields select{padding:10px 12px;font-size:14px;}
-.dataFields input[readonly]{background:#f8fafc}
-.dataFields textarea{padding:12px;font-size:14px;resize:none;height:86px;}
-.note{margin-top:6px;font-size:12.5px;color:var(--muted)}
+/* --- Promos / Nuevos (solo recuadro) --- */
+.promo-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:14px}
+.promo-item{border:1px solid var(--border);border-radius:14px;padding:14px;background:#fff}
+.promo-title{font-weight:800;color:#0b3c91;margin-bottom:6px}
+.promo-code{color:#6b7280;font-size:14px;margin-bottom:10px}
+.promo-btn{padding:10px 12px;font-size:14px;border-radius:12px;background:var(--blue);color:#fff;border:none;font-weight:700;cursor:pointer}
+.promo-btn:hover{filter:brightness(0.95)}
+@media(max-width:900px){.promo-grid{grid-template-columns:1fr}}
 
-/* Productos nuevos compactos */
-.promoHead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:12px;}
-.promoTitle{margin:0;color:var(--blue);font-size:16px;font-weight:900;}
-.promoSub{margin-top:6px;color:var(--muted);font-size:12.5px;line-height:1.35;}
-.promoBadge{font-size:11px;font-weight:800;color:var(--blue);background:#eef4ff;border:1px solid #c7dbff;padding:6px 10px;border-radius:999px;white-space:nowrap;}
-.promoGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
-@media(max-width:980px){ .promoGrid{grid-template-columns:repeat(2,1fr)} }
-@media(max-width:560px){ .promoGrid{grid-template-columns:1fr} }
-.promoCard{border:1px solid #e5e7eb;border-radius:14px;padding:10px;background:#ffffff;box-shadow:0 8px 18px rgba(0,0,0,.05);display:flex;flex-direction:column;gap:8px;min-height:88px;}
-.promoTop{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;}
-.promoCode{font-weight:900;font-size:10.5px;color:#0b3c91;background:#f3f7ff;border:1px solid #dbe7ff;padding:5px 7px;border-radius:10px;line-height:1.05;}
-.promoTag{font-size:10px;font-weight:900;padding:5px 8px;border-radius:999px;border:1px solid #e5e7eb;color:#111827;background:#f9fafb;white-space:nowrap;}
-.promoName{font-weight:850;font-size:12px;line-height:1.15;}
-.promoMeta{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:auto;}
-.promoPrice{font-weight:950;color:#111827;font-size:12px;}
-.promoFoot{margin-top:12px;font-size:12px;color:var(--muted);line-height:1.35;background:#f8fafc;border:1px solid #e5e7eb;border-radius:14px;padding:10px 12px;}
 
-/* Tabla productos del cliente más compacta */
-.table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse}
-th{background:var(--blue);color:#fff;padding:8px 10px;text-align:left;font-size:13px;}
-td{padding:6px 10px;border-bottom:1px solid #e5e7eb;font-size:13px;line-height:1.15;}
-td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border:1px solid var(--border);font-size:13px;}
-
-.btn{width:100%;padding:18px;font-size:18px;font-weight:800;background:var(--blue);color:#fff;border:none;border-radius:16px;cursor:pointer;}
-@media(max-width:900px){.grid{grid-template-columns:1fr}}
+/* PROMOS_TYPO_OVERRIDE */
+.promo-grid{gap:12px;margin-top:12px}
+.promo-item{padding:12px}
+.promo-title{font-size:14px;line-height:1.2}
+.promo-code{font-size:12px;line-height:1.2}
 </style>
 </head>
-
 <body>
-
+<!-- HEADER -->
 <div class="header">
-  <div>
-    <h1>Solicitud de Pedido</h1>
-    <div class="sub">Toyo Foods • Formato de pedido</div>
-  </div>
-  <div class="badge">Versión corporativa</div>
+<div>
+<h1>Solicitud de Pedido</h1>
+<div class="sub">Toyo Foods • Formato de pedido</div>
 </div>
-
+<div class="badge">Versión corporativa</div>
+</div>
 <!-- DATOS -->
-<div class="card dataFields">
-  <div class="grid">
-    <div>
-      <label>Nombre del cliente (como factura)</label>
-      <input id="cliente" value="JOSE PABLO ALVARADO AGUILAR" readonly>
-    </div>
-
-    <div>
-      <label>Número de cliente</label>
-      <input id="codigo" value="CGDL070295" readonly>
-    </div>
-
-    <div>
-      <label>Vendedor</label>
-      <input id="vendedor" placeholder="Nombre del vendedor (lo coloca el cliente)">
-    </div>
-
-    <div>
-      <label>Fecha y hora del pedido</label>
-      <input id="fechaHora" readonly>
-      <div class="note">📅 Automática, no editable</div>
-    </div>
-  </div>
-
-  <label style="margin-top:18px;">Comentarios / Producto Nuevo</label>
-  <textarea id="comentarios" placeholder="Ej. producto nuevo no listado / instrucciones de entrega"></textarea>
-</div>
-
-<!-- PRODUCTOS NUEVOS -->
 <div class="card">
-  <div class="promoHead">
-    <div>
-      <div class="promoTitle">Productos nuevos</div>
-      <div class="promoSub">
-        Novedades disponibles. Si te interesa alguno, coméntalo con tu vendedor para agendar una
-        <b>cotización</b>, <b>degustación</b> o <b>demostración</b>.
-      </div>
-    </div>
-    <div class="promoBadge">Precios referenciales</div>
-  </div>
-
-  <div class="promoGrid">
-    <div class="promoCard">
-      <div class="promoTop"><div class="promoCode">CO-DGB309-13883</div><div class="promoTag">Helado 5 L</div></div>
-      <div class="promoName">VOGLIA HELADO SABOR SAKE 5 L</div>
-      <div class="promoMeta"><div class="promoPrice">$718.06 MXP</div></div>
-    </div>
-<div class="promoCard">
-      <div class="promoTop"><div class="promoCode">CO-DGB309-13884</div><div class="promoTag">Helado 5 L</div></div>
-      <div class="promoName">VOGLIA HELADO SABOR TARO 5 L</div>
-      <div class="promoMeta"><div class="promoPrice">$862.50 MXP</div></div>
-    </div>
-<div class="promoCard">
-      <div class="promoTop"><div class="promoCode">CO-DGB309-12843</div><div class="promoTag">Helado 5.7 L</div></div>
-      <div class="promoName">MAEDA-EN HELADO DE TE VERDE 5.7 L</div>
-      <div class="promoMeta"><div class="promoPrice">$616.21 MXP</div></div>
-    </div>
-<div class="promoCard">
-      <div class="promoTop"><div class="promoCode">CO-DGB309-12844</div><div class="promoTag">Helado 5.7 L</div></div>
-      <div class="promoName">MAEDA-EN HELADO DE LYCHEE 5.7 L</div>
-      <div class="promoMeta"><div class="promoPrice">$616.21 MXP</div></div>
-    </div>
-<div class="promoCard">
-      <div class="promoTop"><div class="promoCode">CO-DGB309-12845</div><div class="promoTag">Helado 5.7 L</div></div>
-      <div class="promoName">MAEDA-EN HELADO DE YUZU 5.7 L</div>
-      <div class="promoMeta"><div class="promoPrice">$616.21 MXP</div></div>
-    </div>
-<div class="promoCard">
-      <div class="promoTop"><div class="promoCode">SE-BEB151-13887</div><div class="promoTag">Cerveza 500 ml</div></div>
-      <div class="promoName">YOUUS CERVEZA KYEONGBOKGUNG IPA 4.5% 500 ML</div>
-      <div class="promoMeta"><div class="promoPrice">$66.56 MXP</div></div>
-    </div>
-<div class="promoCard">
-      <div class="promoTop"><div class="promoCode">SE-BEB151-13885</div><div class="promoTag">Cerveza 500 ml</div></div>
-      <div class="promoName">YOUUS CERVEZA JEJU BAENGNOKDAM ALE 4.3% 500 ML</div>
-      <div class="promoMeta"><div class="promoPrice">$74.25 MXP</div></div>
-    </div>
-<div class="promoCard">
-      <div class="promoTop"><div class="promoCode">SE-BEB151-13886</div><div class="promoTag">Cerveza 500 ml</div></div>
-      <div class="promoName">YOUUS CERVEZA GWANGHWAMUN ALE 5% 500 ML</div>
-      <div class="promoMeta"><div class="promoPrice">$51.15 MXP</div></div>
-    </div>
-<div class="promoCard">
-      <div class="promoTop"><div class="promoCode">SE-BEB151-13888</div><div class="promoTag">Cerveza 500 ml</div></div>
-      <div class="promoName">YOUUS CERVEZA SEONGSAN ILCHULBONG ALE 5% 500 ML</div>
-      <div class="promoMeta"><div class="promoPrice">$74.25 MXP</div></div>
-    </div>
-  </div>
-
-  <div class="promoFoot">
-    *Precio sujeto a cambios. Si te interesa alguna cotización o degustación, favor de agendarlo con tu vendedor.
-  </div>
+<div class="grid">
+<div>
+<label>Nombre del cliente (como factura)</label>
+<input id="cliente" readonly="" value="JOSE PABLO ALVARADO AGUILAR"/>
 </div>
-
+<div>
+<label>Número de cliente</label>
+<input id="codigo" readonly="" value="CGDL070295"/>
+</div>
+<div>
+<label>Vendedor</label>
+<input id="vendedor" placeholder="Nombre del vendedor"/>
+</div>
+<div>
+<label>Fecha y hora del pedido</label>
+<input id="fechaHora" readonly=""/>
+<div class="note">📅 Automática, no editable</div>
+</div>
+</div>
+<label style="margin-top:22px;">Comentarios / Producto Nuevo</label>
+<textarea id="comentarios" placeholder="Ej. producto nuevo no listado / instrucciones de entrega"></textarea>
+</div>
 <!-- PAGO + BUSCADOR -->
-<div class="card dataFields">
-  <div class="grid">
-    <div>
-      <label>Forma de pago</label>
-      <select id="formaPago">
-        <option value="">Selecciona...</option>
-        <option>Contado</option>
-        <option>Transferencia</option>
-        <option>Crédito</option>
-      </select>
-    </div>
+<div class="card">
+<div class="header" style="margin-bottom:0">
+<div>
+<label style="margin:0">Productos nuevos / Promoción</label>
 
-    <div>
-      <label>Buscar producto</label>
-      <input id="buscador" placeholder="Escribe para filtrar (código o descripción)" onkeyup="filtrar()">
-      <div class="note">Tip: escribe “nori”, “arroz”, “salsa”, etc.</div>
-    </div>
-  </div>
 </div>
-
-<!-- PRODUCTOS DEL CLIENTE -->
+<div class="badge" style="font-size:13px">Nuevo</div>
+</div>
+<div class="promo-grid"><div class="promo-item"><div class="promo-title">VOGLIA HELADO SABOR SAKE 5 L</div><div class="promo-code">Código: <b>CO-DGB309-13883</b> • <b>$718.06 MXP</b></div></div><div class="promo-item"><div class="promo-title">VOGLIA HELADO SABOR TARO 5 L</div><div class="promo-code">Código: <b>CO-DGB309-13884</b> • <b>$862.50 MXP</b></div></div><div class="promo-item"><div class="promo-title">MAEDA-EN HELADO DE TE VERDE 5.7 L</div><div class="promo-code">Código: <b>CO-DGB309-12843</b> • <b>$616.21 MXP</b></div></div><div class="promo-item"><div class="promo-title">MAEDA-EN HELADO DE LYCHEE 5.7 L</div><div class="promo-code">Código: <b>CO-DGB309-12844</b> • <b>$616.21 MXP</b></div></div><div class="promo-item"><div class="promo-title">MAEDA-EN HELADO DE YUZU 5.7 L</div><div class="promo-code">Código: <b>CO-DGB309-12845</b> • <b>$616.21 MXP</b></div></div></div>
+<div class="note" style="margin-top:12px">Si te interesan estos productos, favor de mencionarle a tu vendedor para agendar una degustación o demostración.</div>
+</div><div class="card">
+<div class="grid">
+<div>
+<label>Forma de pago</label>
+<select id="formaPago">
+<option value="">Selecciona...</option>
+<option>Contado</option>
+<option>Transferencia</option>
+<option>Crédito</option>
+</select>
+</div>
+<div>
+<label>Buscar producto</label>
+<input id="buscador" onkeyup="filtrar()" placeholder="Escribe para filtrar (código o descripción)"/>
+<div class="note">Tip: escribe “nori”, “arroz”, “salsa”, etc.</div>
+</div>
+</div>
+</div>
+<!-- PROMOS / PRODUCTOS NUEVOS -->
+<!-- PRODUCTOS -->
 <div class="card table-wrap">
 <table id="tabla">
 <tr>
-  <th>Código</th>
-  <th>Descripción</th>
-  <th>Piezas</th>
+<th>Código</th>
+<th>Descripción</th>
+<th>Piezas</th>
 </tr>
-<tr><td>SE-SFP606-12032</td><td>ACECOOK IPPIN MISO 80 G</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-SFP606-12031</td><td>ACECOOK IPPIN TONKOTSU 82 G</td><td><input type="number" min="0"></td></tr>
+
 <tr><td>SE-SYE558-6392</td><td>AJINOMOTO HONDASHI BOLSA 1 KG</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB302-13185</td><td>AMOS 4D GUMMY PIÑA 65G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB302-13182</td><td>AMOS 4D GUMMY ROBOT 65G</td><td><input type="number" min="0"></td></tr>
@@ -205,21 +214,18 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>SE-FVL358-12070</td><td>CATHAY KITCHEN SHITAKE MUSHROOM WHOLE (S) 3OZ</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-TYE755-5391</td><td>CHIMEI PAN PARA HAMBURGUESA 10 PZAS. 300 G.</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB156-5568</td><td>CHOYA SARARI LIGERO UMESHU 1.8 L</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-BEB156-5567</td><td>CHOYA SARARI LIGERO UMESHU 500 ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-TYE751-0208</td><td>DYNASTY GYOZA SKIN 284 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-TYE753-0213</td><td>DYNASTY WONTON SKIN 340 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SYE558-4693</td><td>EBARA KARYU TORI GARA SOUP 500 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-FVL357-5141</td><td>EBARA UMAKARA KIMUCHI 500 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SAL503-6755</td><td>EBARA YAKINIKUOUEN KOCHUJAN NO TARE 230 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>OT-UTE899-4944</td><td>ECHO RALLADOR 0440-006</td><td><input type="number" min="0"></td></tr>
-<tr><td>OT-UTE810-13223</td><td>ENDO JIGEN PLATO DE CERAMICA 20×10.5×3.5 &lt;RYK-E5&gt;</td><td><input type="number" min="0"></td></tr>
-<tr><td>OT-UTE810-13255</td><td>ENDO KONAYUKI PLATO DE CERAMICA 20×10.5×3.5 &lt;RYK-E6&gt;</td><td><input type="number" min="0"></td></tr>
+<tr><td>OT-UTE810-13223</td><td>ENDO JIGEN PLATO DE CERAMICA 20×10.5×3.5 <RYK-E5></td><td><input type="number" min="0"></td></tr>
+<tr><td>OT-UTE810-13255</td><td>ENDO KONAYUKI PLATO DE CERAMICA 20×10.5×3.5 <RYK-E6></td><td><input type="number" min="0"></td></tr>
 <tr><td>OT-UTE899-11881</td><td>ENDO PELADOR DE ACERO INOXIDABLE BPC-96</td><td><input type="number" min="0"></td></tr>
-<tr><td>OT-UTE810-12527</td><td>ENDO PORTA PALILLOS T03-318 &lt;RHS-T7&gt;</td><td><input type="number" min="0"></td></tr>
-<tr><td>OT-UTE810-13224</td><td>ENDO SEKIRAKU PLATO DE CERAMICA 20×10.5×3.5 &lt;RYK-B7&gt;</td><td><input type="number" min="0"></td></tr>
+<tr><td>OT-UTE810-12527</td><td>ENDO PORTA PALILLOS T03-318 <RHS-T7></td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB152-13563</td><td>FAMILY BEAR TÉ LIQUIDO LIMON MIEL 1KG</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB152-13566</td><td>FAMILY BEAR TÉ LIQUIDO MARACUYA 1 KG</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-SAL504-11628</td><td>FLYING GOOSE SALSA DE CHILE Y AJO 3.450 L</td><td><input type="number" min="0"></td></tr>
 <tr><td>OT-ACC003-0274</td><td>FUJI ADORNO DARUMA 11.25 CM. MOD DA-2</td><td><input type="number" min="0"></td></tr>
 <tr><td>OT-UTE899-3443</td><td>FUJI JUEGO DE VAPORERA DE BAMBOO 3 PZAS 25.4 CM #10</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB157-11677</td><td>GEKKEIKAN DAIGINJO 720 ML</td><td><input type="number" min="0"></td></tr>
@@ -228,36 +234,37 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>SE-FVL354-7555</td><td>GREENLAND KIZAMI BENISHOGA GENGIBRE 907 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB303-11859</td><td>HAITAI CHOCO PICK 45 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB156-11667</td><td>HAKUTSURU JUICY YUZU 700 ML / 720 ML</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-BEB157-11672</td><td>HAKUTSURU SAYURI NIGORI 720 ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB305-8266</td><td>HAPI KAKI PEA 140 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SFP604-0541</td><td>HARUSAMEN VERMICELLI 300 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SAL505-0552</td><td>HFF SAMBAL OELEK (XL) 136OZ</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-HYE449-10990</td><td>HINOKUNI KATAKURIKO 1 KG</td><td><input type="number" min="0"></td></tr>
 <tr><td>OT-UTE810-8917</td><td>HIZAN TOUEN PLATO DE CERAMICA HZ-043 14 X 14</td><td><input type="number" min="0"></td></tr>
 <tr><td>OT-UTE810-8918</td><td>HIZAN TOUEN PLATO DE CERAMICA HZ-044 14 X 14</td><td><input type="number" min="0"></td></tr>
+<tr><td>OT-UTE898-8177</td><td>HORIKOSHI TAZÓN PARA SALSA S1872</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB302-13106</td><td>HSU FU CHI DULCE CRUJIENTE DE TRUFA 308 G</td><td><input type="number" min="0"></td></tr>
-<tr><td>RE-SYE551-12991</td><td>ICHIBIKI NAGOYA HACCHO AKA DASHI MISO 400 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-FVL353-0648</td><td>JACK POT LYCHEES ENTEROS EN ALMIBAR LIGHT 565 G</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-SYE558-0660</td><td>JFC FURIKAKE KATSUO / ALIM PREP 50G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-ACE050-0701</td><td>KADOYA ACEITE DE AJONJOLI 56FL (1.656L)</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB157-11201</td><td>KAGATOBI GOKKAN JUNMAI KARAKUCHI 1800 ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB157-11194</td><td>KAGATOBI JUNMAI GINJO 720 ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB305-11376</td><td>KAMEDA KAKINOTANE 6P 180G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB305-13728</td><td>KAMEDA KAKINOTANE SABOR CIRUELA UME CON SHISO 6 BOLSAS 164 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB300-9998</td><td>KASUGAI MAME MIX 57G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-SYE558-13705</td><td>KAWAGUCHI NATTO FURIKAKE 35 G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-SYE554-2961</td><td>KEWPIE ADEREZO SÉSAMO CREMOSO 236ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SYE599-2962</td><td>KEWPIE MAYONESA 1.89L</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SAL502-0788</td><td>KIKKOMAN SALSA SOYA 18.9 L</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-SYE558-6000</td><td>KINJIRUSHI KAORU NAMA OROSHI WASABI RC-808 800 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-HYE449-6877</td><td>KODA KATAKURIKO 1 KG</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-SFP400-11962</td><td>KOKKU TALLARIN DE ARROZ 3 MM 400 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SFP400-11963</td><td>KOKKU TALLARIN DE ARROZ 5 MM 400 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-PDM450-10620</td><td>KOKKU WAKAME ALGA SAZONADA 1 KG</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-FVL398-12609</td><td>KOUSYO SHISO UME 250 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB153-0876</td><td>LIMON DESHIDRATADO EN POLVO 1 KG.</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB151-0920</td><td>LUCKY BUDDHA BEER 330 ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-SFP603-8117</td><td>MARUCHAN MENDEN NAIBAKU UDON 1.25 KG</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-SFP649-6116</td><td>MARUCHAN YAKI SOBA NOODLE 3 PZAS 480 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>RE-SYE551-0988</td><td>MARUKOME MISO RED 2.2LB</td><td><input type="number" min="0"></td></tr>
 <tr><td>RE-SYE551-1002</td><td>MARUKOME MISO WHITE 2.2LB</td><td><input type="number" min="0"></td></tr>
-<tr><td>CO-DGB309-2153</td><td>MARUTOSEIKA NAGASAKI CASTELLA 6 PZAS 285 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>OT-UTE810-8852</td><td>MATSUMI PLATO DE CERAMICA SP23-011/M19-24 14 X 3</td><td><input type="number" min="0"></td></tr>
 <tr><td>OT-UTE810-11524</td><td>MATSUMI PLATO PEQUEÑO CERAMICA SP23-033 8.2 X 2.5</td><td><input type="number" min="0"></td></tr>
 <tr><td>OT-UTE899-1060</td><td>MH CHAROLA C/ TAPA 50 PZA MOD YP-1.5 GDE</td><td><input type="number" min="0"></td></tr>
@@ -265,6 +272,8 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>CO-DGB309-2131</td><td>MINATO SEIKA DAIFUKU CAMOTE 90 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-DGB309-2159</td><td>MINATO SEIKA DAIFUKU FRESA CON CREMA 60 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-DGB309-2133</td><td>MINATO SEIKA DAIFUKU FRIJOL 90 G</td><td><input type="number" min="0"></td></tr>
+<tr><td>CO-DGB309-2160</td><td>MINATO SEIKA DAIFUKU MANGO CON CREMA 60 G</td><td><input type="number" min="0"></td></tr>
+<tr><td>CO-DGB309-2157</td><td>MINATO SEIKA DAIFUKU MORA AZUL CON CREMA 60 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-TYE754-1099</td><td>MIYAKO RAINBOW NORI SESAME NAT 2.79 OZ</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SAL503-10130</td><td>MIZKAN GOMA SHABU 250 ML N</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SAL503-1128</td><td>MIZKAN SALSA DE ANGUILA 1.89 L</td><td><input type="number" min="0"></td></tr>
@@ -275,15 +284,12 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>SE-BEB157-7820</td><td>NAKANO JUNMAI DOBUROKU 720 ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB156-7824</td><td>NAKANO NASHI NO OSAKE 720 ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB157-7817</td><td>NAKANO NIGORI SAKE 720 ML</td><td><input type="number" min="0"></td></tr>
-<tr><td>RE-FVL355-1202</td><td>NIRA (CHIVE CHINO)</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-HYE402-6733</td><td>NISSIN FOODS TENPURAKO AGE JYOZU 1 KG</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SYE558-6182</td><td>OCEAN FOODS YUZU KOSHO 1 KG</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-TE654-12109</td><td>ODANI TÉ VERDE DULCE CON MATCHA 100 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-PDM452-1278</td><td>OSAKI KANIKAMA 500 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SAL504-1316</td><td>PANTAI SAUCE SPENGRLL 32.5OZ</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-TYE751-1324</td><td>PEKING GYOZA SKIN 283 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>RE-TQO701-0847</td><td>PHILADELPHIA QUESO CREMA 1.900 KG</td><td><input type="number" min="0"></td></tr>
-<tr><td>OT-ACC005-10877</td><td>PILOT MARCADOR PERMANENTE SCA400 TINTA NEGRA 44114</td><td><input type="number" min="0"></td></tr>
 <tr><td>RE-SYE551-10014</td><td>ROKKO MISO ASHIYA KURADUKURI AKADASHI MISO 300G</td><td><input type="number" min="0"></td></tr>
 <tr><td>RE-SYE551-10012</td><td>ROKKO MISO ASHIYA KURADUKURI CHOJUKU MISO 300G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB309-10341</td><td>ROYAL DAIFUKU FRESA 120 G</td><td><input type="number" min="0"></td></tr>
@@ -293,16 +299,15 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>SE-DGB309-11561</td><td>ROYAL FRUIT MOCHI TROPICAL 120 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB309-10352</td><td>ROYAL MARSHMALLOW DAIFUKU CACAHUATE 120 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB309-12793</td><td>ROYAL MOCHI COCO 120 G</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-DGB303-10363</td><td>ROYAL MOCHI COOKIES PLATANO 120 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB309-12794</td><td>ROYAL MOCHI CREMA DE CACAHUATE 120 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB309-12723</td><td>ROYAL MOCHI CREMA DE CACAHUATE 180 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB309-12790</td><td>ROYAL MOCHI MAPLE 120 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB309-12788</td><td>ROYAL MOCHI PAY DE QUESO CON FRESA 120 G</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-DGB309-12789</td><td>ROYAL MOCHI VAINILLA 120 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DGB309-12122</td><td>ROYAL MOCHI VAINILLA 180 G</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-SYE558-9720</td><td>S&amp;B UMAMI OKAZU RAYU 110 G</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-SYE558-13398</td><td>S&amp;B UMAMI OKAZU RAYU 400 G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-SYE558-9720</td><td>S&B UMAMI OKAZU RAYU 110 G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-SYE558-13398</td><td>S&B UMAMI OKAZU RAYU 400 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SFP606-7236</td><td>SAMYANG FIDEO INSTANTANEO CUP 2X SPICY HOT 70 G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-SFP606-11851</td><td>SAMYANG HOT CHICKEN RAMEN BIG BOWL CHEESE 105 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB151-11268</td><td>SAPPORO BEER PREMIUM LATA 473 ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB157-7982</td><td>SAWANOTSURU JITSURAKU YAMADANISHIKI 1.8L</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SYE558-1456</td><td>SB NERI WASABI EN TUBO 90 G</td><td><input type="number" min="0"></td></tr>
@@ -311,7 +316,6 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>SE-FVL398-4445</td><td>SEKIMOTO SHISO UMEBOSHI ROJO 150 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB156-4961</td><td>SENGETSU SHISO LICOR KOISHISO 500 ML</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-SFP606-7121</td><td>SHIMADAYA TAIKOBAN RAMEN 5 P 1 KG</td><td><input type="number" min="0"></td></tr>
-<tr><td>OT-UTE807-9691</td><td>SHINE FARM / CATHAY KITCHEN SUNOKO MAKISU MANTEL DE MADERA 21X24</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-FVL356-1512</td><td>SHIRAKIKU/NISHIMOTO EDAMAME FRIJOL DE SOYA 400 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-FVL358-1547</td><td>SHITAKE REBANADO 3 OZ</td><td><input type="number" min="0"></td></tr>
 <tr><td>OT-UTE809-11939</td><td>SM CUCHARA DE MELAMINA NEGRA IT-YS10B</td><td><input type="number" min="0"></td></tr>
@@ -327,13 +331,13 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>OT-UTE899-4151</td><td>SOLO CUP VASO PORCION 2 OZ C/250 PZAS. P200N</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SAL549-1770</td><td>SRIRACHA TAPA VERDE GRANDE 793 GRS.</td><td><input type="number" min="0"></td></tr>
 <tr><td>OT-UTE899-10025</td><td>STRATON CILINDRO DE GAS 400 ML</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-SFP606-9841</td><td>SUNAOSHI SAPPORO TANMEN 83G</td><td><input type="number" min="0"></td></tr>
 <tr><td>OT-UTE899-10286</td><td>TAKAOKAYA CAJA PARA NORI HALF SIZE #501</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-PDM450-3524</td><td>TAKAOKAYA KIZAMI NORI 2.5 MM 100 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SYE559-1803</td><td>TAKARA U. S. A. MIRIN 18L</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB157-6028</td><td>TAKASHIMIZU JUNMAI DAIGINJYO 1.8 L</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB157-5411</td><td>TAKASHIMIZU JUNMAISHU SAKENOKUNI 1.8 L</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-BEB157-9344</td><td>TAKASHIMIZU KIMOTO TOKUBETSU JUNMAISHU 1.8 L N</td><td><input type="number" min="0"></td></tr>
+<tr><td>OT-UTE898-12657</td><td>TANAKA TAZÓN DE PLÁSTICO 047485</td><td><input type="number" min="0"></td></tr>
 <tr><td>OT-UTE810-11537</td><td>TANAKA TAZÓN PARA ARROZ BLANCO 513003</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-PDM451-2342</td><td>TETSUJIN ANGUILA PREMIUM 11 OZ</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-PDM450-5475</td><td>TETSUJIN DASHI KOMBU DRIED 907 G</td><td><input type="number" min="0"></td></tr>
@@ -347,12 +351,10 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>OT-UTE810-13313</td><td>TOUICHI PLATO DE CERÁMICA 33.2 X 10.3 X 2.2 63-157-61BK</td><td><input type="number" min="0"></td></tr>
 <tr><td>OT-UTE810-13314</td><td>TOUICHI PLATO DE CERÁMICA 33.2 X 10.3 X 2.2 63-157-61WH</td><td><input type="number" min="0"></td></tr>
 <tr><td>OT-UTE810-13316</td><td>TOUICHI PLATO DE CERÁMICA 33.5 X 10.8 X 2.8 63-160-61WH</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-ARR102-11297</td><td>TOYAMA KOSHIHIKARI ARROZ JAPÓN 5 KG</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SYE558-1884</td><td>TOYO AJONJOLI BLANCO 1 KG</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-ARR101-1888</td><td>TOYO ARROZ 2 KG</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-ARR102-11402</td><td>TOYO ARROZ JAPONÉS PREMIUM 10 KG</td><td><input type="number" min="0"></td></tr>
 <tr><td>CO-FVL356-6031</td><td>TOYO EDAMAME 400 G</td><td><input type="number" min="0"></td></tr>
-<tr><td>RE-FVL357-8322</td><td>TOYO GARI BLANCO 454 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>RE-FVL357-8324</td><td>TOYO GARI BLANCO 9 KG</td><td><input type="number" min="0"></td></tr>
 <tr><td>RE-FVL357-8323</td><td>TOYO GARI ROSA 454 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-ARR101-0838</td><td>TOYO MAI KOMACHI ARROZ U.S. # 1 20 KG</td><td><input type="number" min="0"></td></tr>
@@ -372,20 +374,19 @@ td input{width:84px;text-align:center;padding:8px 10px;border-radius:10px;border
 <tr><td>SE-FVL358-1944</td><td>TOYO SHITAKE ENTERO 50 GRS.</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-FVL358-2139</td><td>TOYO SHITAKE REBANADO 50 GRS.</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-DEL250-5614</td><td>TOYO SHOKU PAN</td><td><input type="number" min="0"></td></tr>
+<tr><td>RE-SYE552-1947</td><td>TOYO TAHINI CREMA DE AJONJOLI 500G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-HYE402-1970</td><td>TOYO TEMPURA BATTER MX 1 KG</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SYE558-1991</td><td>URASHIMA BULK SAKE TARAKO FURIKAKE 1LB</td><td><input type="number" min="0"></td></tr>
+<tr><td>CO-CAR201-10891</td><td>WAGYU JAPONÉS STRIPLOIN KILO A5 BMS #10+</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-SYE599-2023</td><td>WILSEY MAYONESA 3.79 L</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-PDM450-2034</td><td>WP DASHI KOMBU / ALGA MARINA 113 G</td><td><input type="number" min="0"></td></tr>
+<tr><td>SE-PDM450-2035</td><td>WP DASHI KOMBU 998 G</td><td><input type="number" min="0"></td></tr>
 <tr><td>SE-PDM450-2037</td><td>WP FUERU WAKAME 453G</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-PDM450-2040</td><td>WP HIJIKI 57 G</td><td><input type="number" min="0"></td></tr>
-<tr><td>SE-TYE754-2053</td><td>YAMA MOTO YAMA SUSHI PARTY C/5H</td><td><input type="number" min="0"></td></tr>
 <tr><td>OT-UTE810-12348</td><td>YOUBI SALSERA DE CERÁMICA 19-232-12 9 X 6.2 X 2</td><td><input type="number" min="0"></td></tr>
 <tr><td>OT-UTE810-12345</td><td>YOUBI SALSERA DE CERÁMICA 27873 7.3 X 2.3</td><td><input type="number" min="0"></td></tr>
 </table>
 </div>
-
 <button class="btn" onclick="descargarPedido()">Descargar pedido</button>
-
 <script>
 function filtrar(){
   let f=document.getElementById("buscador").value.toUpperCase();
@@ -404,43 +405,52 @@ function filtrar(){
 })();
 
 function descargarPedido(){
-  const cliente = document.getElementById("cliente").value;
-  const codigo = document.getElementById("codigo").value;
-  const vendedor = document.getElementById("vendedor").value || "-";
-  const formaPago = document.getElementById("formaPago").value || "-";
-  const comentarios = document.getElementById("comentarios").value || "-";
 
-  const ahora = new Date();
-  const fechaHora = ahora.toLocaleDateString("es-MX")+" "+
-                    ahora.toLocaleTimeString("es-MX",{hour:'2-digit',minute:'2-digit'});
+  let cliente = document.getElementById("cliente").value;
+  let codigo = document.getElementById("codigo").value;
+  let vendedor = document.getElementById("vendedor").value || "-";
+  let formaPago = document.getElementById("formaPago").value || "-";
+  let comentarios = document.getElementById("comentarios").value || "-";
+
+  let ahora = new Date();
+  let fechaHora = ahora.toLocaleDateString("es-MX")+" "+
+                  ahora.toLocaleTimeString("es-MX",{hour:'2-digit',minute:'2-digit'});
 
   let html = `
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pedido Toyo Foods</title>
 <style>
-:root{--blue:#0B4CCB;--bg:#F5F7FA;--card:#ffffff;--border:#D1D5DB;--text:#111827}
-*{box-sizing:border-box}
-body{margin:0;padding:24px;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:var(--text)}
-.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;gap:12px;flex-wrap:wrap}
+:root{--blue:#0B4CCB;--bg:#F5F7FA;--card:#ffffff;--border:#D1D5DB}
+body{margin:0;padding:24px;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
 .header h1{color:var(--blue);margin:0}
 .badge{border:1px solid #c7dbff;color:var(--blue);padding:8px 14px;border-radius:20px;font-weight:700;background:#eef4ff}
 .card{background:var(--card);border-radius:18px;padding:24px;margin-bottom:22px;box-shadow:0 10px 25px rgba(0,0,0,.06)}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-label{font-weight:800;color:#0b3c91;display:block;margin-bottom:6px;font-size:13px}
-.field{padding:10px 12px;border-radius:12px;border:1px solid var(--border);background:#f9fafb;font-size:14px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+label{font-weight:700;color:#0b3c91}
+.field{padding:14px;border-radius:12px;border:1px solid var(--border);background:#f9fafb}
 table{width:100%;border-collapse:collapse}
-th{background:var(--blue);color:#fff;padding:8px 10px;text-align:left;font-size:13px}
-td{padding:6px 10px;border-bottom:1px solid #e5e7eb;font-size:13px}
+th{background:var(--blue);color:#fff;padding:14px}
+td{padding:14px;border-bottom:1px solid #e5e7eb}
 .empty{text-align:center;color:#6b7280;padding:20px}
-.footer{display:flex;gap:14px;flex-wrap:wrap}
+.footer{display:flex;gap:14px}
 .pill{background:#eef4ff;border:1px solid #c7dbff;color:var(--blue);padding:10px 18px;border-radius:20px;font-weight:700}
-@media(max-width:900px){.grid{grid-template-columns:1fr}}
+
+/* --- Promos / Nuevos (solo recuadro) --- */
+.promo-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:14px}
+.promo-item{border:1px solid var(--border);border-radius:14px;padding:14px;background:#fff}
+.promo-title{font-weight:800;color:#0b3c91;margin-bottom:6px}
+.promo-code{color:#6b7280;font-size:14px;margin-bottom:10px}
+.promo-btn{padding:10px 12px;font-size:14px;border-radius:12px;background:var(--blue);color:#fff;border:none;font-weight:700;cursor:pointer}
+.promo-btn:hover{filter:brightness(0.95)}
+@media(max-width:900px){.promo-grid{grid-template-columns:1fr}}
+
 </style>
 </head>
+
 <body>
 
 <div class="header">
@@ -460,7 +470,7 @@ td{padding:6px 10px;border-bottom:1px solid #e5e7eb;font-size:13px}
     <div><label>Forma de pago</label><div class="field">${formaPago}</div></div>
   </div>
 
-  <label style="margin-top:18px;">Comentarios / Producto Nuevo</label>
+  <label style="margin-top:22px;">Comentarios / Producto Nuevo</label>
   <div class="field">${comentarios}</div>
 </div>
 
@@ -472,19 +482,19 @@ td{padding:6px 10px;border-bottom:1px solid #e5e7eb;font-size:13px}
   let items=0, piezas=0;
   document.querySelectorAll("#tabla tr").forEach((r,i)=>{
     if(i===0)return;
-    const input=r.querySelector("input");
-    if(input && Number(input.value)>0){
+    let input=r.querySelector("input");
+    if(input && input.value>0){
       items++;
-      piezas += parseInt(input.value,10);
-      html += `<tr><td>${r.children[0].innerText}</td><td>${r.children[1].innerText}</td><td>${input.value}</td></tr>`;
+      piezas+=parseInt(input.value);
+      html+=`<tr><td>${r.children[0].innerText}</td><td>${r.children[1].innerText}</td><td>${input.value}</td></tr>`;
     }
   });
 
   if(items===0){
-    html += `<tr><td colspan="3" class="empty">Sin productos capturados</td></tr>`;
+    html+=`<tr><td colspan="3" class="empty">Sin productos capturados</td></tr>`;
   }
 
-  html += `
+  html+=`
 </table>
 </div>
 
@@ -497,19 +507,109 @@ td{padding:6px 10px;border-bottom:1px solid #e5e7eb;font-size:13px}
 </html>
 `;
 
-  const blob = new Blob([html], {type:"text/html;charset=utf-8"});
-  const url = URL.createObjectURL(blob);
-
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "PEDIDO_" + codigo + ".html";
-  document.body.appendChild(a);
+  let blob=new Blob([html],{type:"text/html"});
+  let a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="PEDIDO_"+codigo+".html";
   a.click();
-  a.remove();
+}
 
-  setTimeout(()=>URL.revokeObjectURL(url), 800);
+// Agrega piezas a un producto por CÓDIGO (busca la fila y suma)
+function agregarPromo(codigo, qty){
+  const rows = document.querySelectorAll("#tabla tr");
+  let found = false;
+
+  rows.forEach((r, i) => {
+    if(i===0) return;
+    const codeCell = (r.children[0]?.innerText || "").trim();
+    if(codeCell === codigo){
+      const input = r.querySelector("input");
+      const actual = parseInt(input.value || "0", 10);
+      input.value = actual + qty;
+      found = true;
+    }
+  });
+
+  if(!found){
+    alert("Este producto no está en la lista del cliente. Pídele a tu vendedor que lo agregue.");
+  }
+}
+
+
+/* --- PROMOS: agregar automáticamente si no existe (sin alertas) --- */
+function agregarPromo(codigo, descripcion, qty){
+  const table = document.getElementById("tabla");
+  if(!table) return;
+
+  const rows = Array.from(table.querySelectorAll("tr")).slice(1); // sin header
+  let foundRow = null;
+
+  for(const r of rows){
+    const codeCell = (r.children[0]?.innerText || "").trim();
+    if(codeCell === codigo){
+      foundRow = r;
+      break;
+    }
+  }
+
+  // Si no existe, crear fila nueva
+  if(!foundRow){
+    const tr = document.createElement("tr");
+
+    const tdCode = document.createElement("td");
+    tdCode.textContent = codigo;
+
+    const tdDesc = document.createElement("td");
+    tdDesc.textContent = descripcion;
+
+    const tdQty = document.createElement("td");
+    const input = document.createElement("input");
+    input.type = "number";
+    input.min = "0";
+    input.value = "0";
+    tdQty.appendChild(input);
+
+    tr.appendChild(tdCode);
+    tr.appendChild(tdDesc);
+    tr.appendChild(tdQty);
+
+    // Insertar ordenado por descripción (A-Z)
+    let inserted = false;
+    const bodyRows = Array.from(table.querySelectorAll("tr")).slice(1); // re-lee por si cambió
+    for(const r of bodyRows){
+      const d = (r.children[1]?.innerText || "").trim().toUpperCase();
+      if(descripcion.trim().toUpperCase().localeCompare(d, 'es') < 0){
+        table.insertBefore(tr, r);
+        inserted = true;
+        break;
+      }
+    }
+    if(!inserted){
+      table.appendChild(tr);
+    }
+    foundRow = tr;
+  }
+
+  // Sumar qty
+  const input = foundRow.querySelector("input");
+  const actual = parseInt(input.value || "0", 10);
+  input.value = actual + qty;
+
+  // Si el usuario tenía un filtro en el buscador, lo limpiamos para que sí vea el producto agregado
+  const buscador = document.getElementById("buscador");
+  if(buscador){
+    buscador.value = "";
+    if(typeof filtrar === "function") filtrar();
+  }
+
+  // Resaltar la fila agregada/actualizada (solo visual)
+  foundRow.style.outline = "3px solid rgba(11,76,203,.35)";
+  foundRow.style.borderRadius = "10px";
+  setTimeout(()=>{ foundRow.style.outline = ""; }, 900);
+
+  // Bajar hacia la tabla para que el usuario lo vea
+  try { foundRow.scrollIntoView({behavior:"smooth", block:"center"}); } catch(e){}
 }
 </script>
-
 </body>
 </html>
