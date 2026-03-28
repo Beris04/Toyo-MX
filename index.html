@@ -8,9 +8,8 @@
   <style>
     :root{
       --blue:#0B4CCB;
-      --blue2:#0a3aa1;
       --bg:#F3F5F7;
-      --card:#ffffff;
+      --card:#fff;
       --border:#D1D5DB;
       --text:#111827;
       --muted:#6b7280;
@@ -20,307 +19,89 @@
       --safe-t: env(safe-area-inset-top, 0px);
     }
     *{box-sizing:border-box}
-    html,body{height:100%}
     body{
       margin:0;
       background:var(--bg);
       font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
       color:var(--text);
+      padding-bottom: calc(78px + var(--safe-b));
     }
-
-    .app{
-      max-width:1180px;
-      margin:0 auto;
-      padding:14px 14px calc(74px + var(--safe-b));
-    }
-    @media(min-width: 980px){
-      .app{padding:18px}
-      body{padding-bottom:0}
-    }
-    .shell{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap:14px;
-    }
-    @media(min-width: 980px){
-      .shell{grid-template-columns: 360px 1fr; align-items:start}
-    }
-
+    .wrap{max-width:1180px;margin:0 auto;padding:14px 14px 18px}
     .topbar{
-      position:sticky;
-      top:0;
-      z-index:60;
-      padding: calc(12px + var(--safe-t)) 14px 10px;
-      margin: -14px -14px 14px;
-      background:linear-gradient(180deg, rgba(243,245,247,.96) 0%, rgba(243,245,247,.86) 68%, rgba(243,245,247,0) 100%);
+      position:sticky;top:0;z-index:50;
+      background:linear-gradient(180deg, rgba(243,245,247,.96) 0%, rgba(243,245,247,.86) 70%, rgba(243,245,247,0) 100%);
       backdrop-filter: blur(10px);
+      padding: calc(12px + var(--safe-t)) 14px 10px;
+      margin:-14px -14px 14px;
     }
-    @media(min-width:980px){
-      .topbar{position:static; padding:0; margin:0 0 14px; background:transparent; backdrop-filter:none}
-    }
-    .brandRow{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .brandRow{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
     .brand{display:flex;align-items:center;gap:10px;min-width:0}
-    .mark{
-      width:34px;height:34px;border-radius:12px;
-      background:linear-gradient(135deg,var(--blue),var(--blue2));
-      box-shadow:0 10px 22px rgba(11,76,203,.25);
-      flex:0 0 auto;
-    }
-    .titleWrap{min-width:0}
-    h1{
-      margin:0;
-      font-size:18px;
-      letter-spacing:.2px;
-      color:var(--blue);
-      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-    }
-    .sub{
-      margin-top:3px;
-      font-size:12px;
-      color:var(--muted);
-      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-    }
-    .pill{
-      border:1px solid #c7dbff;
-      color:var(--blue);
-      padding:8px 10px;
-      border-radius:999px;
-      font-weight:900;
-      background:#eef4ff;
-      font-size:12px;
-      white-space:nowrap;
-    }
+    .mark{width:34px;height:34px;border-radius:12px;background:linear-gradient(135deg,#0B4CCB,#0a3aa1);box-shadow:0 10px 22px rgba(11,76,203,.25)}
+    h1{margin:0;color:var(--blue);font-size:18px;letter-spacing:.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .sub{margin-top:3px;color:var(--muted);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .pill{border:1px solid #c7dbff;color:var(--blue);background:#eef4ff;border-radius:999px;padding:8px 10px;font-weight:900;font-size:12px}
 
-    .card{
-      background:var(--card);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      border:1px solid rgba(0,0,0,.03);
-      overflow:hidden;
-    }
-    .cardHd{
-      padding:14px 14px 10px;
-      border-bottom:1px solid rgba(17,24,39,.10);
-      display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
-    }
-    .cardTitle{font-weight:950;color:#0b3c91;font-size:13px}
-    .cardBd{padding:14px}
+    .grid{display:grid;grid-template-columns:1fr;gap:14px}
+    @media(min-width:980px){ .grid{grid-template-columns:360px 1fr;align-items:start} body{padding-bottom:0} }
 
-    label{display:block;font-weight:800;margin-bottom:7px;color:#0b3c91;font-size:13px}
-    input,select{
-      width:100%;
-      padding:12px 12px;
-      border-radius:14px;
-      border:1px solid var(--border);
-      background:#fff;
-      font-size:15px;
-      outline:none;
-    }
-    .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-    .btn{
-      border:1px solid rgba(17,24,39,.12);
-      background:#fff;
-      border-radius:14px;
-      padding:11px 12px;
-      cursor:pointer;
-      font-weight:900;
-      color:#0b3c91;
-      font-size:13px;
-    }
-    .btn.primary{
-      background:var(--blue);
-      color:#fff;
-      border-color:transparent;
-    }
-    .btn.ghost{
-      background:#eef4ff;
-      color:var(--blue);
-      border:1px solid #c7dbff;
-    }
-    .hint{margin-top:10px;color:var(--muted);font-size:12.5px;line-height:1.35}
-
-    .tabs{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-    }
-    .tab{
-      border:1px solid rgba(17,24,39,.10);
-      background:#fff;
-      border-radius:999px;
-      padding:9px 12px;
-      font-weight:950;
-      font-size:12px;
-      cursor:pointer;
-      color:#0b3c91;
-    }
-    .tab.active{
-      background:var(--blue);
-      color:#fff;
-      border-color:transparent;
-    }
+    .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid rgba(0,0,0,.03);overflow:hidden}
+    .hd{padding:14px 14px 10px;border-bottom:1px solid rgba(17,24,39,.10);display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+    .title{font-weight:950;color:#0b3c91;font-size:13px}
+    .bd{padding:14px}
+    label{display:block;font-weight:900;color:#0b3c91;font-size:13px;margin-bottom:7px}
+    input,select{width:100%;padding:12px;border:1px solid var(--border);border-radius:14px;font-size:15px;outline:none;background:#fff}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .btn{border:1px solid rgba(17,24,39,.12);background:#fff;border-radius:14px;padding:11px 12px;font-weight:900;color:#0b3c91;cursor:pointer;font-size:13px}
+    .btn.ghost{background:#eef4ff;border:1px solid #c7dbff;color:var(--blue)}
+    .tabs{display:flex;gap:8px;flex-wrap:wrap}
+    .tab{border:1px solid rgba(17,24,39,.10);background:#fff;border-radius:999px;padding:9px 12px;font-weight:950;font-size:12px;cursor:pointer;color:#0b3c91}
+    .tab.active{background:var(--blue);color:#fff;border-color:transparent}
 
     .list{display:flex;flex-direction:column;gap:10px}
-    .item{
-      border:1px solid rgba(17,24,39,.10);
-      background:#fff;
-      border-radius:16px;
-      padding:12px;
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      gap:12px;
-    }
+    .item{border:1px solid rgba(17,24,39,.10);background:#fff;border-radius:16px;padding:12px;display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
     .left{min-width:0}
-    .name{
-      margin:0;
-      font-weight:950;
-      font-size:14px;
-      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-      max-width:100%;
-    }
-    .meta{
-      margin-top:4px;
-      color:var(--muted);
-      font-size:12px;
-      font-weight:750;
-      line-height:1.25;
-    }
-    .actions{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      justify-content:flex-end;
-      align-items:center;
-      flex:0 0 auto;
-    }
-    .mini{
-      border-radius:12px;
-      padding:9px 10px;
-      font-size:12px;
-      font-weight:900;
-      cursor:pointer;
-      white-space:nowrap;
-      border:1px solid rgba(17,24,39,.12);
-      background:#fff;
-      color:#0b3c91;
-    }
-    .mini.open{
-      border:1px solid #c7dbff;
-      background:#eef4ff;
-      color:var(--blue);
-    }
-    .empty{
-      padding:12px 2px;
-      color:var(--muted);
-      font-weight:800;
-      font-size:13px;
-    }
-    @media(min-width:980px){
-      .actions{flex-wrap:nowrap}
-      .mini{padding:9px 12px}
-    }
+    .name{margin:0;font-weight:950;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .meta{margin-top:4px;color:var(--muted);font-size:12px;font-weight:750}
+    .actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;align-items:center;flex:0 0 auto}
+    .mini{border-radius:12px;padding:9px 10px;font-size:12px;font-weight:900;cursor:pointer;white-space:nowrap;border:1px solid rgba(17,24,39,.12);background:#fff;color:#0b3c91}
+    .mini.open{border:1px solid #c7dbff;background:#eef4ff;color:var(--blue)}
+    .empty{padding:12px 2px;color:var(--muted);font-weight:900;font-size:13px}
+    .hint{color:var(--muted);font-size:12.5px;line-height:1.35}
+    .pager{display:none;justify-content:space-between;align-items:center;gap:10px;margin-top:10px;flex-wrap:wrap}
+    .pager .hint{margin:0}
 
-    .bottombar{
-      position:fixed;left:0;right:0;bottom:0;z-index:80;
-      padding:10px 10px calc(10px + var(--safe-b));
-      background:rgba(255,255,255,.92);
-      border-top:1px solid rgba(17,24,39,.10);
-      backdrop-filter: blur(10px);
-    }
-    .bnav{
-      max-width:1180px;margin:0 auto;
-      display:grid;grid-template-columns:repeat(3,1fr);gap:8px;
-    }
-    .btab{
-      border:1px solid rgba(17,24,39,.10);
-      background:#fff;
-      border-radius:16px;
-      padding:10px 10px;
-      font-weight:950;
-      cursor:pointer;
-      font-size:12px;
-      display:flex;flex-direction:column;align-items:center;gap:4px;
-      color:#0b3c91;
-    }
+    .bottombar{position:fixed;left:0;right:0;bottom:0;z-index:60;padding:10px 10px calc(10px + var(--safe-b));background:rgba(255,255,255,.92);border-top:1px solid rgba(17,24,39,.10);backdrop-filter: blur(10px)}
+    .bnav{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+    .btab{border:1px solid rgba(17,24,39,.10);background:#fff;border-radius:16px;padding:10px 10px;font-weight:950;cursor:pointer;font-size:12px;display:flex;flex-direction:column;align-items:center;gap:4px;color:#0b3c91}
     .btab.active{background:var(--blue);color:#fff;border-color:transparent}
     .ico{font-size:16px;line-height:1}
-    @media(min-width:980px){
-      .bottombar{display:none}
-      .app{padding-bottom:18px}
-    }
+    @media(min-width:980px){ .bottombar{display:none} }
 
-    .toast{
-      position:fixed;
-      left:50%;
-      bottom: calc(76px + var(--safe-b));
-      transform:translateX(-50%);
-      background:rgba(17,24,39,.92);
-      color:#fff;
-      padding:10px 12px;
-      border-radius:999px;
-      font-weight:900;
-      font-size:12px;
-      box-shadow:0 18px 40px rgba(0,0,0,.22);
-      opacity:0;
-      pointer-events:none;
-      transition:opacity .2s ease, transform .2s ease;
-      z-index:9999;
-    }
-    .toast.show{opacity:1; transform:translateX(-50%) translateY(-2px);}
-
-    details{
-      margin-top:10px;
-      border-top:1px dashed #d1d5db;
-      padding-top:10px;
-    }
-    details summary{
-      cursor:pointer;
-      font-weight:900;
-      color:#0b3c91;
-      font-size:12px;
-      list-style:none;
-    }
+    details{margin-top:10px;border-top:1px dashed #d1d5db;padding-top:10px}
+    details summary{cursor:pointer;font-weight:900;color:#0b3c91;font-size:12px;list-style:none}
     details summary::-webkit-details-marker{display:none}
-    pre{
-      margin:10px 0 0;
-      white-space:pre-wrap;
-      background:#0b1220;
-      color:#e5e7eb;
-      padding:12px;
-      border-radius:12px;
-      font-size:12px;
-      overflow:auto;
-    }
+    pre{margin:10px 0 0;white-space:pre-wrap;background:#0b1220;color:#e5e7eb;padding:12px;border-radius:12px;font-size:12px;overflow:auto}
   </style>
 </head>
-
 <body>
-  <div class="topbar">
-    <div class="brandRow">
-      <div class="brand">
-        <div class="mark" aria-hidden="true"></div>
-        <div class="titleWrap">
-          <h1>Pedidos Toyo MX</h1>
-          <div class="sub" id="subtitle">Cargando clientes…</div>
-        </div>
-      </div>
-      <div class="pill">Portal</div>
-    </div>
-  </div>
-
-  <div class="app">
-    <div class="shell">
-      <div class="card">
-        <div class="cardHd">
-          <div class="cardTitle">Búsqueda y filtros</div>
-          <div class="tabs" id="tabsDesk" style="display:none">
-            <button class="tab active" id="tabDeskSearch" type="button">Buscar</button>
-            <button class="tab" id="tabDeskRecent" type="button">Recientes</button>
-            <button class="tab" id="tabDeskVendors" type="button">Vendedores</button>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brandRow">
+        <div class="brand">
+          <div class="mark" aria-hidden="true"></div>
+          <div style="min-width:0">
+            <h1>Pedidos Toyo MX</h1>
+            <div class="sub" id="subtitle">Cargando clientes…</div>
           </div>
         </div>
-        <div class="cardBd">
+        <div class="pill" id="pill">Portal</div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="hd"><div class="title">Búsqueda y filtros</div></div>
+        <div class="bd">
           <label>Buscar cliente (nombre o código)</label>
           <div class="row">
             <input id="q" placeholder="Ej. GENKI o C020980" autocomplete="off" />
@@ -330,16 +111,14 @@
           <div style="height:12px"></div>
 
           <label>Vendedor</label>
-          <select id="vendorFilter">
-            <option value="ALL">Todos</option>
-          </select>
+          <select id="vendorFilter"><option value="ALL">Todos</option></select>
 
           <div class="row" style="margin-top:12px">
             <button class="btn ghost" id="btnCopyBase" type="button">Copiar link</button>
             <button class="btn" id="btnCompact" type="button">Vista compacta</button>
           </div>
 
-          <div class="hint">
+          <div class="hint" style="margin-top:10px">
             Tip: si actualizas y no se refleja, abre con <b>?v=2</b> (o en incógnito).
           </div>
 
@@ -351,18 +130,18 @@
       </div>
 
       <div class="card">
-        <div class="cardHd">
-          <div class="cardTitle" id="viewTitle">Resultados</div>
+        <div class="hd">
+          <div class="title" id="viewTitle">Resultados</div>
           <div class="tabs">
             <button class="tab active" id="tabSearch" type="button">Buscar</button>
             <button class="tab" id="tabRecent" type="button">Recientes</button>
             <button class="tab" id="tabVendors" type="button">Vendedores</button>
           </div>
         </div>
-        <div class="cardBd">
+        <div class="bd">
           <div class="hint" id="scope">Mostrando: todos</div>
-          
-          <div class="row" id="pager" style="justify-content:space-between;margin-top:10px;gap:10px;align-items:center;display:none">
+
+          <div class="pager" id="pager">
             <div class="row" style="gap:8px">
               <button class="btn" id="btnPrev" type="button">Anterior</button>
               <button class="btn" id="btnNext" type="button">Siguiente</button>
@@ -377,7 +156,8 @@
               </select>
             </div>
           </div>
-<div class="list" id="list" style="margin-top:10px"></div>
+
+          <div class="list" id="list" style="margin-top:10px"></div>
           <div class="empty" id="empty" style="display:none">Sin resultados.</div>
         </div>
       </div>
@@ -392,13 +172,12 @@
     </div>
   </div>
 
-  <div class="toast" id="toast">Listo</div>
-
 <script>
 (() => {
   const $ = (q)=>document.querySelector(q);
 
   const subtitle = $("#subtitle");
+  const pill = $("#pill");
   const q = $("#q");
   const vendorFilter = $("#vendorFilter");
   const btnClear = $("#btnClear");
@@ -418,46 +197,37 @@
   const list = $("#list");
   const empty = $("#empty");
 
-  
   const pager = $("#pager");
   const btnPrev = $("#btnPrev");
   const btnNext = $("#btnNext");
   const pageInfo = $("#pageInfo");
   const pageSizeSel = $("#pageSize");
-const diag = $("#diag");
-  const diagText = $("#diagText");
-  const toastEl = $("#toast");
 
-  const LS_REC = "toyo_index_recent_v2";
-  const LS_COMPACT = "toyo_index_compact_v2";
+  const diag = $("#diag");
+  const diagText = $("#diagText");
+
+  const LS_REC = "toyo_index_recent_v3";
+  const LS_COMPACT = "toyo_index_compact_v3";
 
   let ALL = [];
   let VENDORS = [];
   let MODE = "search"; // search | recent | vendors
   let ACTIVE_VENDOR = "ALL";
+  let compact = (localStorage.getItem(LS_COMPACT) === "1");
+
   let PAGE = 1;
   let PAGE_SIZE = 100;
   let LAST_TOTAL = 0;
-
-  let compact = (localStorage.getItem(LS_COMPACT) === "1");
-
-  function showToast(msg){
-    toastEl.textContent = msg;
-    toastEl.classList.add("show");
-    setTimeout(()=>toastEl.classList.remove("show"), 1500);
-  }
 
   function esc(s){
     return (s ?? "").toString()
       .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
       .replaceAll('"',"&quot;").replaceAll("'","&#039;");
   }
-
   function norm(s){
     return (s||"").toString().trim().toLowerCase()
       .normalize("NFD").replace(/[\u0300-\u036f]/g,"");
   }
-
   function loadJSON(key, fallback){
     try{ return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback)); }
     catch(e){ return fallback; }
@@ -465,27 +235,17 @@ const diag = $("#diag");
   function saveJSON(key, obj){
     localStorage.setItem(key, JSON.stringify(obj));
   }
-
   function pushRecent(path){
     let rec = loadJSON(LS_REC, []);
     rec.unshift(path);
     rec = [...new Set(rec)].slice(0, 30);
     saveJSON(LS_REC, rec);
   }
-
   function setDiag(obj){
     diagText.textContent = (typeof obj === "string") ? obj : JSON.stringify(obj, null, 2);
   }
-
-  function setCompact(on){
-    compact = !!on;
-    localStorage.setItem(LS_COMPACT, compact ? "1" : "0");
-    document.body.classList.toggle("compact", compact);
-    showToast(compact ? "Vista compacta" : "Vista normal");
-  }
-
   function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
-
+  function resetPage(){ PAGE = 1; }
   function setPager(total){
     LAST_TOTAL = total || 0;
     const totalPages = Math.max(1, Math.ceil(LAST_TOTAL / PAGE_SIZE));
@@ -501,119 +261,41 @@ const diag = $("#diag");
     if(btnPrev) btnPrev.disabled = (PAGE <= 1);
     if(btnNext) btnNext.disabled = (PAGE >= totalPages);
   }
-
-  function resetPage(){ PAGE = 1; }
-
-  function getPageSlice(list){
+  function getPageSlice(arr){
     const start = (PAGE - 1) * PAGE_SIZE;
-    const end = start + PAGE_SIZE;
-    return list.slice(start, end);
+    return arr.slice(start, start + PAGE_SIZE);
+  }
+
+  function setCompact(on){
+    compact = !!on;
+    localStorage.setItem(LS_COMPACT, compact ? "1" : "0");
+    document.body.classList.toggle("compact", compact);
   }
 
   function setActiveTab(which){
     MODE = which;
-
     const active = (el, on)=>el.classList.toggle("active", on);
-
     active(tabSearch, MODE==="search");
     active(tabRecent, MODE==="recent");
     active(tabVendors, MODE==="vendors");
-
-    
-    // Left (desktop) tabs
-    const tabDeskSearch = document.getElementById("tabDeskSearch");
-    const tabDeskRecent = document.getElementById("tabDeskRecent");
-    const tabDeskVendors = document.getElementById("tabDeskVendors");
-    if(tabDeskSearch) active(tabDeskSearch, MODE==="search");
-    if(tabDeskRecent) active(tabDeskRecent, MODE==="recent");
-    if(tabDeskVendors) active(tabDeskVendors, MODE==="vendors");
-active(bSearch, MODE==="search");
+    active(bSearch, MODE==="search");
     active(bRecent, MODE==="recent");
     active(bVendors, MODE==="vendors");
 
-    viewTitle.textContent =
-      MODE==="search" ? "Resultados" :
-      MODE==="recent" ? "Recientes" : "Vendedores";
-
+    viewTitle.textContent = MODE==="search" ? "Resultados" : (MODE==="recent" ? "Recientes" : "Vendedores");
     resetPage();
     render();
     window.scrollTo({top:0, behavior:"smooth"});
   }
 
-  async function loadClients(){
-    const url = "clients.json?v=" + Date.now();
-    try{
-      setDiag({status:"fetching", url});
-      const res = await fetch(url, {cache:"no-store"});
-      const text = await res.text();
-      if(!res.ok){
-        setDiag({status:"error", http:res.status, body:text.slice(0,500)});
-        throw new Error("No se pudo cargar clients.json (" + res.status + ")");
-      }
-      let data;
-      try{ data = JSON.parse(text); }
-      catch(e){
-        setDiag({status:"error", msg:"clients.json no es JSON válido", sample:text.slice(0,600)});
-        throw e;
-      }
-
-      const arr = Array.isArray(data) ? data : (Array.isArray(data.clients) ? data.clients : []);
-
-      ALL = arr.map(x=>{
-        const vendor_folder = (x.vendor_folder || x.seller || "").toString().trim();
-        const vendor_label  = (x.vendor_label || x.vendor_name || x.seller_name || vendor_folder).toString().trim();
-        const client_name   = (x.client_name || x.client || "").toString().trim();
-        const client_code   = (x.client_code || x.code || "").toString().trim();
-
-        let path = (x.path || "").toString().trim();
-        if(!path){
-          const file = (x.file || "").toString().trim();
-          if(vendor_folder && file) path = vendor_folder + "/" + file;
-        }
-        return {vendor_folder, vendor_label, client_name, client_code, path};
-      }).filter(x=>x.vendor_folder && x.path && x.client_name);
-
-      const map = new Map();
-      ALL.forEach(c=>{
-        if(!map.has(c.vendor_folder)){
-          map.set(c.vendor_folder, {folder:c.vendor_folder, label:c.vendor_label || c.vendor_folder, count:0});
-        }
-        map.get(c.vendor_folder).count++;
-      });
-      VENDORS = [...map.values()].sort((a,b)=>a.label.localeCompare(b.label, "es"));
-
-      subtitle.textContent = `${VENDORS.length} vendedor(es) · actualizado`;
-
-      vendorFilter.innerHTML =
-        `<option value="ALL">Todos</option>` +
-        VENDORS.map(v=>`<option value="${esc(v.folder)}">${esc(v.label)} (${v.count})</option>`).join("");
-
-      vendorFilter.value = "ALL";
-      ACTIVE_VENDOR = "ALL";
-
-      setDiag({status:"ok", total_clients: ALL.length, total_vendors: VENDORS.length, sample: ALL[0]});
-      diag.open = false;
-
-      render();
-    }catch(e){
-      subtitle.textContent = "No se pudo cargar clients.json";
-      empty.style.display = "block";
-      empty.textContent = "No se pudo cargar la lista de clientes.";
-      diag.open = true;
-      setDiag({status:"fatal", error: e?.message || String(e)});
-    }
-  }
-
-  function applyQuery(list){
-    const raw = q.value || "";
-    const s = norm(raw);
-    if(!s) return list;
-
+  function applyQuery(list0){
+    const s = norm(q.value || "");
+    if(!s) return list0;
     const looksCode = /^c?\d/.test(s.replace(/\s+/g,"")) || /\d{3,}/.test(s);
     if(looksCode){
-      return list.filter(c=> norm(c.client_code).includes(s) || norm(c.client_name).includes(s));
+      return list0.filter(c=> norm(c.client_code).includes(s) || norm(c.client_name).includes(s));
     }
-    return list.filter(c=> norm(c.client_name).includes(s) || norm(c.client_code).includes(s));
+    return list0.filter(c=> norm(c.client_name).includes(s) || norm(c.client_code).includes(s));
   }
 
   function render(){
@@ -621,8 +303,9 @@ active(bSearch, MODE==="search");
     empty.style.display = "none";
 
     if(!ALL.length){
+      setPager(0);
       empty.style.display = "block";
-      empty.textContent = "Sin datos (revisa clients.json).";
+      empty.textContent = "Sin datos (no se cargó clients.json).";
       return;
     }
 
@@ -647,13 +330,13 @@ active(bSearch, MODE==="search");
   }
 
   function renderVendors(){
-    const vendors = VENDORS.slice();
-    if(!vendors.length){
+    list.innerHTML = "";
+    if(!VENDORS.length){
       empty.style.display = "block";
       empty.textContent = "No hay vendedores.";
       return;
     }
-    vendors.forEach(v=>{
+    VENDORS.forEach(v=>{
       const el = document.createElement("div");
       el.className = "item";
       el.innerHTML = `
@@ -671,7 +354,6 @@ active(bSearch, MODE==="search");
         setActiveTab("search");
         q.value = "";
         render();
-        showToast("Filtrado por vendedor");
       });
       list.appendChild(el);
     });
@@ -685,14 +367,13 @@ active(bSearch, MODE==="search");
       base = base.filter(c=>c.vendor_folder === ACTIVE_VENDOR);
     }
     if(!base.length){
-      empty.style.display = "block";
       setPager(0);
+      empty.style.display = "block";
       empty.textContent = "Aún no hay recientes. Abre un cliente desde Buscar.";
       return;
     }
     setPager(base.length);
-    const view = getPageSlice(base);
-    renderClientList(view, base.length);
+    renderClientList(getPageSlice(base), base.length);
   }
 
   function renderSearch(){
@@ -702,19 +383,18 @@ active(bSearch, MODE==="search");
     }
     base = applyQuery(base);
     base.sort((a,b)=> (a.client_name||"").localeCompare((b.client_name||""), "es"));
-
     if(!base.length){
-      empty.style.display = "block";
       setPager(0);
+      empty.style.display = "block";
       empty.textContent = "Sin resultados.";
       return;
     }
     setPager(base.length);
-    const view = getPageSlice(base);
-    renderClientList(view, base.length);
+    renderClientList(getPageSlice(base), base.length);
   }
 
   function renderClientList(rows, totalLen){
+    list.innerHTML = "";
     rows.forEach(c=>{
       const el = document.createElement("div");
       el.className = "item";
@@ -728,19 +408,15 @@ active(bSearch, MODE==="search");
           <button class="mini" type="button">Copiar link</button>
         </div>
       `;
-
       const [openBtn, copyBtn] = el.querySelectorAll("button");
-
       openBtn.addEventListener("click", ()=>{
         pushRecent(c.path);
         window.open(c.path, "_blank");
       });
-
       copyBtn.addEventListener("click", async ()=>{
         const full = new URL(c.path, window.location.href).href;
         try{
           await navigator.clipboard.writeText(full);
-          showToast("Link copiado");
         }catch(e){
           const ta = document.createElement("textarea");
           ta.value = full;
@@ -748,31 +424,101 @@ active(bSearch, MODE==="search");
           ta.select();
           document.execCommand("copy");
           ta.remove();
-          showToast("Link copiado");
         }
       });
-
       list.appendChild(el);
     });
-
-    if(totalLen && totalLen > rows.length){
-      const more = document.createElement("div");
-      more.className = "empty";
-      more.textContent = `Total: ${totalLen}. Usa Anterior / Siguiente para navegar.`;
-      list.appendChild(more);
+    if(totalLen > rows.length){
+      const msg = document.createElement("div");
+      msg.className = "empty";
+      msg.textContent = `Total: ${totalLen}. Usa Anterior / Siguiente para navegar.`;
+      list.appendChild(msg);
     }
   }
 
-  let t;
-  function debounceRender(){
-    clearTimeout(t);
-    t = setTimeout(()=>{ if(MODE!=="vendors") render(); }, 120);
+  async function fetchFirstOk(urls){
+    for(const u of urls){
+      try{
+        const res = await fetch(u + (u.includes("?") ? "&" : "?") + "v=" + Date.now(), {cache:"no-store"});
+        if(!res.ok) { continue; }
+        const text = await res.text();
+        try{ return {url:u, data: JSON.parse(text)}; } catch(e){ continue; }
+      }catch(e){}
+    }
+    return null;
   }
 
+  function getParam(name){
+    const u = new URL(window.location.href);
+    return u.searchParams.get(name);
+  }
+
+  async function loadClients(){
+    // Allow override: ?clients=clients_historial_oct_marzo.json
+    const override = getParam("clients");
+    const candidates = override ? [override] : [
+      "clients.json",
+      "clients_historial_oct_marzo.json",
+      "clients_historial_oct_marzo.json",
+      "clients_historial_oct_marzo.json".toLowerCase()
+    ];
+
+    const result = await fetchFirstOk(candidates);
+    if(!result){
+      subtitle.textContent = "No se pudo cargar clients.json";
+      pill.textContent = "Error";
+      diag.open = True;
+      setDiag({status:"fatal", error:"No se pudo cargar clients.json (404).", ayuda:"Sube clients.json a la RAÍZ del repo (mismo nivel que index.html) y en minúsculas."});
+      empty.style.display = "block";
+      empty.textContent = "No se pudo cargar clients.json. Revisa Diagnóstico.";
+      return;
+    }
+
+    let data = result.data;
+    const arr = Array.isArray(data) ? data : (Array.isArray(data.clients) ? data.clients : []);
+
+    ALL = arr.map(x=>{
+      const vendor_folder = (x.vendor_folder || x.seller || "").toString().trim();
+      const vendor_label  = (x.vendor_label || x.vendor_name || x.seller_name || vendor_folder).toString().trim();
+      const client_name   = (x.client_name || x.client || "").toString().trim();
+      const client_code   = (x.client_code || x.code || "").toString().trim();
+      let path = (x.path || "").toString().trim();
+      if(!path){
+        const file = (x.file || "").toString().trim();
+        if(vendor_folder && file) path = vendor_folder + "/" + file;
+      }
+      return {vendor_folder, vendor_label, client_name, client_code, path};
+    }).filter(x=>x.vendor_folder && x.path && x.client_name);
+
+    const map = new Map();
+    ALL.forEach(c=>{
+      if(!map.has(c.vendor_folder)){
+        map.set(c.vendor_folder, {folder:c.vendor_folder, label:c.vendor_label || c.vendor_folder, count:0});
+      }
+      map.get(c.vendor_folder).count++;
+    });
+    VENDORS = [...map.values()].sort((a,b)=>a.label.localeCompare(b.label, "es"));
+
+    subtitle.textContent = `${VENDORS.length} vendedor(es) · ${ALL.length} cliente(s)`;
+    pill.textContent = "OK";
+
+    vendorFilter.innerHTML = `<option value="ALL">Todos</option>` + VENDORS.map(v=>`<option value="${esc(v.folder)}">${esc(v.label)} (${v.count})</option>`).join("");
+    vendorFilter.value = "ALL";
+    ACTIVE_VENDOR = "ALL";
+
+    setDiag({status:"ok", fuente: result.url, total_clients: ALL.length, total_vendors: VENDORS.length, ejemplo: ALL[0]});
+    diag.open = false;
+
+    render();
+  }
+
+  // Events
+  let t;
   q.addEventListener("input", ()=>{
     if(MODE !== "search") setActiveTab("search");
     resetPage();
-    debounceRender();
+    clearTimeout(t);
+    t = setTimeout(()=>render(), 120);
   });
 
   btnClear.addEventListener("click", ()=>{
@@ -794,15 +540,16 @@ active(bSearch, MODE==="search");
 
   btnCopyBase.addEventListener("click", async ()=>{
     const base = window.location.href.split("?")[0].replace(/index\.html$/i,"");
-    try{
-      await navigator.clipboard.writeText(base);
-      showToast("Link copiado");
-    }catch(e){
-      showToast("No se pudo copiar");
-    }
+    try{ await navigator.clipboard.writeText(base); }catch(e){}
   });
 
-  // Pager controls
+  tabSearch.addEventListener("click", ()=>setActiveTab("search"));
+  tabRecent.addEventListener("click", ()=>setActiveTab("recent"));
+  tabVendors.addEventListener("click", ()=>setActiveTab("vendors"));
+  bSearch.addEventListener("click", ()=>setActiveTab("search"));
+  bRecent.addEventListener("click", ()=>setActiveTab("recent"));
+  bVendors.addEventListener("click", ()=>setActiveTab("vendors"));
+
   if(pageSizeSel){
     pageSizeSel.value = String(PAGE_SIZE);
     pageSizeSel.addEventListener("change", ()=>{
@@ -813,32 +560,10 @@ active(bSearch, MODE==="search");
     });
   }
   if(btnPrev) btnPrev.addEventListener("click", ()=>{ PAGE = Math.max(1, PAGE-1); render(); });
-  if(btnNext) btnNext.addEventListener("click", ()=>{ PAGE = PAGE+1; render(); });
+  if(btnNext) btnNext.addEventListener("click", ()=>{ PAGE = PAGE + 1; render(); });
 
-  tabSearch.addEventListener("click", ()=>setActiveTab("search"));
-  tabRecent.addEventListener("click", ()=>setActiveTab("recent"));
-  tabVendors.addEventListener("click", ()=>setActiveTab("vendors"));
-
-  
-  // Desktop tabs (left card)
-  const tabDeskSearch = document.getElementById("tabDeskSearch");
-  const tabDeskRecent = document.getElementById("tabDeskRecent");
-  const tabDeskVendors = document.getElementById("tabDeskVendors");
-
-  if(tabDeskSearch) tabDeskSearch.addEventListener("click", ()=>setActiveTab("search"));
-  if(tabDeskRecent) tabDeskRecent.addEventListener("click", ()=>setActiveTab("recent"));
-  if(tabDeskVendors) tabDeskVendors.addEventListener("click", ()=>setActiveTab("vendors"));
-bSearch.addEventListener("click", ()=>setActiveTab("search"));
-  bRecent.addEventListener("click", ()=>setActiveTab("recent"));
-  bVendors.addEventListener("click", ()=>setActiveTab("vendors"));
-
+  // Init
   setCompact(compact);
-
-  const tabsDesk = document.getElementById("tabsDesk");
-  const showDeskTabs = ()=>{ if(tabsDesk) tabsDesk.style.display = (window.innerWidth>=980) ? "flex" : "none"; };
-  window.addEventListener("resize", showDeskTabs);
-  showDeskTabs();
-
   loadClients();
 })();
 </script>
