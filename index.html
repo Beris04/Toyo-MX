@@ -3,567 +3,1245 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Pedidos Toyo MX</title>
-  <meta name="theme-color" content="#0B4CCB" />
+  <title>Portal de Pedidos | Toyo Foods</title>
+  <meta name="theme-color" content="#123B7A" />
   <style>
     :root{
-      --blue:#0B4CCB;
-      --bg:#F3F5F7;
-      --card:#fff;
-      --border:#D1D5DB;
-      --text:#111827;
-      --muted:#6b7280;
-      --shadow:0 10px 25px rgba(0,0,0,.06);
-      --radius:18px;
+      --brand:#123B7A;
+      --brand-2:#0E2E60;
+      --brand-soft:#EAF1FB;
+      --bg:#F5F7FA;
+      --card:#FFFFFF;
+      --line:#D9E1EC;
+      --line-2:#E8EDF4;
+      --text:#122033;
+      --muted:#617086;
+      --success:#177245;
+      --warning:#A16207;
+      --danger:#B42318;
+      --shadow:0 12px 30px rgba(16, 24, 40, .08);
+      --shadow-soft:0 4px 14px rgba(16, 24, 40, .05);
+      --radius:12px;
+      --radius-lg:16px;
       --safe-b: env(safe-area-inset-bottom, 0px);
       --safe-t: env(safe-area-inset-top, 0px);
+      --max:1280px;
     }
+
     *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
     body{
       margin:0;
-      background:var(--bg);
-      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+      font-family:Inter, "Segoe UI", Roboto, Arial, sans-serif;
+      background:linear-gradient(180deg,#F8FAFC 0%, #F3F6F9 100%);
       color:var(--text);
-      padding-bottom: calc(78px + var(--safe-b));
+      padding-bottom:calc(86px + var(--safe-b));
     }
-    .wrap{max-width:1180px;margin:0 auto;padding:14px 14px 18px}
+
+    button,input,select{font:inherit}
+    a{color:inherit;text-decoration:none}
+
+    .page{
+      max-width:var(--max);
+      margin:0 auto;
+      padding:18px;
+    }
+
     .topbar{
-      position:sticky;top:0;z-index:50;
-      background:linear-gradient(180deg, rgba(243,245,247,.96) 0%, rgba(243,245,247,.86) 70%, rgba(243,245,247,0) 100%);
-      backdrop-filter: blur(10px);
-      padding: calc(12px + var(--safe-t)) 14px 10px;
-      margin:-14px -14px 14px;
+      position:sticky;
+      top:0;
+      z-index:60;
+      backdrop-filter:blur(14px);
+      background:linear-gradient(180deg, rgba(248,250,252,.96) 0%, rgba(248,250,252,.90) 68%, rgba(248,250,252,.45) 100%);
+      margin:-18px -18px 18px;
+      padding:calc(16px + var(--safe-t)) 18px 14px;
+      border-bottom:1px solid rgba(18,59,122,.06);
     }
-    .brandRow{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
-    .brand{display:flex;align-items:center;gap:10px;min-width:0}
-    .mark{width:34px;height:34px;border-radius:12px;background:linear-gradient(135deg,#0B4CCB,#0a3aa1);box-shadow:0 10px 22px rgba(11,76,203,.25)}
-    h1{margin:0;color:var(--blue);font-size:18px;letter-spacing:.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .sub{margin-top:3px;color:var(--muted);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .pill{border:1px solid #c7dbff;color:var(--blue);background:#eef4ff;border-radius:999px;padding:8px 10px;font-weight:900;font-size:12px}
 
-    .grid{display:grid;grid-template-columns:1fr;gap:14px}
-    @media(min-width:980px){ .grid{grid-template-columns:360px 1fr;align-items:start} body{padding-bottom:0} }
+    .topbarInner{
+      max-width:var(--max);
+      margin:0 auto;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+    }
 
-    .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid rgba(0,0,0,.03);overflow:hidden}
-    .hd{padding:14px 14px 10px;border-bottom:1px solid rgba(17,24,39,.10);display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
-    .title{font-weight:950;color:#0b3c91;font-size:13px}
-    .bd{padding:14px}
-    label{display:block;font-weight:900;color:#0b3c91;font-size:13px;margin-bottom:7px}
-    input,select{width:100%;padding:12px;border:1px solid var(--border);border-radius:14px;font-size:15px;outline:none;background:#fff}
-    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-    .btn{border:1px solid rgba(17,24,39,.12);background:#fff;border-radius:14px;padding:11px 12px;font-weight:900;color:#0b3c91;cursor:pointer;font-size:13px}
-    .btn.ghost{background:#eef4ff;border:1px solid #c7dbff;color:var(--blue)}
+    .brandWrap{display:flex;align-items:flex-start;gap:14px;min-width:0}
+    .brandMark{
+      width:46px;
+      height:46px;
+      border-radius:14px;
+      background:linear-gradient(160deg, var(--brand) 0%, #2058A5 100%);
+      box-shadow:0 14px 28px rgba(18,59,122,.22);
+      position:relative;
+      flex:0 0 auto;
+    }
+    .brandMark::after{
+      content:"";
+      position:absolute;
+      inset:9px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,.28);
+    }
+
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:var(--brand);
+      background:var(--brand-soft);
+      border:1px solid #D7E4F7;
+      padding:7px 10px;
+      border-radius:999px;
+      margin-bottom:8px;
+    }
+
+    .title{
+      margin:0;
+      font-size:28px;
+      line-height:1.05;
+      font-weight:800;
+      letter-spacing:-.02em;
+      color:var(--brand-2);
+    }
+
+    .subtitle{
+      margin:8px 0 0;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.5;
+      max-width:760px;
+    }
+
+    .statusPill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid #D7E4F7;
+      background:#FFF;
+      box-shadow:var(--shadow-soft);
+      color:var(--brand);
+      font-weight:700;
+      font-size:13px;
+      white-space:nowrap;
+    }
+
+    .dot{
+      width:9px;height:9px;border-radius:50%;background:#16A34A;box-shadow:0 0 0 3px rgba(22,163,74,.12)
+    }
+
+    .hero{
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:16px;
+      margin-bottom:18px;
+    }
+
+    .heroCard,.statsCard,.panel,.resultsCard{
+      background:var(--card);
+      border:1px solid var(--line-2);
+      box-shadow:var(--shadow);
+      border-radius:var(--radius-lg);
+    }
+
+    .heroCard{
+      padding:24px;
+      background:
+        radial-gradient(circle at top right, rgba(18,59,122,.08), transparent 28%),
+        linear-gradient(180deg,#FFFFFF 0%, #FBFCFE 100%);
+    }
+
+    .statsCard{
+      padding:18px;
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px;
+      align-content:start;
+    }
+
+    .kpi{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:14px;
+      background:#fff;
+      min-height:96px;
+    }
+    .kpiLabel{font-size:12px;color:var(--muted);font-weight:700;margin-bottom:8px}
+    .kpiValue{font-size:28px;font-weight:800;color:var(--brand-2);line-height:1}
+    .kpiSub{margin-top:8px;font-size:12px;color:var(--muted)}
+
+    .layout{
+      display:grid;
+      grid-template-columns:320px 1fr;
+      gap:18px;
+      align-items:start;
+    }
+
+    .panelHead,.resultsHead{
+      padding:18px 18px 14px;
+      border-bottom:1px solid var(--line-2);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .panelTitle,.resultsTitle{
+      font-size:15px;
+      font-weight:800;
+      color:var(--brand-2);
+      letter-spacing:.01em;
+    }
+
+    .panelBody{padding:18px}
+
+    .field{margin-bottom:16px}
+    .field:last-child{margin-bottom:0}
+    .label{
+      display:block;
+      margin-bottom:8px;
+      font-size:12px;
+      font-weight:800;
+      color:var(--brand-2);
+      letter-spacing:.02em;
+      text-transform:uppercase;
+    }
+
+    .inputWrap{position:relative}
+    .searchIcon{
+      position:absolute;
+      left:12px;
+      top:50%;
+      transform:translateY(-50%);
+      color:#7B8796;
+      pointer-events:none;
+      font-size:15px;
+    }
+
+    input,select{
+      width:100%;
+      height:46px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:#fff;
+      color:var(--text);
+      padding:0 14px;
+      transition:border-color .18s ease, box-shadow .18s ease, background .18s ease;
+      outline:none;
+    }
+
+    #q{padding-left:38px}
+
+    input:focus,select:focus{
+      border-color:#8CB4F5;
+      box-shadow:0 0 0 4px rgba(38,99,235,.10);
+    }
+
+    .btnRow,.btnGrid{display:flex;gap:10px;flex-wrap:wrap}
+    .btnGrid .btn{flex:1 1 0}
+
+    .btn{
+      appearance:none;
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--brand-2);
+      height:42px;
+      border-radius:12px;
+      padding:0 14px;
+      font-weight:700;
+      cursor:pointer;
+      transition:all .18s ease;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      white-space:nowrap;
+    }
+
+    .btn:hover{transform:translateY(-1px);box-shadow:var(--shadow-soft);border-color:#C4D3E8}
+    .btn:active{transform:translateY(0)}
+    .btn.primary{background:var(--brand);color:#fff;border-color:var(--brand)}
+    .btn.primary:hover{background:#17478F;border-color:#17478F}
+    .btn.soft{background:var(--brand-soft);border-color:#D7E4F7;color:var(--brand)}
+    .btn.ghost{background:#fff}
+    .btn:disabled{opacity:.55;cursor:not-allowed;transform:none;box-shadow:none}
+
+    .miniMeta{
+      font-size:12px;
+      line-height:1.45;
+      color:var(--muted);
+      background:#FAFBFD;
+      border:1px dashed var(--line);
+      border-radius:12px;
+      padding:12px 13px;
+    }
+
+    .resultsTop{
+      padding:14px 18px 0;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .scope{
+      font-size:13px;
+      color:var(--muted);
+      font-weight:600;
+    }
+
     .tabs{display:flex;gap:8px;flex-wrap:wrap}
-    .tab{border:1px solid rgba(17,24,39,.10);background:#fff;border-radius:999px;padding:9px 12px;font-weight:950;font-size:12px;cursor:pointer;color:#0b3c91}
-    .tab.active{background:var(--blue);color:#fff;border-color:transparent}
+    .tab{
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--brand-2);
+      border-radius:999px;
+      min-height:38px;
+      padding:0 14px;
+      font-size:13px;
+      font-weight:700;
+      cursor:pointer;
+      transition:all .18s ease;
+    }
+    .tab.active{background:var(--brand);color:#fff;border-color:var(--brand);box-shadow:0 10px 18px rgba(18,59,122,.16)}
 
-    .list{display:flex;flex-direction:column;gap:10px}
-    .item{border:1px solid rgba(17,24,39,.10);background:#fff;border-radius:16px;padding:12px;display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
-    .left{min-width:0}
-    .name{margin:0;font-weight:950;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .meta{margin-top:4px;color:var(--muted);font-size:12px;font-weight:750}
-    .actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;align-items:center;flex:0 0 auto}
-    .mini{border-radius:12px;padding:9px 10px;font-size:12px;font-weight:900;cursor:pointer;white-space:nowrap;border:1px solid rgba(17,24,39,.12);background:#fff;color:#0b3c91}
-    .mini.open{border:1px solid #c7dbff;background:#eef4ff;color:var(--blue)}
-    .empty{padding:12px 2px;color:var(--muted);font-weight:900;font-size:13px}
-    .hint{color:var(--muted);font-size:12.5px;line-height:1.35}
-    .pager{display:none;justify-content:space-between;align-items:center;gap:10px;margin-top:10px;flex-wrap:wrap}
-    .pager .hint{margin:0}
+    .toolbar{
+      padding:12px 18px 0;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+    }
 
-    .bottombar{position:fixed;left:0;right:0;bottom:0;z-index:60;padding:10px 10px calc(10px + var(--safe-b));background:rgba(255,255,255,.92);border-top:1px solid rgba(17,24,39,.10);backdrop-filter: blur(10px)}
-    .bnav{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-    .btab{border:1px solid rgba(17,24,39,.10);background:#fff;border-radius:16px;padding:10px 10px;font-weight:950;cursor:pointer;font-size:12px;display:flex;flex-direction:column;align-items:center;gap:4px;color:#0b3c91}
-    .btab.active{background:var(--blue);color:#fff;border-color:transparent}
-    .ico{font-size:16px;line-height:1}
-    @media(min-width:980px){ .bottombar{display:none} }
+    .pager{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    .pageInfo{font-size:13px;font-weight:700;color:var(--muted)}
+    .pageSizeWrap{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px;font-weight:700}
+    .pageSizeWrap select{width:112px;height:40px}
 
-    details{margin-top:10px;border-top:1px dashed #d1d5db;padding-top:10px}
-    details summary{cursor:pointer;font-weight:900;color:#0b3c91;font-size:12px;list-style:none}
+    .resultsBody{padding:16px 18px 18px}
+
+    .desktopTable{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      border:1px solid var(--line-2);
+      border-radius:14px;
+      overflow:hidden;
+      background:#fff;
+    }
+
+    .desktopTable thead th{
+      text-align:left;
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+      color:var(--muted);
+      background:#F8FAFC;
+      padding:14px 14px;
+      border-bottom:1px solid var(--line-2);
+    }
+
+    .desktopTable tbody td{
+      padding:15px 14px;
+      border-bottom:1px solid var(--line-2);
+      vertical-align:middle;
+      font-size:14px;
+    }
+
+    .desktopTable tbody tr:hover{background:#FBFDFF}
+    .desktopTable tbody tr:last-child td{border-bottom:none}
+
+    .codeBadge{
+      display:inline-flex;
+      align-items:center;
+      padding:6px 10px;
+      border-radius:999px;
+      background:#F2F5FA;
+      border:1px solid #DFE6EF;
+      font-size:12px;
+      font-weight:700;
+      color:#334155;
+    }
+
+    .clientName{font-weight:800;color:#122033;margin-bottom:4px}
+    .clientMeta{font-size:12px;color:var(--muted)}
+
+    .actionRow{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+    .miniBtn{
+      height:36px;
+      border-radius:10px;
+      padding:0 12px;
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--brand-2);
+      font-weight:700;
+      font-size:12px;
+      cursor:pointer;
+      transition:all .18s ease;
+    }
+    .miniBtn:hover{border-color:#C4D3E8;box-shadow:var(--shadow-soft)}
+    .miniBtn.primary{background:var(--brand-soft);border-color:#D7E4F7;color:var(--brand)}
+
+    .cards{display:none;flex-direction:column;gap:12px}
+    .resultCard{
+      border:1px solid var(--line-2);
+      background:#fff;
+      border-radius:14px;
+      padding:14px;
+      box-shadow:var(--shadow-soft);
+    }
+
+    .cardTop{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+    .cardName{font-size:15px;font-weight:800;color:var(--text);margin:0 0 6px}
+    .cardMeta{font-size:12px;color:var(--muted);line-height:1.45}
+    .cardActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+
+    .vendorList{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .vendorCard{
+      border:1px solid var(--line-2);
+      border-radius:14px;
+      padding:16px;
+      background:#fff;
+      box-shadow:var(--shadow-soft);
+    }
+    .vendorCard h3{margin:0 0 8px;font-size:15px;color:var(--text)}
+    .vendorCard p{margin:0 0 14px;font-size:12px;color:var(--muted)}
+
+    .empty{
+      display:none;
+      border:1px dashed var(--line);
+      border-radius:14px;
+      padding:22px;
+      text-align:center;
+      color:var(--muted);
+      background:#FBFCFE;
+      font-weight:700;
+    }
+
+    .compact .desktopTable thead th{padding:11px 12px}
+    .compact .desktopTable tbody td{padding:10px 12px}
+    .compact .resultCard{padding:12px}
+    .compact .panelBody{padding:14px}
+
+    .statusBar{
+      margin-top:14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    details{
+      margin-top:12px;
+      border:1px solid var(--line-2);
+      border-radius:12px;
+      overflow:hidden;
+      background:#FBFCFE;
+    }
+    details summary{
+      list-style:none;
+      cursor:pointer;
+      padding:12px 14px;
+      font-size:12px;
+      font-weight:800;
+      color:var(--brand-2);
+      border-bottom:1px solid transparent;
+    }
+    details[open] summary{border-bottom-color:var(--line-2)}
     details summary::-webkit-details-marker{display:none}
-    pre{margin:10px 0 0;white-space:pre-wrap;background:#0b1220;color:#e5e7eb;padding:12px;border-radius:12px;font-size:12px;overflow:auto}
+    pre{
+      margin:0;
+      padding:14px;
+      font-size:12px;
+      overflow:auto;
+      white-space:pre-wrap;
+      color:#DDE7F3;
+      background:#0F172A;
+    }
+
+    .bottombar{
+      position:fixed;
+      left:0;right:0;bottom:0;
+      z-index:70;
+      padding:10px 10px calc(10px + var(--safe-b));
+      background:rgba(255,255,255,.92);
+      backdrop-filter:blur(12px);
+      border-top:1px solid rgba(15,23,42,.08);
+    }
+    .bnav{
+      max-width:var(--max);
+      margin:0 auto;
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:8px;
+    }
+    .btab{
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--brand-2);
+      min-height:58px;
+      border-radius:14px;
+      cursor:pointer;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:4px;
+      font-size:11px;
+      font-weight:800;
+    }
+    .btab.active{background:var(--brand);color:#fff;border-color:var(--brand)}
+    .ico{font-size:16px;line-height:1}
+
+    .toastWrap{
+      position:fixed;
+      right:16px;
+      top:calc(16px + var(--safe-t));
+      z-index:90;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      pointer-events:none;
+    }
+    .toast{
+      min-width:220px;
+      max-width:360px;
+      border-radius:12px;
+      background:#0F172A;
+      color:#fff;
+      padding:12px 14px;
+      box-shadow:0 18px 30px rgba(15,23,42,.24);
+      font-size:13px;
+      font-weight:600;
+      opacity:0;
+      transform:translateY(-6px);
+      animation:toastIn .18s ease forwards;
+    }
+    @keyframes toastIn{to{opacity:1;transform:translateY(0)}}
+
+    @media (max-width:1100px){
+      .hero{grid-template-columns:1fr}
+      .layout{grid-template-columns:1fr}
+      .vendorList{grid-template-columns:1fr 1fr}
+    }
+
+    @media (max-width:860px){
+      body{padding-bottom:calc(92px + var(--safe-b))}
+      .title{font-size:22px}
+      .statsCard{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .desktopTableWrap{display:none}
+      .cards{display:flex}
+      .vendorList{grid-template-columns:1fr}
+      .toolbar{padding-top:6px}
+    }
+
+    @media (min-width:981px){
+      body{padding-bottom:0}
+      .bottombar{display:none}
+    }
+
+    @media (max-width:640px){
+      .page{padding:14px}
+      .topbar{margin:-14px -14px 14px;padding:calc(14px + var(--safe-t)) 14px 12px}
+      .heroCard{padding:18px}
+      .panelHead,.resultsHead,.resultsBody,.resultsTop,.toolbar,.panelBody{padding-left:14px;padding-right:14px}
+      .statsCard{grid-template-columns:1fr 1fr;padding:14px}
+      .kpi{min-height:auto}
+      .toastWrap{left:12px;right:12px}
+      .toast{min-width:0;max-width:none}
+    }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="topbar">
-      <div class="brandRow">
-        <div class="brand">
-          <div class="mark" aria-hidden="true"></div>
-          <div style="min-width:0">
-            <h1>Pedidos Toyo MX</h1>
-            <div class="sub" id="subtitle">Cargando clientes…</div>
+  <div class="toastWrap" id="toastWrap"></div>
+
+  <div class="page">
+    <header class="topbar">
+      <div class="topbarInner">
+        <div class="brandWrap">
+          <div class="brandMark" aria-hidden="true"></div>
+          <div>
+            <div class="eyebrow">Portal interno · Toyo Foods México</div>
+            <h1 class="title">Portal de Pedidos</h1>
+            <p class="subtitle" id="subtitle">Cargando información de clientes y directorio comercial…</p>
           </div>
         </div>
-        <div class="pill" id="pill">Portal</div>
+        <div class="statusPill" id="pill"><span class="dot"></span><span>Inicializando</span></div>
       </div>
-    </div>
+    </header>
 
-    <div class="grid">
-      <div class="card">
-        <div class="hd"><div class="title">Búsqueda y filtros</div></div>
-        <div class="bd">
-          <label>Buscar cliente (nombre o código)</label>
-          <div class="row">
-            <input id="q" placeholder="Ej. GENKI o C020980" autocomplete="off" />
-            <button class="btn" id="btnClear" type="button">Limpiar</button>
+    <section class="hero">
+      <div class="heroCard">
+        <div class="eyebrow">Acceso corporativo</div>
+        <h2 style="margin:0;font-size:24px;line-height:1.1;color:var(--brand-2)">Consulta clientes, localiza formatos y accede más rápido a cada pedido.</h2>
+        <p style="margin:12px 0 0;color:var(--muted);font-size:14px;line-height:1.65;max-width:780px">
+          Versión renovada con enfoque ejecutivo: mejor lectura, controles más claros, experiencia optimizada para oficina y una navegación más ordenada en móvil.
+        </p>
+        <div class="statusBar">
+          <span id="statusText">Preparando datos del portal…</span>
+          <span id="lastUpdate">Sincronización pendiente</span>
+        </div>
+      </div>
+
+      <div class="statsCard">
+        <div class="kpi">
+          <div class="kpiLabel">Clientes</div>
+          <div class="kpiValue" id="kpiClients">—</div>
+          <div class="kpiSub">Base disponible</div>
+        </div>
+        <div class="kpi">
+          <div class="kpiLabel">Vendedores</div>
+          <div class="kpiValue" id="kpiVendors">—</div>
+          <div class="kpiSub">Directorio cargado</div>
+        </div>
+        <div class="kpi">
+          <div class="kpiLabel">Recientes</div>
+          <div class="kpiValue" id="kpiRecents">0</div>
+          <div class="kpiSub">Accesos guardados</div>
+        </div>
+        <div class="kpi">
+          <div class="kpiLabel">Vista</div>
+          <div class="kpiValue" id="kpiMode">Lista</div>
+          <div class="kpiSub">Densidad actual</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="layout">
+      <aside class="panel">
+        <div class="panelHead">
+          <div class="panelTitle">Panel de consulta</div>
+        </div>
+        <div class="panelBody">
+          <div class="field">
+            <label class="label" for="q">Buscar cliente</label>
+            <div class="inputWrap">
+              <span class="searchIcon">🔎</span>
+              <input id="q" type="text" placeholder="Nombre del cliente o código" autocomplete="off" />
+            </div>
           </div>
 
-          <div style="height:12px"></div>
-
-          <label>Vendedor</label>
-          <select id="vendorFilter"><option value="ALL">Todos</option></select>
-
-          <div class="row" style="margin-top:12px">
-            <button class="btn ghost" id="btnCopyBase" type="button">Copiar link</button>
-            <button class="btn" id="btnCompact" type="button">Vista compacta</button>
+          <div class="field">
+            <label class="label" for="vendorFilter">Vendedor</label>
+            <select id="vendorFilter">
+              <option value="ALL">Todos</option>
+            </select>
           </div>
 
-          <div class="hint" style="margin-top:10px">
-            Tip: si actualizas y no se refleja, abre con <b>?v=2</b> (o en incógnito).
+          <div class="btnGrid" style="margin-bottom:10px">
+            <button class="btn ghost" id="btnClear" type="button">Limpiar</button>
+            <button class="btn soft" id="btnCompact" type="button">Vista compacta</button>
           </div>
 
-          <details id="diag">
-            <summary>Diagnóstico</summary>
+          <div class="btnRow" style="margin-bottom:12px">
+            <button class="btn primary" id="btnCopyBase" type="button">Copiar enlace base</button>
+          </div>
+
+          <div class="miniMeta">
+            Usa la búsqueda por nombre o código, filtra por vendedor y comparte enlaces rápidos con el equipo comercial.
+          </div>
+
+          <details id="diag" style="margin-top:14px">
+            <summary>Diagnóstico técnico</summary>
             <pre id="diagText">—</pre>
           </details>
         </div>
-      </div>
+      </aside>
 
-      <div class="card">
-        <div class="hd">
-          <div class="title" id="viewTitle">Resultados</div>
+      <section class="resultsCard">
+        <div class="resultsHead">
+          <div class="resultsTitle" id="viewTitle">Clientes disponibles</div>
           <div class="tabs">
             <button class="tab active" id="tabSearch" type="button">Buscar</button>
             <button class="tab" id="tabRecent" type="button">Recientes</button>
             <button class="tab" id="tabVendors" type="button">Vendedores</button>
           </div>
         </div>
-        <div class="bd">
-          <div class="hint" id="scope">Mostrando: todos</div>
 
-          <div class="pager" id="pager">
-            <div class="row" style="gap:8px">
-              <button class="btn" id="btnPrev" type="button">Anterior</button>
-              <button class="btn" id="btnNext" type="button">Siguiente</button>
-            </div>
-            <div class="hint" id="pageInfo">Página 1</div>
-            <div class="row" style="gap:8px">
-              <label style="margin:0;font-weight:900;color:#0b3c91;font-size:12px">Por página</label>
-              <select id="pageSize" style="width:auto;min-width:110px;padding:10px 10px;border-radius:12px;font-size:13px">
-                <option value="50">50</option>
-                <option value="100" selected>100</option>
-                <option value="200">200</option>
-              </select>
-            </div>
+        <div class="resultsTop">
+          <div class="scope" id="scope">Mostrando: todos</div>
+          <div class="scope" id="resultCount">0 resultados</div>
+        </div>
+
+        <div class="toolbar" id="toolbar">
+          <div class="pager">
+            <button class="btn ghost" id="btnPrev" type="button">Anterior</button>
+            <button class="btn ghost" id="btnNext" type="button">Siguiente</button>
+            <span class="pageInfo" id="pageInfo">Página 1 de 1</span>
+          </div>
+          <div class="pageSizeWrap">
+            <span>Registros por página</span>
+            <select id="pageSize">
+              <option value="50">50</option>
+              <option value="100" selected>100</option>
+              <option value="200">200</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="resultsBody">
+          <div class="desktopTableWrap" id="desktopTableWrap">
+            <table class="desktopTable">
+              <thead>
+                <tr>
+                  <th style="width:150px">Código</th>
+                  <th>Cliente</th>
+                  <th style="width:220px">Vendedor</th>
+                  <th style="width:230px;text-align:right">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody"></tbody>
+            </table>
           </div>
 
-          <div class="list" id="list" style="margin-top:10px"></div>
-          <div class="empty" id="empty" style="display:none">Sin resultados.</div>
+          <div class="cards" id="cards"></div>
+          <div class="vendorList" id="vendorList" style="display:none"></div>
+          <div class="empty" id="empty">Sin resultados.</div>
         </div>
-      </div>
-    </div>
+      </section>
+    </section>
   </div>
 
   <div class="bottombar">
     <div class="bnav">
       <button class="btab active" id="bSearch" type="button"><span class="ico">🔎</span><span>Buscar</span></button>
       <button class="btab" id="bRecent" type="button"><span class="ico">🕘</span><span>Recientes</span></button>
-      <button class="btab" id="bVendors" type="button"><span class="ico">🧑‍💼</span><span>Vendedores</span></button>
+      <button class="btab" id="bVendors" type="button"><span class="ico">👔</span><span>Vendedores</span></button>
     </div>
   </div>
 
 <script>
 (() => {
-  const $ = (q)=>document.querySelector(q);
+  const $ = (q) => document.querySelector(q);
+  const esc = (s) => (s ?? "").toString()
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+  const norm = (s) => (s || "").toString().trim().toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+  const loadJSON = (key, fallback) => {
+    try { return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback)); }
+    catch { return fallback; }
+  };
+
+  const saveJSON = (key, value) => localStorage.setItem(key, JSON.stringify(value));
+  const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
+
+  const LS_REC = "toyo_index_recent_v4";
+  const LS_COMPACT = "toyo_index_compact_v4";
 
   const subtitle = $("#subtitle");
   const pill = $("#pill");
+  const statusText = $("#statusText");
+  const lastUpdate = $("#lastUpdate");
   const q = $("#q");
   const vendorFilter = $("#vendorFilter");
   const btnClear = $("#btnClear");
   const btnCompact = $("#btnCompact");
   const btnCopyBase = $("#btnCopyBase");
-
   const tabSearch = $("#tabSearch");
   const tabRecent = $("#tabRecent");
   const tabVendors = $("#tabVendors");
-
   const bSearch = $("#bSearch");
   const bRecent = $("#bRecent");
   const bVendors = $("#bVendors");
-
   const viewTitle = $("#viewTitle");
   const scope = $("#scope");
-  const list = $("#list");
-  const empty = $("#empty");
-
-  const pager = $("#pager");
+  const resultCount = $("#resultCount");
+  const toolbar = $("#toolbar");
   const btnPrev = $("#btnPrev");
   const btnNext = $("#btnNext");
   const pageInfo = $("#pageInfo");
   const pageSizeSel = $("#pageSize");
-
+  const tableBody = $("#tableBody");
+  const cards = $("#cards");
+  const vendorList = $("#vendorList");
+  const empty = $("#empty");
   const diag = $("#diag");
   const diagText = $("#diagText");
-
-  const LS_REC = "toyo_index_recent_v3";
-  const LS_COMPACT = "toyo_index_compact_v3";
+  const kpiClients = $("#kpiClients");
+  const kpiVendors = $("#kpiVendors");
+  const kpiRecents = $("#kpiRecents");
+  const kpiMode = $("#kpiMode");
+  const toastWrap = $("#toastWrap");
 
   let ALL = [];
   let VENDORS = [];
   let MODE = "search"; // search | recent | vendors
   let ACTIVE_VENDOR = "ALL";
-  let compact = (localStorage.getItem(LS_COMPACT) === "1");
-
   let PAGE = 1;
   let PAGE_SIZE = 100;
   let LAST_TOTAL = 0;
+  let compact = localStorage.getItem(LS_COMPACT) === "1";
+  let searchTimer = null;
 
-  function esc(s){
-    return (s ?? "").toString()
-      .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
-      .replaceAll('"',"&quot;").replaceAll("'","&#039;");
+  function showToast(message) {
+    const el = document.createElement("div");
+    el.className = "toast";
+    el.textContent = message;
+    toastWrap.appendChild(el);
+    setTimeout(() => {
+      el.style.opacity = "0";
+      el.style.transform = "translateY(-8px)";
+      el.style.transition = "all .18s ease";
+    }, 1700);
+    setTimeout(() => el.remove(), 2100);
   }
-  function norm(s){
-    return (s||"").toString().trim().toLowerCase()
-      .normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+
+  function setDiag(data) {
+    diagText.textContent = typeof data === "string" ? data : JSON.stringify(data, null, 2);
   }
-  function loadJSON(key, fallback){
-    try{ return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback)); }
-    catch(e){ return fallback; }
+
+  function setPortalStatus(text, mode = "ok") {
+    const labels = {
+      ok: { dot: "#16A34A", text: "En línea" },
+      loading: { dot: "#D97706", text: "Cargando" },
+      error: { dot: "#DC2626", text: "Error" }
+    };
+    const info = labels[mode] || labels.ok;
+    pill.innerHTML = `<span class="dot" style="background:${info.dot};box-shadow:0 0 0 3px ${mode === 'error' ? 'rgba(220,38,38,.12)' : mode === 'loading' ? 'rgba(217,119,6,.12)' : 'rgba(22,163,74,.12)'}"></span><span>${info.text}</span>`;
+    statusText.textContent = text;
   }
-  function saveJSON(key, obj){
-    localStorage.setItem(key, JSON.stringify(obj));
+
+  function updateLastSync() {
+    const now = new Date();
+    lastUpdate.textContent = `Última sincronización: ${now.toLocaleDateString('es-MX')} ${now.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' })}`;
   }
-  function pushRecent(path){
+
+  function pushRecent(path) {
     let rec = loadJSON(LS_REC, []);
     rec.unshift(path);
     rec = [...new Set(rec)].slice(0, 30);
     saveJSON(LS_REC, rec);
+    updateRecentsKpi();
   }
-  function setDiag(obj){
-    diagText.textContent = (typeof obj === "string") ? obj : JSON.stringify(obj, null, 2);
-  }
-  function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
-  function resetPage(){ PAGE = 1; }
-  function setPager(total){
-    LAST_TOTAL = total || 0;
-    const totalPages = Math.max(1, Math.ceil(LAST_TOTAL / PAGE_SIZE));
-    PAGE = clamp(PAGE, 1, totalPages);
 
-    if(pager){
-      const shouldShow = (MODE !== "vendors") && (LAST_TOTAL > 0);
-      pager.style.display = shouldShow ? "flex" : "none";
-    }
-    if(pageInfo){
-      pageInfo.textContent = `Página ${PAGE} de ${Math.max(1, Math.ceil(LAST_TOTAL / PAGE_SIZE))}`;
-    }
-    if(btnPrev) btnPrev.disabled = (PAGE <= 1);
-    if(btnNext) btnNext.disabled = (PAGE >= totalPages);
+  function updateRecentsKpi() {
+    kpiRecents.textContent = loadJSON(LS_REC, []).length;
   }
-  function getPageSlice(arr){
+
+  function setCompact(on) {
+    compact = !!on;
+    document.body.classList.toggle("compact", compact);
+    localStorage.setItem(LS_COMPACT, compact ? "1" : "0");
+    btnCompact.textContent = compact ? "Vista amplia" : "Vista compacta";
+    kpiMode.textContent = compact ? "Compacta" : "Lista";
+  }
+
+  function resetPage() { PAGE = 1; }
+
+  function setPager(total) {
+    LAST_TOTAL = total || 0;
+    const pages = Math.max(1, Math.ceil(LAST_TOTAL / PAGE_SIZE));
+    PAGE = clamp(PAGE, 1, pages);
+    pageInfo.textContent = `Página ${PAGE} de ${pages}`;
+    btnPrev.disabled = PAGE <= 1;
+    btnNext.disabled = PAGE >= pages;
+  }
+
+  function getPageSlice(arr) {
     const start = (PAGE - 1) * PAGE_SIZE;
     return arr.slice(start, start + PAGE_SIZE);
   }
 
-  function setCompact(on){
-    compact = !!on;
-    localStorage.setItem(LS_COMPACT, compact ? "1" : "0");
-    document.body.classList.toggle("compact", compact);
-  }
-
-  function setActiveTab(which){
+  function setActiveTab(which) {
     MODE = which;
-    const active = (el, on)=>el.classList.toggle("active", on);
-    active(tabSearch, MODE==="search");
-    active(tabRecent, MODE==="recent");
-    active(tabVendors, MODE==="vendors");
-    active(bSearch, MODE==="search");
-    active(bRecent, MODE==="recent");
-    active(bVendors, MODE==="vendors");
+    const mark = (el, on) => el.classList.toggle("active", on);
+    mark(tabSearch, MODE === "search");
+    mark(tabRecent, MODE === "recent");
+    mark(tabVendors, MODE === "vendors");
+    mark(bSearch, MODE === "search");
+    mark(bRecent, MODE === "recent");
+    mark(bVendors, MODE === "vendors");
 
-    viewTitle.textContent = MODE==="search" ? "Resultados" : (MODE==="recent" ? "Recientes" : "Vendedores");
+    viewTitle.textContent = MODE === "search"
+      ? "Clientes disponibles"
+      : MODE === "recent"
+        ? "Accesos recientes"
+        : "Directorio comercial";
+
     resetPage();
     render();
-    window.scrollTo({top:0, behavior:"smooth"});
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  function applyQuery(list0){
-    const s = norm(q.value || "");
-    if(!s) return list0;
-    const looksCode = /^c?\d/.test(s.replace(/\s+/g,"")) || /\d{3,}/.test(s);
-    if(looksCode){
-      return list0.filter(c=> norm(c.client_code).includes(s) || norm(c.client_name).includes(s));
-    }
-    return list0.filter(c=> norm(c.client_name).includes(s) || norm(c.client_code).includes(s));
+  function applyQuery(arr) {
+    const s = norm(q.value);
+    if (!s) return arr;
+    const looksCode = /^c?\d/.test(s.replace(/\s+/g, "")) || /\d{3,}/.test(s);
+    return arr.filter(c => {
+      const code = norm(c.client_code);
+      const name = norm(c.client_name);
+      return looksCode ? (code.includes(s) || name.includes(s)) : (name.includes(s) || code.includes(s));
+    });
   }
 
-  function render(){
-    list.innerHTML = "";
+  function renderEmpty(text) {
+    tableBody.innerHTML = "";
+    cards.innerHTML = "";
+    vendorList.innerHTML = "";
+    vendorList.style.display = "none";
+    cards.style.display = window.innerWidth <= 860 ? "flex" : cards.style.display;
+    empty.style.display = "block";
+    empty.textContent = text;
+  }
+
+  function renderClientRows(rows) {
+    tableBody.innerHTML = rows.map(c => `
+      <tr>
+        <td><span class="codeBadge">${esc(c.client_code || "—")}</span></td>
+        <td>
+          <div class="clientName">${esc(c.client_name)}</div>
+          <div class="clientMeta">Formato listo para abrir o compartir</div>
+        </td>
+        <td>
+          <div class="clientName" style="font-size:14px;font-weight:700">${esc(c.vendor_label || c.vendor_folder || "—")}</div>
+          <div class="clientMeta">${esc(c.vendor_folder || "—")}</div>
+        </td>
+        <td>
+          <div class="actionRow">
+            <button class="miniBtn primary" type="button" data-act="open" data-path="${esc(c.path)}">Abrir</button>
+            <button class="miniBtn" type="button" data-act="copy" data-path="${esc(c.path)}">Copiar enlace</button>
+          </div>
+        </td>
+      </tr>
+    `).join("");
+
+    cards.innerHTML = rows.map(c => `
+      <article class="resultCard">
+        <div class="cardTop">
+          <div>
+            <h3 class="cardName">${esc(c.client_name)}</h3>
+            <div class="cardMeta">Código: ${esc(c.client_code || "—")}</div>
+            <div class="cardMeta">Vendedor: ${esc(c.vendor_label || c.vendor_folder || "—")}</div>
+          </div>
+          <span class="codeBadge">${esc(c.client_code || "—")}</span>
+        </div>
+        <div class="cardActions">
+          <button class="miniBtn primary" type="button" data-act="open" data-path="${esc(c.path)}">Abrir</button>
+          <button class="miniBtn" type="button" data-act="copy" data-path="${esc(c.path)}">Copiar enlace</button>
+        </div>
+      </article>
+    `).join("");
+  }
+
+  function renderVendors() {
+    tableBody.innerHTML = "";
+    cards.innerHTML = "";
+    vendorList.innerHTML = "";
     empty.style.display = "none";
+    vendorList.style.display = "grid";
+    toolbar.style.display = "none";
 
-    if(!ALL.length){
-      setPager(0);
-      empty.style.display = "block";
-      empty.textContent = "Sin datos (no se cargó clients.json).";
+    if (!VENDORS.length) {
+      renderEmpty("No hay vendedores disponibles.");
       return;
     }
 
-    const vendorLabel = ACTIVE_VENDOR==="ALL" ? "todos" : (VENDORS.find(v=>v.folder===ACTIVE_VENDOR)?.label || ACTIVE_VENDOR);
+    resultCount.textContent = `${VENDORS.length} vendedores`;
+    scope.textContent = "Selecciona un vendedor para ver sus clientes";
 
-    if(MODE === "vendors"){
-      scope.textContent = "Selecciona un vendedor";
-      setPager(0);
-      if(pager) pager.style.display = "none";
-      renderVendors();
-      return;
-    }
-
-    if(MODE === "recent"){
-      scope.textContent = "Últimos abiertos";
-      renderRecent();
-      return;
-    }
-
-    scope.textContent = `Mostrando: ${vendorLabel}`;
-    renderSearch();
-  }
-
-  function renderVendors(){
-    list.innerHTML = "";
-    if(!VENDORS.length){
-      empty.style.display = "block";
-      empty.textContent = "No hay vendedores.";
-      return;
-    }
-    VENDORS.forEach(v=>{
-      const el = document.createElement("div");
-      el.className = "item";
+    VENDORS.forEach(v => {
+      const el = document.createElement("article");
+      el.className = "vendorCard";
       el.innerHTML = `
-        <div class="left">
-          <p class="name">${esc(v.label)}</p>
-          <div class="meta">${esc(v.folder)} · ${v.count} cliente(s)</div>
-        </div>
-        <div class="actions">
-          <button class="mini open" type="button">Ver clientes</button>
-        </div>
+        <h3>${esc(v.label)}</h3>
+        <p>${esc(v.folder)} · ${v.count} cliente(s)</p>
+        <button class="btn soft" type="button">Ver clientes</button>
       `;
-      el.querySelector("button").addEventListener("click", ()=>{
+      el.querySelector("button").addEventListener("click", () => {
         ACTIVE_VENDOR = v.folder;
         vendorFilter.value = v.folder;
         setActiveTab("search");
         q.value = "";
-        render();
       });
-      list.appendChild(el);
+      vendorList.appendChild(el);
     });
   }
 
-  function renderRecent(){
+  function renderRecent() {
+    toolbar.style.display = "flex";
+    vendorList.style.display = "none";
+
     const rec = loadJSON(LS_REC, []);
-    const pos = new Map(rec.map((p,i)=>[p,i]));
-    let base = ALL.filter(c=>pos.has(c.path)).sort((a,b)=>pos.get(a.path)-pos.get(b.path));
-    if(ACTIVE_VENDOR !== "ALL"){
-      base = base.filter(c=>c.vendor_folder === ACTIVE_VENDOR);
-    }
-    if(!base.length){
+    const pos = new Map(rec.map((p, i) => [p, i]));
+    let base = ALL.filter(c => pos.has(c.path)).sort((a, b) => pos.get(a.path) - pos.get(b.path));
+    if (ACTIVE_VENDOR !== "ALL") base = base.filter(c => c.vendor_folder === ACTIVE_VENDOR);
+
+    if (!base.length) {
+      resultCount.textContent = "0 resultados";
+      scope.textContent = "Últimos accesos";
       setPager(0);
-      empty.style.display = "block";
-      empty.textContent = "Aún no hay recientes. Abre un cliente desde Buscar.";
+      renderEmpty("Aún no hay accesos recientes. Abre un cliente desde la pestaña Buscar.");
       return;
     }
+
+    const rows = getPageSlice(base);
     setPager(base.length);
-    renderClientList(getPageSlice(base), base.length);
+    resultCount.textContent = `${base.length} resultado(s)`;
+    scope.textContent = ACTIVE_VENDOR === "ALL" ? "Últimos accesos" : `Últimos accesos · ${VENDORS.find(v => v.folder === ACTIVE_VENDOR)?.label || ACTIVE_VENDOR}`;
+    empty.style.display = "none";
+    renderClientRows(rows);
   }
 
-  function renderSearch(){
+  function renderSearch() {
+    toolbar.style.display = "flex";
+    vendorList.style.display = "none";
+
     let base = ALL.slice();
-    if(ACTIVE_VENDOR !== "ALL"){
-      base = base.filter(c=>c.vendor_folder === ACTIVE_VENDOR);
-    }
+    if (ACTIVE_VENDOR !== "ALL") base = base.filter(c => c.vendor_folder === ACTIVE_VENDOR);
     base = applyQuery(base);
-    base.sort((a,b)=> (a.client_name||"").localeCompare((b.client_name||""), "es"));
-    if(!base.length){
+    base.sort((a, b) => (a.client_name || "").localeCompare((b.client_name || ""), "es"));
+
+    if (!base.length) {
+      resultCount.textContent = "0 resultados";
+      scope.textContent = ACTIVE_VENDOR === "ALL" ? "Mostrando: todos" : `Mostrando: ${VENDORS.find(v => v.folder === ACTIVE_VENDOR)?.label || ACTIVE_VENDOR}`;
       setPager(0);
-      empty.style.display = "block";
-      empty.textContent = "Sin resultados.";
+      renderEmpty("Sin resultados para la búsqueda actual.");
       return;
     }
+
+    const rows = getPageSlice(base);
     setPager(base.length);
-    renderClientList(getPageSlice(base), base.length);
+    resultCount.textContent = `${base.length} resultado(s)`;
+    scope.textContent = ACTIVE_VENDOR === "ALL" ? "Mostrando: todos" : `Mostrando: ${VENDORS.find(v => v.folder === ACTIVE_VENDOR)?.label || ACTIVE_VENDOR}`;
+    empty.style.display = "none";
+    renderClientRows(rows);
   }
 
-  function renderClientList(rows, totalLen){
-    list.innerHTML = "";
-    rows.forEach(c=>{
-      const el = document.createElement("div");
-      el.className = "item";
-      el.innerHTML = `
-        <div class="left">
-          <p class="name" title="${esc(c.client_name)}">${esc(c.client_name)}</p>
-          <div class="meta">${esc(c.client_code || "—")} · ${esc(c.vendor_label || c.vendor_folder)}</div>
-        </div>
-        <div class="actions">
-          <button class="mini open" type="button">Abrir</button>
-          <button class="mini" type="button">Copiar link</button>
-        </div>
-      `;
-      const [openBtn, copyBtn] = el.querySelectorAll("button");
-      openBtn.addEventListener("click", ()=>{
-        pushRecent(c.path);
-        window.open(c.path, "_blank");
-      });
-      copyBtn.addEventListener("click", async ()=>{
-        const full = new URL(c.path, window.location.href).href;
-        try{
-          await navigator.clipboard.writeText(full);
-        }catch(e){
-          const ta = document.createElement("textarea");
-          ta.value = full;
-          document.body.appendChild(ta);
-          ta.select();
-          document.execCommand("copy");
-          ta.remove();
-        }
-      });
-      list.appendChild(el);
-    });
-    if(totalLen > rows.length){
-      const msg = document.createElement("div");
-      msg.className = "empty";
-      msg.textContent = `Total: ${totalLen}. Usa Anterior / Siguiente para navegar.`;
-      list.appendChild(msg);
+  function render() {
+    empty.style.display = "none";
+    tableBody.innerHTML = "";
+    cards.innerHTML = "";
+    vendorList.innerHTML = "";
+    vendorList.style.display = "none";
+
+    if (!ALL.length) {
+      toolbar.style.display = "none";
+      renderEmpty("Sin datos. No se pudo cargar el archivo de clientes.");
+      return;
+    }
+
+    if (MODE === "vendors") {
+      renderVendors();
+      return;
+    }
+    if (MODE === "recent") {
+      renderRecent();
+      return;
+    }
+    renderSearch();
+  }
+
+  async function copyText(value, successMessage) {
+    try {
+      await navigator.clipboard.writeText(value);
+      showToast(successMessage || "Enlace copiado");
+    } catch {
+      const ta = document.createElement("textarea");
+      ta.value = value;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      ta.remove();
+      showToast(successMessage || "Enlace copiado");
     }
   }
 
-  async function fetchFirstOk(urls){
-    for(const u of urls){
-      try{
-        const res = await fetch(u + (u.includes("?") ? "&" : "?") + "v=" + Date.now(), {cache:"no-store"});
-        if(!res.ok) { continue; }
+  async function fetchFirstOk(urls) {
+    for (const url of urls) {
+      try {
+        const glue = url.includes("?") ? "&" : "?";
+        const res = await fetch(url + glue + "v=" + Date.now(), { cache: "no-store" });
+        if (!res.ok) continue;
         const text = await res.text();
-        try{ return {url:u, data: JSON.parse(text)}; } catch(e){ continue; }
-      }catch(e){}
+        return { url, data: JSON.parse(text) };
+      } catch {}
     }
     return null;
   }
 
-  function getParam(name){
+  function getParam(name) {
     const u = new URL(window.location.href);
     return u.searchParams.get(name);
   }
 
-  async function loadClients(){
-    // Allow override: ?clients=clients_historial_oct_marzo.json
+  async function loadClients() {
+    setPortalStatus("Cargando base de clientes…", "loading");
+
     const override = getParam("clients");
     const candidates = override ? [override] : [
       "clients.json",
       "clients_historial_oct_marzo.json",
-      "clients_historial_oct_marzo.json",
-      "clients_historial_oct_marzo.json".toLowerCase()
+      "Clients.json"
     ];
 
     const result = await fetchFirstOk(candidates);
-    if(!result){
-      subtitle.textContent = "No se pudo cargar clients.json";
-      pill.textContent = "Error";
-      diag.open = True;
-      setDiag({status:"fatal", error:"No se pudo cargar clients.json (404).", ayuda:"Sube clients.json a la RAÍZ del repo (mismo nivel que index.html) y en minúsculas."});
-      empty.style.display = "block";
-      empty.textContent = "No se pudo cargar clients.json. Revisa Diagnóstico.";
+    if (!result) {
+      subtitle.textContent = "No se pudo cargar el archivo de clientes. Revisa la ruta y la ubicación del JSON.";
+      setPortalStatus("Error al cargar la base de clientes.", "error");
+      diag.open = true;
+      setDiag({
+        status: "fatal",
+        error: "No se pudo cargar clients.json",
+        ayuda: "Sube el archivo a la raíz del repositorio, al mismo nivel que index.html."
+      });
+      renderEmpty("No se pudo cargar el archivo de clientes. Revisa el diagnóstico técnico.");
       return;
     }
 
-    let data = result.data;
-    const arr = Array.isArray(data) ? data : (Array.isArray(data.clients) ? data.clients : []);
+    const raw = result.data;
+    const arr = Array.isArray(raw) ? raw : (Array.isArray(raw.clients) ? raw.clients : []);
 
-    ALL = arr.map(x=>{
+    ALL = arr.map(x => {
       const vendor_folder = (x.vendor_folder || x.seller || "").toString().trim();
-      const vendor_label  = (x.vendor_label || x.vendor_name || x.seller_name || vendor_folder).toString().trim();
-      const client_name   = (x.client_name || x.client || "").toString().trim();
-      const client_code   = (x.client_code || x.code || "").toString().trim();
+      const vendor_label = (x.vendor_label || x.vendor_name || x.seller_name || vendor_folder).toString().trim();
+      const client_name = (x.client_name || x.client || "").toString().trim();
+      const client_code = (x.client_code || x.code || "").toString().trim();
       let path = (x.path || "").toString().trim();
-      if(!path){
+      if (!path) {
         const file = (x.file || "").toString().trim();
-        if(vendor_folder && file) path = vendor_folder + "/" + file;
+        if (vendor_folder && file) path = `${vendor_folder}/${file}`;
       }
-      return {vendor_folder, vendor_label, client_name, client_code, path};
-    }).filter(x=>x.vendor_folder && x.path && x.client_name);
+      return { vendor_folder, vendor_label, client_name, client_code, path };
+    }).filter(x => x.vendor_folder && x.client_name && x.path);
 
     const map = new Map();
-    ALL.forEach(c=>{
-      if(!map.has(c.vendor_folder)){
-        map.set(c.vendor_folder, {folder:c.vendor_folder, label:c.vendor_label || c.vendor_folder, count:0});
+    ALL.forEach(c => {
+      if (!map.has(c.vendor_folder)) {
+        map.set(c.vendor_folder, {
+          folder: c.vendor_folder,
+          label: c.vendor_label || c.vendor_folder,
+          count: 0
+        });
       }
       map.get(c.vendor_folder).count++;
     });
-    VENDORS = [...map.values()].sort((a,b)=>a.label.localeCompare(b.label, "es"));
 
-    subtitle.textContent = `${VENDORS.length} vendedor(es) · ${ALL.length} cliente(s)`;
-    pill.textContent = "OK";
+    VENDORS = [...map.values()].sort((a, b) => a.label.localeCompare(b.label, "es"));
 
-    vendorFilter.innerHTML = `<option value="ALL">Todos</option>` + VENDORS.map(v=>`<option value="${esc(v.folder)}">${esc(v.label)} (${v.count})</option>`).join("");
-    vendorFilter.value = "ALL";
-    ACTIVE_VENDOR = "ALL";
+    subtitle.textContent = `${ALL.length.toLocaleString('es-MX')} clientes disponibles en ${VENDORS.length.toLocaleString('es-MX')} vendedor(es).`;
+    setPortalStatus("Portal cargado correctamente.", "ok");
+    updateLastSync();
 
-    setDiag({status:"ok", fuente: result.url, total_clients: ALL.length, total_vendors: VENDORS.length, ejemplo: ALL[0]});
-    diag.open = false;
+    kpiClients.textContent = ALL.length.toLocaleString('es-MX');
+    kpiVendors.textContent = VENDORS.length.toLocaleString('es-MX');
+    updateRecentsKpi();
+
+    vendorFilter.innerHTML = `<option value="ALL">Todos</option>` + VENDORS.map(v => `<option value="${esc(v.folder)}">${esc(v.label)} (${v.count})</option>`).join("");
+    vendorFilter.value = ACTIVE_VENDOR;
+
+    setDiag({
+      status: "ok",
+      source: result.url,
+      total_clients: ALL.length,
+      total_vendors: VENDORS.length,
+      sample: ALL[0] || null
+    });
 
     render();
   }
 
-  // Events
-  let t;
-  q.addEventListener("input", ()=>{
-    if(MODE !== "search") setActiveTab("search");
-    resetPage();
-    clearTimeout(t);
-    t = setTimeout(()=>render(), 120);
+  function openClient(path) {
+    pushRecent(path);
+    window.open(path, "_blank");
+  }
+
+  async function copyClientPath(path) {
+    const full = new URL(path, window.location.href).href;
+    await copyText(full, "Enlace del cliente copiado");
+  }
+
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-act]");
+    if (!btn) return;
+    const act = btn.getAttribute("data-act");
+    const path = btn.getAttribute("data-path") || "";
+    if (!path) return;
+    if (act === "open") openClient(path);
+    if (act === "copy") copyClientPath(path);
   });
 
-  btnClear.addEventListener("click", ()=>{
+  q.addEventListener("input", () => {
+    if (MODE !== "search") setActiveTab("search");
+    resetPage();
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(render, 120);
+  });
+
+  vendorFilter.addEventListener("change", () => {
+    ACTIVE_VENDOR = vendorFilter.value || "ALL";
+    if (MODE === "vendors") setActiveTab("search");
+    resetPage();
+    render();
+  });
+
+  btnClear.addEventListener("click", () => {
     q.value = "";
-    if(MODE !== "search") setActiveTab("search");
+    ACTIVE_VENDOR = "ALL";
+    vendorFilter.value = "ALL";
+    if (MODE !== "search") setActiveTab("search");
     resetPage();
     render();
     q.focus();
   });
 
-  vendorFilter.addEventListener("change", ()=>{
-    ACTIVE_VENDOR = vendorFilter.value || "ALL";
+  btnCompact.addEventListener("click", () => setCompact(!compact));
+
+  btnCopyBase.addEventListener("click", async () => {
+    const base = window.location.href.split("?")[0].replace(/index\.html$/i, "");
+    await copyText(base, "Enlace base copiado");
+  });
+
+  tabSearch.addEventListener("click", () => setActiveTab("search"));
+  tabRecent.addEventListener("click", () => setActiveTab("recent"));
+  tabVendors.addEventListener("click", () => setActiveTab("vendors"));
+  bSearch.addEventListener("click", () => setActiveTab("search"));
+  bRecent.addEventListener("click", () => setActiveTab("recent"));
+  bVendors.addEventListener("click", () => setActiveTab("vendors"));
+
+  pageSizeSel.value = String(PAGE_SIZE);
+  pageSizeSel.addEventListener("change", () => {
+    const v = parseInt(pageSizeSel.value || "100", 10);
+    PAGE_SIZE = Number.isFinite(v) ? v : 100;
     resetPage();
-    if(MODE === "vendors") setActiveTab("search");
     render();
   });
 
-  btnCompact.addEventListener("click", ()=>setCompact(!compact));
-
-  btnCopyBase.addEventListener("click", async ()=>{
-    const base = window.location.href.split("?")[0].replace(/index\.html$/i,"");
-    try{ await navigator.clipboard.writeText(base); }catch(e){}
+  btnPrev.addEventListener("click", () => {
+    PAGE = Math.max(1, PAGE - 1);
+    render();
   });
 
-  tabSearch.addEventListener("click", ()=>setActiveTab("search"));
-  tabRecent.addEventListener("click", ()=>setActiveTab("recent"));
-  tabVendors.addEventListener("click", ()=>setActiveTab("vendors"));
-  bSearch.addEventListener("click", ()=>setActiveTab("search"));
-  bRecent.addEventListener("click", ()=>setActiveTab("recent"));
-  bVendors.addEventListener("click", ()=>setActiveTab("vendors"));
+  btnNext.addEventListener("click", () => {
+    PAGE += 1;
+    render();
+  });
 
-  if(pageSizeSel){
-    pageSizeSel.value = String(PAGE_SIZE);
-    pageSizeSel.addEventListener("change", ()=>{
-      const v = parseInt(pageSizeSel.value || "100", 10);
-      PAGE_SIZE = isNaN(v) ? 100 : v;
-      resetPage();
-      render();
-    });
-  }
-  if(btnPrev) btnPrev.addEventListener("click", ()=>{ PAGE = Math.max(1, PAGE-1); render(); });
-  if(btnNext) btnNext.addEventListener("click", ()=>{ PAGE = PAGE + 1; render(); });
+  window.addEventListener("resize", () => {
+    if (MODE !== "vendors") render();
+  });
 
-  // Init
   setCompact(compact);
+  updateRecentsKpi();
   loadClients();
 })();
 </script>
