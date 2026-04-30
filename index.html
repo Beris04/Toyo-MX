@@ -4,206 +4,302 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Portal de Pedidos | Toyo Foods</title>
-  <meta name="theme-color" content="#123B7A" />
+  <meta name="theme-color" content="#0f172a" />
   <style>
     :root{
-      --brand:#123B7A;
-      --brand-2:#0E2E60;
-      --brand-soft:#EAF1FB;
-      --bg:#F5F7FA;
-      --card:#FFFFFF;
-      --line:#D9E1EC;
-      --line-2:#E8EDF4;
-      --text:#122033;
-      --muted:#617086;
-      --success:#177245;
-      --warning:#A16207;
+      --bg:#F3F6FA;
+      --surface:#FFFFFF;
+      --surface-2:#FBFCFE;
+      --surface-3:#F8FAFC;
+      --surface-4:#F1F5F9;
+      --ink:#0F172A;
+      --ink-2:#1E293B;
+      --muted:#64748B;
+      --line:#D9E2EC;
+      --line-2:#E5EBF2;
+      --line-3:#EEF3F7;
+      --brand:#0B3A75;
+      --brand-2:#0F4C9A;
+      --brand-soft:#EAF2FF;
+      --success:#0F9D58;
+      --warning:#B45309;
       --danger:#B42318;
-      --shadow:0 12px 30px rgba(16, 24, 40, .08);
-      --shadow-soft:0 4px 14px rgba(16, 24, 40, .05);
-      --radius:12px;
-      --radius-lg:16px;
-      --safe-b: env(safe-area-inset-bottom, 0px);
+      --shadow:0 14px 32px rgba(15, 23, 42, .07);
+      --shadow-soft:0 4px 14px rgba(15, 23, 42, .05);
+      --radius:14px;
+      --radius-sm:10px;
+      --radius-lg:18px;
+      --max:1440px;
       --safe-t: env(safe-area-inset-top, 0px);
-      --max:1280px;
+      --safe-b: env(safe-area-inset-bottom, 0px);
     }
 
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
     body{
       margin:0;
-      font-family:Inter, "Segoe UI", Roboto, Arial, sans-serif;
-      background:linear-gradient(180deg,#F8FAFC 0%, #F3F6F9 100%);
-      color:var(--text);
-      padding-bottom:calc(86px + var(--safe-b));
+      font-family:Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(15,76,154,.08), transparent 20%),
+        linear-gradient(180deg,#F7F9FC 0%, #F3F6FA 100%);
+      color:var(--ink);
+      padding-bottom:calc(90px + var(--safe-b));
     }
-
     button,input,select{font:inherit}
-    a{color:inherit;text-decoration:none}
+    a{text-decoration:none;color:inherit}
+
+    .shellBar{
+      position:sticky;
+      top:0;
+      z-index:80;
+      background:rgba(10, 17, 30, .88);
+      backdrop-filter:blur(12px);
+      border-bottom:1px solid rgba(255,255,255,.07);
+      color:#E5EDF7;
+    }
+    .shellInner{
+      max-width:var(--max);
+      margin:0 auto;
+      padding:calc(12px + var(--safe-t)) 20px 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      flex-wrap:wrap;
+    }
+    .shellLeft,.shellRight{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .shellBadge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      min-height:34px;
+      padding:0 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.04);
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:.01em;
+    }
+    .shellDot{
+      width:8px;height:8px;border-radius:50%;
+      background:#22C55E;
+      box-shadow:0 0 0 4px rgba(34,197,94,.14);
+      flex:0 0 auto;
+    }
+    .shellLabel{
+      font-size:12px;
+      color:#B6C2D2;
+      font-weight:600;
+    }
+    .shellStat{
+      display:flex;
+      align-items:baseline;
+      gap:8px;
+      font-size:12px;
+      color:#B6C2D2;
+    }
+    .shellStat strong{
+      color:#fff;
+      font-size:13px;
+      font-weight:800;
+    }
 
     .page{
       max-width:var(--max);
       margin:0 auto;
-      padding:18px;
+      padding:22px 20px 26px;
     }
 
-    .topbar{
-      position:sticky;
-      top:0;
-      z-index:60;
-      backdrop-filter:blur(14px);
-      background:linear-gradient(180deg, rgba(248,250,252,.96) 0%, rgba(248,250,252,.90) 68%, rgba(248,250,252,.45) 100%);
-      margin:-18px -18px 18px;
-      padding:calc(16px + var(--safe-t)) 18px 14px;
-      border-bottom:1px solid rgba(18,59,122,.06);
+    .workspace{
+      display:grid;
+      grid-template-columns:minmax(300px,360px) minmax(0,1fr);
+      gap:20px;
+      align-items:start;
     }
 
-    .topbarInner{
-      max-width:var(--max);
-      margin:0 auto;
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:16px;
-      flex-wrap:wrap;
+    .leftCol,.rightCol{
+      min-width:0;
     }
 
-    .brandWrap{display:flex;align-items:flex-start;gap:14px;min-width:0}
-    .brandMark{
-      width:46px;
-      height:46px;
-      border-radius:14px;
-      background:linear-gradient(160deg, var(--brand) 0%, #2058A5 100%);
-      box-shadow:0 14px 28px rgba(18,59,122,.22);
+    .hero{
+      margin-bottom:18px;
+      padding:24px 24px 20px;
+      border-radius:22px;
+      border:1px solid var(--line-2);
+      background:
+        linear-gradient(145deg, rgba(11,58,117,.95) 0%, rgba(15,76,154,.93) 58%, rgba(19,102,194,.90) 100%);
+      color:#fff;
+      box-shadow:0 24px 44px rgba(15, 76, 154, .18);
       position:relative;
-      flex:0 0 auto;
+      overflow:hidden;
     }
-    .brandMark::after{
+    .hero::before{
       content:"";
       position:absolute;
-      inset:9px;
-      border-radius:10px;
-      border:1px solid rgba(255,255,255,.28);
+      inset:auto -50px -70px auto;
+      width:240px;
+      height:240px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(255,255,255,.18), transparent 70%);
+      pointer-events:none;
     }
-
+    .heroTop{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:16px;
+      flex-wrap:wrap;
+      position:relative;
+      z-index:1;
+    }
     .eyebrow{
       display:inline-flex;
       align-items:center;
       gap:8px;
+      min-height:30px;
+      padding:0 10px;
+      border-radius:999px;
       font-size:11px;
       font-weight:800;
-      letter-spacing:.08em;
       text-transform:uppercase;
-      color:var(--brand);
-      background:var(--brand-soft);
-      border:1px solid #D7E4F7;
-      padding:7px 10px;
-      border-radius:999px;
-      margin-bottom:8px;
+      letter-spacing:.08em;
+      background:rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.16);
     }
-
-    .title{
-      margin:0;
-      font-size:28px;
-      line-height:1.05;
+    .hero h1{
+      margin:14px 0 0;
+      font-size:32px;
+      line-height:1.02;
+      letter-spacing:-.03em;
       font-weight:800;
-      letter-spacing:-.02em;
-      color:var(--brand-2);
     }
-
-    .subtitle{
-      margin:8px 0 0;
-      color:var(--muted);
+    .hero p{
+      margin:12px 0 0;
+      max-width:900px;
+      color:rgba(255,255,255,.88);
       font-size:14px;
-      line-height:1.5;
-      max-width:760px;
+      line-height:1.65;
     }
-
-    .statusPill{
+    .heroMeta{
+      margin-top:18px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      position:relative;
+      z-index:1;
+    }
+    .heroMetaItem{
       display:inline-flex;
       align-items:center;
       gap:8px;
-      padding:10px 14px;
+      min-height:36px;
+      padding:0 12px;
       border-radius:999px;
-      border:1px solid #D7E4F7;
-      background:#FFF;
-      box-shadow:var(--shadow-soft);
-      color:var(--brand);
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.10);
+      font-size:12px;
       font-weight:700;
-      font-size:13px;
-      white-space:nowrap;
+      color:#F8FBFF;
     }
 
-    .dot{
-      width:9px;height:9px;border-radius:50%;background:#16A34A;box-shadow:0 0 0 3px rgba(22,163,74,.12)
-    }
-
-    .hero{
+    .metrics{
       display:grid;
-      grid-template-columns:1.2fr .8fr;
-      gap:16px;
-      margin-bottom:18px;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:14px;
+      margin-top:18px;
     }
-
-    .heroCard,.statsCard,.panel,.resultsCard{
-      background:var(--card);
+    .metric{
+      min-height:112px;
+      border-radius:16px;
       border:1px solid var(--line-2);
+      background:var(--surface);
       box-shadow:var(--shadow);
-      border-radius:var(--radius-lg);
+      padding:16px 16px 14px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+    .metricLabel{
+      font-size:12px;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      font-weight:800;
+    }
+    .metricValue{
+      margin-top:8px;
+      font-size:30px;
+      line-height:1;
+      font-weight:800;
+      color:var(--ink);
+      letter-spacing:-.03em;
+    }
+    .metricSub{
+      margin-top:10px;
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.45;
     }
 
-    .heroCard{
-      padding:24px;
-      background:
-        radial-gradient(circle at top right, rgba(18,59,122,.08), transparent 28%),
-        linear-gradient(180deg,#FFFFFF 0%, #FBFCFE 100%);
+    .controlCard,.resultsCard{
+      border-radius:20px;
+      border:1px solid var(--line-2);
+      background:var(--surface);
+      box-shadow:var(--shadow);
+      overflow:hidden;
     }
 
-    .statsCard{
-      padding:18px;
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:12px;
-      align-content:start;
-    }
-
-    .kpi{
-      border:1px solid var(--line);
-      border-radius:14px;
-      padding:14px;
-      background:#fff;
-      min-height:96px;
-    }
-    .kpiLabel{font-size:12px;color:var(--muted);font-weight:700;margin-bottom:8px}
-    .kpiValue{font-size:28px;font-weight:800;color:var(--brand-2);line-height:1}
-    .kpiSub{margin-top:8px;font-size:12px;color:var(--muted)}
-
-    .layout{
-      display:grid;
-      grid-template-columns:320px 1fr;
-      gap:18px;
-      align-items:start;
-    }
-
-    .panelHead,.resultsHead{
-      padding:18px 18px 14px;
-      border-bottom:1px solid var(--line-2);
+    .cardHead{
+      padding:18px 20px 16px;
+      border-bottom:1px solid var(--line-3);
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:12px;
       flex-wrap:wrap;
+      background:linear-gradient(180deg,#FFFFFF 0%, #FBFCFE 100%);
     }
-
-    .panelTitle,.resultsTitle{
-      font-size:15px;
+    .cardTitle{
+      display:flex;
+      flex-direction:column;
+      gap:5px;
+    }
+    .cardKicker{
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      color:var(--muted);
       font-weight:800;
-      color:var(--brand-2);
-      letter-spacing:.01em;
+    }
+    .cardName{
+      font-size:17px;
+      line-height:1.2;
+      font-weight:800;
+      color:var(--ink);
+    }
+    .cardInfo{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      min-height:34px;
+      padding:0 12px;
+      border-radius:999px;
+      background:var(--surface-4);
+      border:1px solid var(--line);
+      font-size:12px;
+      font-weight:700;
+      color:var(--ink-2);
     }
 
-    .panelBody{padding:18px}
-
+    .controlBody{
+      padding:18px 20px 20px;
+    }
     .field{margin-bottom:16px}
     .field:last-child{margin-bottom:0}
     .label{
@@ -211,11 +307,10 @@
       margin-bottom:8px;
       font-size:12px;
       font-weight:800;
-      color:var(--brand-2);
-      letter-spacing:.02em;
+      letter-spacing:.04em;
       text-transform:uppercase;
+      color:var(--ink-2);
     }
-
     .inputWrap{position:relative}
     .searchIcon{
       position:absolute;
@@ -226,231 +321,433 @@
       pointer-events:none;
       font-size:15px;
     }
-
     input,select{
       width:100%;
-      height:46px;
-      border:1px solid var(--line);
+      min-height:46px;
       border-radius:12px;
+      border:1px solid var(--line);
       background:#fff;
-      color:var(--text);
+      color:var(--ink);
       padding:0 14px;
-      transition:border-color .18s ease, box-shadow .18s ease, background .18s ease;
       outline:none;
+      transition:border-color .18s ease, box-shadow .18s ease, background .18s ease;
     }
-
     #q{padding-left:38px}
-
     input:focus,select:focus{
       border-color:#8CB4F5;
-      box-shadow:0 0 0 4px rgba(38,99,235,.10);
+      box-shadow:0 0 0 4px rgba(38,99,235,.12);
     }
 
-    .btnRow,.btnGrid{display:flex;gap:10px;flex-wrap:wrap}
-    .btnGrid .btn{flex:1 1 0}
-
+    .buttonStack{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+    .buttonRow{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
     .btn{
       appearance:none;
+      min-height:42px;
+      padding:0 14px;
+      border-radius:12px;
       border:1px solid var(--line);
       background:#fff;
-      color:var(--brand-2);
-      height:42px;
-      border-radius:12px;
-      padding:0 14px;
-      font-weight:700;
-      cursor:pointer;
-      transition:all .18s ease;
+      color:var(--ink-2);
       display:inline-flex;
       align-items:center;
       justify-content:center;
       gap:8px;
+      cursor:pointer;
+      font-size:13px;
+      font-weight:700;
+      transition:all .18s ease;
       white-space:nowrap;
     }
-
-    .btn:hover{transform:translateY(-1px);box-shadow:var(--shadow-soft);border-color:#C4D3E8}
+    .btn:hover{
+      transform:translateY(-1px);
+      box-shadow:var(--shadow-soft);
+      border-color:#BFD0E1;
+    }
     .btn:active{transform:translateY(0)}
-    .btn.primary{background:var(--brand);color:#fff;border-color:var(--brand)}
-    .btn.primary:hover{background:#17478F;border-color:#17478F}
-    .btn.soft{background:var(--brand-soft);border-color:#D7E4F7;color:var(--brand)}
-    .btn.ghost{background:#fff}
-    .btn:disabled{opacity:.55;cursor:not-allowed;transform:none;box-shadow:none}
+    .btn.primary{
+      background:var(--brand);
+      border-color:var(--brand);
+      color:#fff;
+    }
+    .btn.primary:hover{
+      background:#0D468C;
+      border-color:#0D468C;
+    }
+    .btn.soft{
+      background:var(--brand-soft);
+      border-color:#D8E8FF;
+      color:var(--brand);
+    }
+    .btn.ghost{
+      background:#fff;
+    }
+    .btn:disabled{
+      opacity:.56;
+      cursor:not-allowed;
+      transform:none;
+      box-shadow:none;
+    }
 
-    .miniMeta{
+    .note{
+      margin-top:14px;
+      padding:14px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:var(--surface-3);
       font-size:12px;
-      line-height:1.45;
+      line-height:1.6;
       color:var(--muted);
-      background:#FAFBFD;
-      border:1px dashed var(--line);
-      border-radius:12px;
-      padding:12px 13px;
+    }
+    .note strong{color:var(--ink-2)}
+
+    .shortcutRow{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:14px;
+    }
+    .shortcut{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      min-height:34px;
+      padding:0 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:700;
+    }
+    kbd{
+      display:inline-flex;
+      min-width:22px;
+      height:22px;
+      border-radius:8px;
+      align-items:center;
+      justify-content:center;
+      border:1px solid var(--line);
+      background:var(--surface-3);
+      color:var(--ink-2);
+      font-size:11px;
+      font-weight:800;
+      box-shadow:inset 0 -1px 0 rgba(15,23,42,.05);
     }
 
     .resultsTop{
-      padding:14px 18px 0;
+      padding:16px 20px 0;
       display:flex;
+      align-items:center;
       justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .resultMain{
+      display:flex;
       align-items:center;
       gap:12px;
       flex-wrap:wrap;
     }
-
     .scope{
       font-size:13px;
       color:var(--muted);
-      font-weight:600;
+      font-weight:700;
+    }
+    .resultBadge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      min-height:34px;
+      padding:0 11px;
+      border-radius:999px;
+      background:var(--surface-4);
+      border:1px solid var(--line);
+      font-size:12px;
+      font-weight:700;
+      color:var(--ink-2);
     }
 
-    .tabs{display:flex;gap:8px;flex-wrap:wrap}
+    .tabs{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
     .tab{
-      border:1px solid var(--line);
-      background:#fff;
-      color:var(--brand-2);
-      border-radius:999px;
+      appearance:none;
       min-height:38px;
       padding:0 14px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--ink-2);
       font-size:13px;
       font-weight:700;
       cursor:pointer;
       transition:all .18s ease;
     }
-    .tab.active{background:var(--brand);color:#fff;border-color:var(--brand);box-shadow:0 10px 18px rgba(18,59,122,.16)}
+    .tab.active{
+      background:var(--ink);
+      border-color:var(--ink);
+      color:#fff;
+      box-shadow:0 10px 18px rgba(15,23,42,.14);
+    }
+
+    .filterChips{
+      padding:12px 20px 0;
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      min-height:12px;
+    }
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      min-height:32px;
+      padding:0 10px;
+      border-radius:999px;
+      background:#fff;
+      border:1px solid var(--line);
+      color:var(--ink-2);
+      font-size:12px;
+      font-weight:700;
+    }
+    .chip .x{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:18px;
+      height:18px;
+      border-radius:999px;
+      background:var(--surface-4);
+      font-size:11px;
+      font-weight:900;
+      cursor:pointer;
+    }
 
     .toolbar{
-      padding:12px 18px 0;
+      padding:12px 20px 0;
       display:flex;
       justify-content:space-between;
       align-items:center;
       gap:12px;
       flex-wrap:wrap;
     }
+    .toolbarLeft,.toolbarRight{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .pageInfo{
+      font-size:13px;
+      color:var(--muted);
+      font-weight:700;
+    }
+    .pageSizeWrap{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:700;
+    }
+    .pageSizeWrap select{
+      width:104px;
+      min-height:40px;
+    }
 
-    .pager{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-    .pageInfo{font-size:13px;font-weight:700;color:var(--muted)}
-    .pageSizeWrap{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px;font-weight:700}
-    .pageSizeWrap select{width:112px;height:40px}
-
-    .resultsBody{padding:16px 18px 18px}
-
+    .resultsBody{
+      padding:16px 20px 20px;
+    }
+    .desktopTableWrap{
+      border:1px solid var(--line-2);
+      border-radius:16px;
+      overflow:hidden;
+      background:#fff;
+    }
     .desktopTable{
       width:100%;
       border-collapse:separate;
       border-spacing:0;
-      border:1px solid var(--line-2);
-      border-radius:14px;
-      overflow:hidden;
-      background:#fff;
     }
-
     .desktopTable thead th{
+      position:sticky;
+      top:0;
+      z-index:2;
       text-align:left;
-      font-size:12px;
-      text-transform:uppercase;
-      letter-spacing:.04em;
-      color:var(--muted);
-      background:#F8FAFC;
       padding:14px 14px;
+      background:#F8FAFC;
       border-bottom:1px solid var(--line-2);
+      color:var(--muted);
+      font-size:12px;
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.06em;
     }
-
     .desktopTable tbody td{
       padding:15px 14px;
-      border-bottom:1px solid var(--line-2);
+      border-bottom:1px solid var(--line-3);
       vertical-align:middle;
       font-size:14px;
     }
-
-    .desktopTable tbody tr:hover{background:#FBFDFF}
-    .desktopTable tbody tr:last-child td{border-bottom:none}
-
+    .desktopTable tbody tr:hover{
+      background:#FBFDFF;
+    }
+    .desktopTable tbody tr:last-child td{
+      border-bottom:none;
+    }
     .codeBadge{
       display:inline-flex;
       align-items:center;
-      padding:6px 10px;
+      min-height:30px;
+      padding:0 10px;
       border-radius:999px;
-      background:#F2F5FA;
-      border:1px solid #DFE6EF;
+      background:var(--surface-4);
+      border:1px solid var(--line);
+      color:var(--ink-2);
       font-size:12px;
-      font-weight:700;
-      color:#334155;
+      font-weight:800;
     }
-
-    .clientName{font-weight:800;color:#122033;margin-bottom:4px}
-    .clientMeta{font-size:12px;color:var(--muted)}
-
-    .actionRow{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+    .clientName{
+      margin:0 0 4px;
+      font-size:14px;
+      font-weight:800;
+      color:var(--ink);
+    }
+    .clientMeta{
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.45;
+    }
+    .actionRow{
+      display:flex;
+      justify-content:flex-end;
+      gap:8px;
+      flex-wrap:wrap;
+    }
     .miniBtn{
-      height:36px;
-      border-radius:10px;
+      appearance:none;
+      min-height:36px;
       padding:0 12px;
+      border-radius:10px;
       border:1px solid var(--line);
       background:#fff;
-      color:var(--brand-2);
-      font-weight:700;
+      color:var(--ink-2);
       font-size:12px;
+      font-weight:700;
       cursor:pointer;
       transition:all .18s ease;
     }
-    .miniBtn:hover{border-color:#C4D3E8;box-shadow:var(--shadow-soft)}
-    .miniBtn.primary{background:var(--brand-soft);border-color:#D7E4F7;color:var(--brand)}
+    .miniBtn:hover{
+      box-shadow:var(--shadow-soft);
+      border-color:#BFD0E1;
+    }
+    .miniBtn.primary{
+      background:var(--brand-soft);
+      color:var(--brand);
+      border-color:#D8E8FF;
+    }
 
-    .cards{display:none;flex-direction:column;gap:12px}
+    .cards{
+      display:none;
+      flex-direction:column;
+      gap:12px;
+    }
     .resultCard{
       border:1px solid var(--line-2);
+      border-radius:16px;
       background:#fff;
-      border-radius:14px;
+      box-shadow:var(--shadow-soft);
       padding:14px;
-      box-shadow:var(--shadow-soft);
+    }
+    .cardTop{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+    }
+    .cardClientName{
+      margin:0 0 6px;
+      font-size:15px;
+      line-height:1.3;
+      font-weight:800;
+      color:var(--ink);
+    }
+    .cardMeta{
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.45;
+    }
+    .cardActions{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:12px;
     }
 
-    .cardTop{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
-    .cardName{font-size:15px;font-weight:800;color:var(--text);margin:0 0 6px}
-    .cardMeta{font-size:12px;color:var(--muted);line-height:1.45}
-    .cardActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-
-    .vendorList{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .vendorList{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px;
+    }
     .vendorCard{
-      border:1px solid var(--line-2);
-      border-radius:14px;
       padding:16px;
+      border-radius:16px;
+      border:1px solid var(--line-2);
       background:#fff;
       box-shadow:var(--shadow-soft);
     }
-    .vendorCard h3{margin:0 0 8px;font-size:15px;color:var(--text)}
-    .vendorCard p{margin:0 0 14px;font-size:12px;color:var(--muted)}
+    .vendorCard h3{
+      margin:0 0 6px;
+      font-size:15px;
+      color:var(--ink);
+    }
+    .vendorCard p{
+      margin:0 0 14px;
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.5;
+    }
 
     .empty{
       display:none;
+      padding:28px;
       border:1px dashed var(--line);
-      border-radius:14px;
-      padding:22px;
+      border-radius:16px;
+      background:var(--surface-3);
       text-align:center;
       color:var(--muted);
-      background:#FBFCFE;
+      font-size:14px;
       font-weight:700;
     }
 
-    .compact .desktopTable thead th{padding:11px 12px}
-    .compact .desktopTable tbody td{padding:10px 12px}
-    .compact .resultCard{padding:12px}
-    .compact .panelBody{padding:14px}
-
-    .statusBar{
+    .statusLine{
       margin-top:14px;
       display:flex;
-      align-items:center;
       justify-content:space-between;
-      gap:12px;
+      align-items:center;
+      gap:10px;
       flex-wrap:wrap;
-      font-size:12px;
       color:var(--muted);
+      font-size:12px;
+      font-weight:700;
     }
 
     details{
-      margin-top:12px;
+      margin-top:14px;
+      border-radius:14px;
       border:1px solid var(--line-2);
-      border-radius:12px;
       overflow:hidden;
-      background:#FBFCFE;
+      background:var(--surface-3);
     }
     details summary{
       list-style:none;
@@ -458,25 +755,32 @@
       padding:12px 14px;
       font-size:12px;
       font-weight:800;
-      color:var(--brand-2);
-      border-bottom:1px solid transparent;
+      color:var(--ink-2);
     }
-    details[open] summary{border-bottom-color:var(--line-2)}
     details summary::-webkit-details-marker{display:none}
+    details[open] summary{
+      border-bottom:1px solid var(--line-2);
+    }
     pre{
       margin:0;
       padding:14px;
-      font-size:12px;
-      overflow:auto;
       white-space:pre-wrap;
+      overflow:auto;
+      font-size:12px;
+      line-height:1.5;
       color:#DDE7F3;
       background:#0F172A;
     }
 
+    .compact .desktopTable thead th{padding:11px 12px}
+    .compact .desktopTable tbody td{padding:11px 12px}
+    .compact .resultCard{padding:12px}
+    .compact .controlBody{padding:15px 16px 16px}
+
     .bottombar{
       position:fixed;
       left:0;right:0;bottom:0;
-      z-index:70;
+      z-index:85;
       padding:10px 10px calc(10px + var(--safe-b));
       background:rgba(255,255,255,.92);
       backdrop-filter:blur(12px);
@@ -490,28 +794,32 @@
       gap:8px;
     }
     .btab{
-      border:1px solid var(--line);
-      background:#fff;
-      color:var(--brand-2);
       min-height:58px;
       border-radius:14px;
-      cursor:pointer;
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--ink-2);
       display:flex;
       flex-direction:column;
       align-items:center;
       justify-content:center;
       gap:4px;
+      cursor:pointer;
       font-size:11px;
       font-weight:800;
     }
-    .btab.active{background:var(--brand);color:#fff;border-color:var(--brand)}
+    .btab.active{
+      background:var(--ink);
+      border-color:var(--ink);
+      color:#fff;
+    }
     .ico{font-size:16px;line-height:1}
 
     .toastWrap{
       position:fixed;
       right:16px;
       top:calc(16px + var(--safe-t));
-      z-index:90;
+      z-index:100;
       display:flex;
       flex-direction:column;
       gap:10px;
@@ -533,188 +841,217 @@
     }
     @keyframes toastIn{to{opacity:1;transform:translateY(0)}}
 
-    @media (max-width:1100px){
-      .hero{grid-template-columns:1fr}
-      .layout{grid-template-columns:1fr}
+    @media (max-width:1180px){
+      .workspace{grid-template-columns:1fr}
+      .metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
       .vendorList{grid-template-columns:1fr 1fr}
     }
-
-    @media (max-width:860px){
-      body{padding-bottom:calc(92px + var(--safe-b))}
-      .title{font-size:22px}
-      .statsCard{grid-template-columns:repeat(2,minmax(0,1fr))}
+    @media (max-width:900px){
       .desktopTableWrap{display:none}
       .cards{display:flex}
       .vendorList{grid-template-columns:1fr}
-      .toolbar{padding-top:6px}
     }
-
     @media (min-width:981px){
       body{padding-bottom:0}
       .bottombar{display:none}
     }
-
     @media (max-width:640px){
       .page{padding:14px}
-      .topbar{margin:-14px -14px 14px;padding:calc(14px + var(--safe-t)) 14px 12px}
-      .heroCard{padding:18px}
-      .panelHead,.resultsHead,.resultsBody,.resultsTop,.toolbar,.panelBody{padding-left:14px;padding-right:14px}
-      .statsCard{grid-template-columns:1fr 1fr;padding:14px}
-      .kpi{min-height:auto}
+      .shellInner{padding-left:14px;padding-right:14px}
+      .hero{padding:18px}
+      .hero h1{font-size:24px}
+      .cardHead,.controlBody,.resultsTop,.filterChips,.toolbar,.resultsBody{padding-left:14px;padding-right:14px}
+      .metrics{grid-template-columns:1fr 1fr}
+      .buttonStack{grid-template-columns:1fr}
+      .toolbar{padding-top:8px}
       .toastWrap{left:12px;right:12px}
       .toast{min-width:0;max-width:none}
     }
   </style>
 </head>
 <body>
+  <div class="shellBar">
+    <div class="shellInner">
+      <div class="shellLeft">
+        <span class="shellBadge"><span class="shellDot"></span><span id="shellStatus">Portal operativo</span></span>
+        <span class="shellLabel">Toyo Foods México · Plataforma interna</span>
+      </div>
+      <div class="shellRight">
+        <span class="shellStat"><span>Entorno</span><strong>Producción</strong></span>
+        <span class="shellStat"><span>Actualización</span><strong id="shellSync">Pendiente</strong></span>
+      </div>
+    </div>
+  </div>
+
   <div class="toastWrap" id="toastWrap"></div>
 
-  <div class="page">
-    <header class="topbar">
-      <div class="topbarInner">
-        <div class="brandWrap">
-          <div class="brandMark" aria-hidden="true"></div>
-          <div>
-            <div class="eyebrow">Portal interno · Toyo Foods México</div>
-            <h1 class="title">Portal de Pedidos</h1>
-            <p class="subtitle" id="subtitle">Cargando información de clientes y directorio comercial…</p>
-          </div>
-        </div>
-        <div class="statusPill" id="pill"><span class="dot"></span><span>Inicializando</span></div>
-      </div>
-    </header>
-
+  <main class="page">
     <section class="hero">
-      <div class="heroCard">
-        <div class="eyebrow">Acceso corporativo</div>
-        <h2 style="margin:0;font-size:24px;line-height:1.1;color:var(--brand-2)">Consulta clientes, localiza formatos y accede más rápido a cada pedido.</h2>
-        <p style="margin:12px 0 0;color:var(--muted);font-size:14px;line-height:1.65;max-width:780px">
-          Versión renovada con enfoque ejecutivo: mejor lectura, controles más claros, experiencia optimizada para oficina y una navegación más ordenada en móvil.
-        </p>
-        <div class="statusBar">
-          <span id="statusText">Preparando datos del portal…</span>
-          <span id="lastUpdate">Sincronización pendiente</span>
+      <div class="heroTop">
+        <div>
+          <span class="eyebrow">Workspace comercial</span>
+          <h1>Portal de Pedidos</h1>
+          <p id="subtitle">Cargando información de clientes, directorio comercial y accesos recientes…</p>
+        </div>
+        <div class="heroMeta">
+          <span class="heroMetaItem">Sin logo · versión ejecutiva</span>
+          <span class="heroMetaItem">Enfoque corporativo global</span>
         </div>
       </div>
-
-      <div class="statsCard">
-        <div class="kpi">
-          <div class="kpiLabel">Clientes</div>
-          <div class="kpiValue" id="kpiClients">—</div>
-          <div class="kpiSub">Base disponible</div>
-        </div>
-        <div class="kpi">
-          <div class="kpiLabel">Vendedores</div>
-          <div class="kpiValue" id="kpiVendors">—</div>
-          <div class="kpiSub">Directorio cargado</div>
-        </div>
-        <div class="kpi">
-          <div class="kpiLabel">Recientes</div>
-          <div class="kpiValue" id="kpiRecents">0</div>
-          <div class="kpiSub">Accesos guardados</div>
-        </div>
-        <div class="kpi">
-          <div class="kpiLabel">Vista</div>
-          <div class="kpiValue" id="kpiMode">Lista</div>
-          <div class="kpiSub">Densidad actual</div>
-        </div>
+      <div class="statusLine">
+        <span id="statusText">Preparando datos del portal…</span>
+        <span id="lastUpdate">Sincronización pendiente</span>
       </div>
     </section>
 
-    <section class="layout">
-      <aside class="panel">
-        <div class="panelHead">
-          <div class="panelTitle">Panel de consulta</div>
+    <section class="metrics">
+      <article class="metric">
+        <div>
+          <div class="metricLabel">Clientes</div>
+          <div class="metricValue" id="kpiClients">—</div>
         </div>
-        <div class="panelBody">
-          <div class="field">
-            <label class="label" for="q">Buscar cliente</label>
-            <div class="inputWrap">
-              <span class="searchIcon">🔎</span>
-              <input id="q" type="text" placeholder="Nombre del cliente o código" autocomplete="off" />
+        <div class="metricSub">Base operativa disponible para consulta</div>
+      </article>
+      <article class="metric">
+        <div>
+          <div class="metricLabel">Vendedores</div>
+          <div class="metricValue" id="kpiVendors">—</div>
+        </div>
+        <div class="metricSub">Directorio comercial sincronizado</div>
+      </article>
+      <article class="metric">
+        <div>
+          <div class="metricLabel">Recientes</div>
+          <div class="metricValue" id="kpiRecents">0</div>
+        </div>
+        <div class="metricSub">Accesos guardados localmente</div>
+      </article>
+      <article class="metric">
+        <div>
+          <div class="metricLabel">Vista</div>
+          <div class="metricValue" id="kpiMode">Lista</div>
+        </div>
+        <div class="metricSub">Densidad actual del workspace</div>
+      </article>
+    </section>
+
+    <section class="workspace" style="margin-top:18px">
+      <aside class="leftCol">
+        <section class="controlCard">
+          <div class="cardHead">
+            <div class="cardTitle">
+              <span class="cardKicker">Control center</span>
+              <span class="cardName">Búsqueda y filtros</span>
+            </div>
+            <span class="cardInfo">Enterprise UI</span>
+          </div>
+          <div class="controlBody">
+            <div class="field">
+              <label class="label" for="q">Buscar cliente</label>
+              <div class="inputWrap">
+                <span class="searchIcon">🔎</span>
+                <input id="q" type="text" placeholder="Nombre del cliente o código" autocomplete="off" />
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label" for="vendorFilter">Vendedor</label>
+              <select id="vendorFilter">
+                <option value="ALL">Todos</option>
+              </select>
+            </div>
+
+            <div class="buttonStack">
+              <button class="btn ghost" id="btnClear" type="button">Limpiar filtros</button>
+              <button class="btn soft" id="btnCompact" type="button">Vista compacta</button>
+            </div>
+
+            <div class="buttonRow" style="margin-top:10px">
+              <button class="btn primary" id="btnCopyBase" type="button">Copiar enlace base</button>
+            </div>
+
+            <div class="note">
+              <strong>Recomendación:</strong> usa la búsqueda por nombre o código, filtra por vendedor y comparte enlaces directos con el equipo comercial.
+            </div>
+
+            <div class="shortcutRow">
+              <span class="shortcut"><kbd>/</kbd> Buscar</span>
+              <span class="shortcut"><kbd>Esc</kbd> Limpiar búsqueda</span>
+            </div>
+
+            <details id="diag">
+              <summary>Diagnóstico técnico</summary>
+              <pre id="diagText">—</pre>
+            </details>
+          </div>
+        </section>
+      </aside>
+
+      <section class="rightCol">
+        <section class="resultsCard">
+          <div class="cardHead">
+            <div class="cardTitle">
+              <span class="cardKicker">Workspace</span>
+              <span class="cardName" id="viewTitle">Clientes disponibles</span>
+            </div>
+            <div class="tabs">
+              <button class="tab active" id="tabSearch" type="button">Buscar</button>
+              <button class="tab" id="tabRecent" type="button">Recientes</button>
+              <button class="tab" id="tabVendors" type="button">Vendedores</button>
             </div>
           </div>
 
-          <div class="field">
-            <label class="label" for="vendorFilter">Vendedor</label>
-            <select id="vendorFilter">
-              <option value="ALL">Todos</option>
-            </select>
+          <div class="resultsTop">
+            <div class="resultMain">
+              <div class="scope" id="scope">Mostrando: todos</div>
+              <div class="resultBadge" id="resultCount">0 resultados</div>
+            </div>
+            <div class="scope">Portal comercial Toyo Foods</div>
           </div>
 
-          <div class="btnGrid" style="margin-bottom:10px">
-            <button class="btn ghost" id="btnClear" type="button">Limpiar</button>
-            <button class="btn soft" id="btnCompact" type="button">Vista compacta</button>
+          <div class="filterChips" id="filterChips"></div>
+
+          <div class="toolbar" id="toolbar">
+            <div class="toolbarLeft">
+              <button class="btn ghost" id="btnPrev" type="button">Anterior</button>
+              <button class="btn ghost" id="btnNext" type="button">Siguiente</button>
+              <span class="pageInfo" id="pageInfo">Página 1 de 1</span>
+            </div>
+            <div class="toolbarRight">
+              <div class="pageSizeWrap">
+                <span>Registros por página</span>
+                <select id="pageSize">
+                  <option value="50">50</option>
+                  <option value="100" selected>100</option>
+                  <option value="200">200</option>
+                </select>
+              </div>
+            </div>
           </div>
 
-          <div class="btnRow" style="margin-bottom:12px">
-            <button class="btn primary" id="btnCopyBase" type="button">Copiar enlace base</button>
+          <div class="resultsBody">
+            <div class="desktopTableWrap" id="desktopTableWrap">
+              <table class="desktopTable">
+                <thead>
+                  <tr>
+                    <th style="width:150px">Código</th>
+                    <th>Cliente</th>
+                    <th style="width:230px">Vendedor</th>
+                    <th style="width:230px;text-align:right">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+              </table>
+            </div>
+
+            <div class="cards" id="cards"></div>
+            <div class="vendorList" id="vendorList" style="display:none"></div>
+            <div class="empty" id="empty">Sin resultados.</div>
           </div>
-
-          <div class="miniMeta">
-            Usa la búsqueda por nombre o código, filtra por vendedor y comparte enlaces rápidos con el equipo comercial.
-          </div>
-
-          <details id="diag" style="margin-top:14px">
-            <summary>Diagnóstico técnico</summary>
-            <pre id="diagText">—</pre>
-          </details>
-        </div>
-      </aside>
-
-      <section class="resultsCard">
-        <div class="resultsHead">
-          <div class="resultsTitle" id="viewTitle">Clientes disponibles</div>
-          <div class="tabs">
-            <button class="tab active" id="tabSearch" type="button">Buscar</button>
-            <button class="tab" id="tabRecent" type="button">Recientes</button>
-            <button class="tab" id="tabVendors" type="button">Vendedores</button>
-          </div>
-        </div>
-
-        <div class="resultsTop">
-          <div class="scope" id="scope">Mostrando: todos</div>
-          <div class="scope" id="resultCount">0 resultados</div>
-        </div>
-
-        <div class="toolbar" id="toolbar">
-          <div class="pager">
-            <button class="btn ghost" id="btnPrev" type="button">Anterior</button>
-            <button class="btn ghost" id="btnNext" type="button">Siguiente</button>
-            <span class="pageInfo" id="pageInfo">Página 1 de 1</span>
-          </div>
-          <div class="pageSizeWrap">
-            <span>Registros por página</span>
-            <select id="pageSize">
-              <option value="50">50</option>
-              <option value="100" selected>100</option>
-              <option value="200">200</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="resultsBody">
-          <div class="desktopTableWrap" id="desktopTableWrap">
-            <table class="desktopTable">
-              <thead>
-                <tr>
-                  <th style="width:150px">Código</th>
-                  <th>Cliente</th>
-                  <th style="width:220px">Vendedor</th>
-                  <th style="width:230px;text-align:right">Acciones</th>
-                </tr>
-              </thead>
-              <tbody id="tableBody"></tbody>
-            </table>
-          </div>
-
-          <div class="cards" id="cards"></div>
-          <div class="vendorList" id="vendorList" style="display:none"></div>
-          <div class="empty" id="empty">Sin resultados.</div>
-        </div>
+        </section>
       </section>
     </section>
-  </div>
+  </main>
 
   <div class="bottombar">
     <div class="bnav">
@@ -745,13 +1082,14 @@
   const saveJSON = (key, value) => localStorage.setItem(key, JSON.stringify(value));
   const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
 
-  const LS_REC = "toyo_index_recent_v4";
-  const LS_COMPACT = "toyo_index_compact_v4";
+  const LS_REC = "toyo_index_recent_v5";
+  const LS_COMPACT = "toyo_index_compact_v5";
 
   const subtitle = $("#subtitle");
-  const pill = $("#pill");
   const statusText = $("#statusText");
   const lastUpdate = $("#lastUpdate");
+  const shellStatus = $("#shellStatus");
+  const shellSync = $("#shellSync");
   const q = $("#q");
   const vendorFilter = $("#vendorFilter");
   const btnClear = $("#btnClear");
@@ -766,6 +1104,7 @@
   const viewTitle = $("#viewTitle");
   const scope = $("#scope");
   const resultCount = $("#resultCount");
+  const filterChips = $("#filterChips");
   const toolbar = $("#toolbar");
   const btnPrev = $("#btnPrev");
   const btnNext = $("#btnNext");
@@ -785,7 +1124,7 @@
 
   let ALL = [];
   let VENDORS = [];
-  let MODE = "search"; // search | recent | vendors
+  let MODE = "search";
   let ACTIVE_VENDOR = "ALL";
   let PAGE = 1;
   let PAGE_SIZE = 100;
@@ -812,18 +1151,19 @@
 
   function setPortalStatus(text, mode = "ok") {
     const labels = {
-      ok: { dot: "#16A34A", text: "En línea" },
-      loading: { dot: "#D97706", text: "Cargando" },
-      error: { dot: "#DC2626", text: "Error" }
+      ok: "Portal operativo",
+      loading: "Sincronizando",
+      error: "Incidencia detectada"
     };
-    const info = labels[mode] || labels.ok;
-    pill.innerHTML = `<span class="dot" style="background:${info.dot};box-shadow:0 0 0 3px ${mode === 'error' ? 'rgba(220,38,38,.12)' : mode === 'loading' ? 'rgba(217,119,6,.12)' : 'rgba(22,163,74,.12)'}"></span><span>${info.text}</span>`;
+    shellStatus.textContent = labels[mode] || labels.ok;
     statusText.textContent = text;
   }
 
   function updateLastSync() {
     const now = new Date();
-    lastUpdate.textContent = `Última sincronización: ${now.toLocaleDateString('es-MX')} ${now.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' })}`;
+    const stamp = `${now.toLocaleDateString('es-MX')} ${now.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' })}`;
+    lastUpdate.textContent = `Última sincronización: ${stamp}`;
+    shellSync.textContent = stamp;
   }
 
   function pushRecent(path) {
@@ -846,7 +1186,7 @@
     kpiMode.textContent = compact ? "Compacta" : "Lista";
   }
 
-  function resetPage() { PAGE = 1; }
+  function resetPage(){ PAGE = 1; }
 
   function setPager(total) {
     LAST_TOTAL = total || 0;
@@ -861,6 +1201,46 @@
     const start = (PAGE - 1) * PAGE_SIZE;
     return arr.slice(start, start + PAGE_SIZE);
   }
+
+  function currentVendorLabel() {
+    return ACTIVE_VENDOR === "ALL"
+      ? "todos"
+      : (VENDORS.find(v => v.folder === ACTIVE_VENDOR)?.label || ACTIVE_VENDOR);
+  }
+
+  function renderChips() {
+    filterChips.innerHTML = "";
+    if (MODE !== "search" && MODE !== "recent") return;
+
+    if (ACTIVE_VENDOR !== "ALL") {
+      const chip = document.createElement("span");
+      chip.className = "chip";
+      chip.innerHTML = `Vendedor: ${esc(currentVendorLabel())} <span class="x" data-chip="vendor">×</span>`;
+      filterChips.appendChild(chip);
+    }
+
+    if ((q.value || "").trim()) {
+      const chip = document.createElement("span");
+      chip.className = "chip";
+      chip.innerHTML = `Búsqueda: ${esc(q.value.trim())} <span class="x" data-chip="query">×</span>`;
+      filterChips.appendChild(chip);
+    }
+  }
+
+  filterChips.addEventListener("click", (e) => {
+    const x = e.target.closest("[data-chip]");
+    if (!x) return;
+    const type = x.getAttribute("data-chip");
+    if (type === "vendor") {
+      ACTIVE_VENDOR = "ALL";
+      vendorFilter.value = "ALL";
+    }
+    if (type === "query") {
+      q.value = "";
+    }
+    resetPage();
+    render();
+  });
 
   function setActiveTab(which) {
     MODE = which;
@@ -899,7 +1279,6 @@
     cards.innerHTML = "";
     vendorList.innerHTML = "";
     vendorList.style.display = "none";
-    cards.style.display = window.innerWidth <= 860 ? "flex" : cards.style.display;
     empty.style.display = "block";
     empty.textContent = text;
   }
@@ -929,7 +1308,7 @@
       <article class="resultCard">
         <div class="cardTop">
           <div>
-            <h3 class="cardName">${esc(c.client_name)}</h3>
+            <h3 class="cardClientName">${esc(c.client_name)}</h3>
             <div class="cardMeta">Código: ${esc(c.client_code || "—")}</div>
             <div class="cardMeta">Vendedor: ${esc(c.vendor_label || c.vendor_folder || "—")}</div>
           </div>
@@ -944,6 +1323,7 @@
   }
 
   function renderVendors() {
+    renderChips();
     tableBody.innerHTML = "";
     cards.innerHTML = "";
     vendorList.innerHTML = "";
@@ -980,6 +1360,7 @@
   function renderRecent() {
     toolbar.style.display = "flex";
     vendorList.style.display = "none";
+    renderChips();
 
     const rec = loadJSON(LS_REC, []);
     const pos = new Map(rec.map((p, i) => [p, i]));
@@ -997,7 +1378,7 @@
     const rows = getPageSlice(base);
     setPager(base.length);
     resultCount.textContent = `${base.length} resultado(s)`;
-    scope.textContent = ACTIVE_VENDOR === "ALL" ? "Últimos accesos" : `Últimos accesos · ${VENDORS.find(v => v.folder === ACTIVE_VENDOR)?.label || ACTIVE_VENDOR}`;
+    scope.textContent = ACTIVE_VENDOR === "ALL" ? "Últimos accesos" : `Últimos accesos · ${currentVendorLabel()}`;
     empty.style.display = "none";
     renderClientRows(rows);
   }
@@ -1005,6 +1386,7 @@
   function renderSearch() {
     toolbar.style.display = "flex";
     vendorList.style.display = "none";
+    renderChips();
 
     let base = ALL.slice();
     if (ACTIVE_VENDOR !== "ALL") base = base.filter(c => c.vendor_folder === ACTIVE_VENDOR);
@@ -1013,7 +1395,7 @@
 
     if (!base.length) {
       resultCount.textContent = "0 resultados";
-      scope.textContent = ACTIVE_VENDOR === "ALL" ? "Mostrando: todos" : `Mostrando: ${VENDORS.find(v => v.folder === ACTIVE_VENDOR)?.label || ACTIVE_VENDOR}`;
+      scope.textContent = ACTIVE_VENDOR === "ALL" ? "Mostrando: todos" : `Mostrando: ${currentVendorLabel()}`;
       setPager(0);
       renderEmpty("Sin resultados para la búsqueda actual.");
       return;
@@ -1022,7 +1404,7 @@
     const rows = getPageSlice(base);
     setPager(base.length);
     resultCount.textContent = `${base.length} resultado(s)`;
-    scope.textContent = ACTIVE_VENDOR === "ALL" ? "Mostrando: todos" : `Mostrando: ${VENDORS.find(v => v.folder === ACTIVE_VENDOR)?.label || ACTIVE_VENDOR}`;
+    scope.textContent = ACTIVE_VENDOR === "ALL" ? "Mostrando: todos" : `Mostrando: ${currentVendorLabel()}`;
     empty.style.display = "none";
     renderClientRows(rows);
   }
@@ -1036,6 +1418,7 @@
 
     if (!ALL.length) {
       toolbar.style.display = "none";
+      renderChips();
       renderEmpty("Sin datos. No se pudo cargar el archivo de clientes.");
       return;
     }
@@ -1085,7 +1468,7 @@
   }
 
   async function loadClients() {
-    setPortalStatus("Cargando base de clientes…", "loading");
+    setPortalStatus("Cargando base de clientes y estructura comercial…", "loading");
 
     const override = getParam("clients");
     const candidates = override ? [override] : [
@@ -1096,7 +1479,7 @@
 
     const result = await fetchFirstOk(candidates);
     if (!result) {
-      subtitle.textContent = "No se pudo cargar el archivo de clientes. Revisa la ruta y la ubicación del JSON.";
+      subtitle.textContent = "No se pudo cargar el archivo de clientes. Verifica que clients.json esté en la raíz del repositorio.";
       setPortalStatus("Error al cargar la base de clientes.", "error");
       diag.open = true;
       setDiag({
@@ -1138,7 +1521,7 @@
 
     VENDORS = [...map.values()].sort((a, b) => a.label.localeCompare(b.label, "es"));
 
-    subtitle.textContent = `${ALL.length.toLocaleString('es-MX')} clientes disponibles en ${VENDORS.length.toLocaleString('es-MX')} vendedor(es).`;
+    subtitle.textContent = `${ALL.length.toLocaleString('es-MX')} clientes disponibles en ${VENDORS.length.toLocaleString('es-MX')} vendedor(es). Diseño ejecutivo sin logo y optimizado para escritorio y móvil.`;
     setPortalStatus("Portal cargado correctamente.", "ok");
     updateLastSync();
 
@@ -1234,6 +1617,20 @@
   btnNext.addEventListener("click", () => {
     PAGE += 1;
     render();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "/" && document.activeElement !== q) {
+      e.preventDefault();
+      q.focus();
+      q.select();
+    }
+    if (e.key === "Escape" && document.activeElement === q) {
+      q.value = "";
+      resetPage();
+      render();
+      q.blur();
+    }
   });
 
   window.addEventListener("resize", () => {
