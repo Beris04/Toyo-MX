@@ -1,0 +1,22 @@
+PAQUETE NORMALIZADO A MINUSCULAS
+
+Este paquete está preparado para GitHub Pages.
+Reglas aplicadas:
+- carpetas en minúsculas
+- archivos HTML en minúsculas
+- clients.json con rutas en minúsculas
+
+Importante:
+1. Descomprime este ZIP
+2. Reemplaza TODO el contenido anterior del portal
+3. Haz commit y push en GitHub Desktop
+4. No subas el ZIP cerrado al repositorio
+
+Archivos clave:
+- index.html
+- clients.json
+- pedido_assets/
+- carpetas de vendedores
+
+También se incluye:
+- validacion_rutas_minusculas.csv
