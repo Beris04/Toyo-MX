@@ -97,7 +97,7 @@
     document.body.classList.toggle('force-web', state.viewMode === 'web');
     const btn = document.getElementById('viewToggleBtn');
     const note = document.getElementById('viewNote');
-    if (btn) btn.textContent = state.viewMode === 'web' ? 'Cambiar a vista móvil' : 'Cambiar a vista web';
+    if (btn) btn.textContent = state.viewMode === 'web' ? 'Vista móvil' : 'Vista web';
     if (note) note.textContent = state.viewMode === 'web' ? 'Vista web activa' : 'Vista móvil activa';
     saveState();
     renderProducts();
@@ -157,9 +157,9 @@
                   </div>
                   <button class="toolbtn" id="selectedBtn" type="button">Solo capturados</button>
                   <button class="toolbtn" id="clearBtn" type="button">Limpiar todo</button>
-                  <button class="toolbtn" id="viewToggleBtn" type="button">Cambiar a vista web</button>
+                  <button class="toolbtn" id="viewToggleBtn" type="button">Vista web</button>
                 </div>
-                <div class="helper">Puedes buscar por nombre o SKU. Las categorías se desplazan de izquierda a derecha y el pedido se guarda automáticamente en este navegador.</div>
+                <div class="helper">Puedes buscar por nombre o SKU, usar las categorías y capturar piezas con teclado o con los botones + / −. El pedido se guarda automáticamente en este navegador.</div>
                 <div class="chip-row" id="categoryChips"></div>
                 <div class="helper" id="viewNote">Vista móvil activa</div>
               </div>
@@ -276,9 +276,9 @@
             <div class="bottom">
               <div class="pieces-label">Selecciona número de piezas</div>
               <div class="qty">
-                <button type="button" data-action="minus" data-code="${esc(p.code)}">−</button>
-                <span>${qty}</span>
-                <button type="button" data-action="plus" data-code="${esc(p.code)}">+</button>
+                <button type="button" aria-label="Quitar pieza" data-action="minus" data-code="${esc(p.code)}">−</button>
+                <input class="qty-input" type="number" min="0" step="1" inputmode="numeric" value="${qty}" data-input-code="${esc(p.code)}" aria-label="Piezas"/>
+                <button type="button" aria-label="Agregar pieza" data-action="plus" data-code="${esc(p.code)}">+</button>
               </div>
             </div>
           </div>
@@ -288,6 +288,21 @@
 
     list.querySelectorAll('button[data-action]').forEach(btn => {
       btn.addEventListener('click', () => changeQty(btn.dataset.code, btn.dataset.action === 'plus' ? 1 : -1));
+    });
+    list.querySelectorAll('input[data-input-code]').forEach(input => {
+      input.addEventListener('focus', () => input.select());
+      input.addEventListener('input', () => {
+        input.value = input.value.replace(/[^\d]/g, '');
+      });
+      input.addEventListener('keydown', e => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          commitQtyInput(input.dataset.inputCode, input.value);
+          input.blur();
+        }
+      });
+      input.addEventListener('change', () => commitQtyInput(input.dataset.inputCode, input.value));
+      input.addEventListener('blur', () => commitQtyInput(input.dataset.inputCode, input.value));
     });
   }
 
@@ -399,6 +414,15 @@
 
   function changeQty(code, delta) {
     state.quantities[code] = Math.max(0, Number(state.quantities[code] || 0) + delta);
+    saveState();
+    renderProducts();
+    renderSummary();
+  }
+
+  function commitQtyInput(code, rawValue) {
+    const clean = String(rawValue ?? '').replace(/[^\d]/g, '');
+    const value = clean === '' ? 0 : Number(clean);
+    state.quantities[code] = Number.isFinite(value) ? Math.max(0, value) : 0;
     saveState();
     renderProducts();
     renderSummary();
