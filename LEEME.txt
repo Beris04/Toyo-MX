@@ -1,26 +1,17 @@
-AJUSTE V2 LISTO
+AJUSTE V3 LISTO
 
-CAMBIOS:
-- en Promociones, la imagen de Takaokaya ya fue sustituida por la nueva
-- el texto de Takaokaya quedó corregido a: 18 mayo al 19 junio 2026
-- ambas promos quedaron más chicas
-- regresó la sección de Productos nuevos
-- Productos nuevos incluye:
+CAMBIO:
+- se corrigió el cruce de imagen/descripción en Promociones
+- AQUAMAR ahora queda con:
+  Promoción Aquamar
+  Compra 12 cajas y recibe 1 caja gratis
+- TAKAOKAYA ahora queda con:
+  Promoción Takaokaya
+  Hoja de soya ajonjoli · 4x3 · 18 mayo al 19 junio 2026
+
+Se mantienen:
+- promos más chicas
+- Productos nuevos:
   - SE-TE651-14109 YAMASHIRO MATCHA KAN 20 G
   - Takaokaya Soy Crepe
-- se mantiene el script para reconstruir clients.json respetando mayúsculas y minúsculas reales del repo
-
-PASOS:
-1) Reemplaza en tu repo:
-   - pedido_assets/pedido_app.js
-   - pedido_assets/pedido_app.css
-   - pedido_assets/promo_aquamar_mayo2026.jpeg
-   - pedido_assets/promo_takaokaya_mayo2026_v2.png
-   - pedido_assets/nuevo_yamashiro_matcha_kan_20g.png
-   - pedido_assets/nuevo_takaokaya_soy_crepe.png
-   - index.html (si quieres dejar la misma versión del patch)
-
-2) Copia reconstruir_clients_json.py a la raíz del repo y ejecútalo:
-   python reconstruir_clients_json.py
-
-3) Haz commit y push.
+- reconstruir_clients_json.py para regenerar clients.json respetando mayúsculas/minúsculas reales

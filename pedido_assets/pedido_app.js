@@ -3,17 +3,17 @@
   const ASSET_BASE = new URL("../pedido_assets/", window.location.href).href;
   const PROMO_DATA = [
   {
-    title: "Promoción Takaokaya",
-    imageTitle: "Hoja de soya ajonjoli · 4x3 · 18 mayo al 19 junio 2026",
-    image: ASSET_BASE + "promo_takaokaya_mayo2026_v2.png",
-    alt: "Promoción Takaokaya hoja de soya ajonjoli 4x3",
-    compact: true
-  },
-  {
     title: "Promoción Aquamar",
     imageTitle: "Compra 12 cajas y recibe 1 caja gratis",
     image: ASSET_BASE + "promo_aquamar_mayo2026.jpeg",
     alt: "Promoción Aquamar mayo 2026",
+    compact: true
+  },
+  {
+    title: "Promoción Takaokaya",
+    imageTitle: "Hoja de soya ajonjoli · 4x3 · 18 mayo al 19 junio 2026",
+    image: ASSET_BASE + "promo_takaokaya_mayo2026_v2.png",
+    alt: "Promoción Takaokaya hoja de soya ajonjoli 4x3",
     compact: true
   }
 ];
