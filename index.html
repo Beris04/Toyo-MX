@@ -2,1315 +2,744 @@
 <html lang="es">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Portal de Pedidos | Toyo Foods</title>
-  <meta name="theme-color" content="#0f172a" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Portal de Clientes | Toyo Foods</title>
+  <meta name="theme-color" content="#104F9E" />
   <style>
     :root{
-      --bg:#F3F6FA;
-      --surface:#FFFFFF;
-      --surface-2:#FBFCFE;
-      --surface-3:#F8FAFC;
-      --surface-4:#F1F5F9;
-      --ink:#0F172A;
-      --ink-2:#1E293B;
-      --muted:#64748B;
-      --line:#D9E2EC;
-      --line-2:#E5EBF2;
-      --line-3:#EEF3F7;
-      --brand:#0B3A75;
-      --brand-2:#0F4C9A;
-      --brand-soft:#EAF2FF;
-      --success:#0F9D58;
-      --warning:#B45309;
-      --danger:#B42318;
-      --shadow:0 14px 32px rgba(15, 23, 42, .07);
-      --shadow-soft:0 4px 14px rgba(15, 23, 42, .05);
-      --radius:14px;
-      --radius-sm:10px;
-      --radius-lg:18px;
-      --max:1440px;
-      --safe-t: env(safe-area-inset-top, 0px);
-      --safe-b: env(safe-area-inset-bottom, 0px);
+      --bg:#f3f6fa;
+      --card:#ffffff;
+      --card-2:#f8fafc;
+      --ink:#0f172a;
+      --muted:#64748b;
+      --line:#dbe5ef;
+      --line-soft:#eef3f8;
+      --brand:#0b3a75;
+      --brand-2:#1154a3;
+      --brand-3:#e8f1ff;
+      --ok:#0f9d58;
+      --warn:#b45309;
+      --danger:#b42318;
+      --shadow:0 18px 40px rgba(15,23,42,.08);
+      --shadow-soft:0 8px 22px rgba(15,23,42,.06);
+      --radius:18px;
+      --radius-sm:12px;
+      --max:1480px;
+      --safe-top:env(safe-area-inset-top,0px);
+      --safe-bottom:env(safe-area-inset-bottom,0px);
     }
-
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
     body{
       margin:0;
-      font-family:Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-      background:
-        radial-gradient(circle at top right, rgba(15,76,154,.08), transparent 20%),
-        linear-gradient(180deg,#F7F9FC 0%, #F3F6FA 100%);
+      min-height:100vh;
+      font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
       color:var(--ink);
-      padding-bottom:calc(90px + var(--safe-b));
+      background:
+        radial-gradient(circle at 15% -10%, rgba(17,84,163,.12), transparent 28%),
+        radial-gradient(circle at 95% 8%, rgba(15,157,88,.10), transparent 24%),
+        linear-gradient(180deg,#f8fbff 0%,var(--bg) 58%,#eef3f8 100%);
+      padding-bottom:calc(86px + var(--safe-bottom));
     }
     button,input,select{font:inherit}
+    button{cursor:pointer}
+    button:disabled{cursor:not-allowed;opacity:.45}
     a{text-decoration:none;color:inherit}
-
-    .shellBar{
+    .topbar{
       position:sticky;
       top:0;
-      z-index:80;
-      background:rgba(10, 17, 30, .88);
-      backdrop-filter:blur(12px);
-      border-bottom:1px solid rgba(255,255,255,.07);
-      color:#E5EDF7;
+      z-index:50;
+      color:#fff;
+      background:rgba(8,22,45,.92);
+      border-bottom:1px solid rgba(255,255,255,.10);
+      backdrop-filter:blur(14px);
     }
-    .shellInner{
+    .topbarInner{
       max-width:var(--max);
-      margin:0 auto;
-      padding:calc(12px + var(--safe-t)) 20px 12px;
+      margin:auto;
+      padding:calc(12px + var(--safe-top)) 18px 12px;
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap:14px;
-      flex-wrap:wrap;
-    }
-    .shellLeft,.shellRight{
-      display:flex;
-      align-items:center;
       gap:12px;
       flex-wrap:wrap;
     }
-    .shellBadge{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      min-height:34px;
-      padding:0 12px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.10);
-      background:rgba(255,255,255,.04);
-      font-size:12px;
-      font-weight:700;
-      letter-spacing:.01em;
-    }
-    .shellDot{
-      width:8px;height:8px;border-radius:50%;
-      background:#22C55E;
-      box-shadow:0 0 0 4px rgba(34,197,94,.14);
+    .brandBlock{display:flex;align-items:center;gap:12px;min-width:0}
+    .mark{
+      width:38px;height:38px;border-radius:13px;
+      display:grid;place-items:center;
+      background:linear-gradient(145deg,#ffffff,#dfeaff);
+      color:var(--brand);
+      font-weight:900;
+      box-shadow:0 8px 22px rgba(0,0,0,.18);
       flex:0 0 auto;
     }
-    .shellLabel{
-      font-size:12px;
-      color:#B6C2D2;
-      font-weight:600;
-    }
-    .shellStat{
-      display:flex;
-      align-items:baseline;
-      gap:8px;
-      font-size:12px;
-      color:#B6C2D2;
-    }
-    .shellStat strong{
-      color:#fff;
-      font-size:13px;
-      font-weight:800;
-    }
-
-    .page{
-      max-width:var(--max);
-      margin:0 auto;
-      padding:22px 20px 26px;
-    }
-
-    .workspace{
-      display:grid;
-      grid-template-columns:minmax(300px,360px) minmax(0,1fr);
-      gap:20px;
-      align-items:start;
-    }
-
-    .leftCol,.rightCol{
-      min-width:0;
-    }
-
-    .hero{
-      margin-bottom:18px;
-      padding:24px 24px 20px;
-      border-radius:22px;
-      border:1px solid var(--line-2);
-      background:
-        linear-gradient(145deg, rgba(11,58,117,.95) 0%, rgba(15,76,154,.93) 58%, rgba(19,102,194,.90) 100%);
-      color:#fff;
-      box-shadow:0 24px 44px rgba(15, 76, 154, .18);
-      position:relative;
-      overflow:hidden;
-    }
-    .hero::before{
-      content:"";
-      position:absolute;
-      inset:auto -50px -70px auto;
-      width:240px;
-      height:240px;
-      border-radius:50%;
-      background:radial-gradient(circle, rgba(255,255,255,.18), transparent 70%);
-      pointer-events:none;
-    }
-    .heroTop{
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      gap:16px;
-      flex-wrap:wrap;
-      position:relative;
-      z-index:1;
-    }
-    .eyebrow{
+    .brandTitle{font-size:14px;font-weight:900;letter-spacing:.01em;white-space:nowrap}
+    .brandSub{font-size:12px;color:#bdd0e7;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:62vw}
+    .topPills{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .topPill{
+      min-height:32px;
       display:inline-flex;
       align-items:center;
       gap:8px;
-      min-height:30px;
-      padding:0 10px;
-      border-radius:999px;
-      font-size:11px;
-      font-weight:800;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-      background:rgba(255,255,255,.12);
-      border:1px solid rgba(255,255,255,.16);
-    }
-    .hero h1{
-      margin:14px 0 0;
-      font-size:32px;
-      line-height:1.02;
-      letter-spacing:-.03em;
-      font-weight:800;
-    }
-    .hero p{
-      margin:12px 0 0;
-      max-width:900px;
-      color:rgba(255,255,255,.88);
-      font-size:14px;
-      line-height:1.65;
-    }
-    .heroMeta{
-      margin-top:18px;
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      position:relative;
-      z-index:1;
-    }
-    .heroMetaItem{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      min-height:36px;
-      padding:0 12px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.14);
-      background:rgba(255,255,255,.10);
-      font-size:12px;
-      font-weight:700;
-      color:#F8FBFF;
-    }
-
-    .metrics{
-      display:grid;
-      grid-template-columns:repeat(4,minmax(0,1fr));
-      gap:14px;
-      margin-top:18px;
-    }
-    .metric{
-      min-height:112px;
-      border-radius:16px;
-      border:1px solid var(--line-2);
-      background:var(--surface);
-      box-shadow:var(--shadow);
-      padding:16px 16px 14px;
-      display:flex;
-      flex-direction:column;
-      justify-content:space-between;
-    }
-    .metricLabel{
-      font-size:12px;
-      color:var(--muted);
-      text-transform:uppercase;
-      letter-spacing:.06em;
-      font-weight:800;
-    }
-    .metricValue{
-      margin-top:8px;
-      font-size:30px;
-      line-height:1;
-      font-weight:800;
-      color:var(--ink);
-      letter-spacing:-.03em;
-    }
-    .metricSub{
-      margin-top:10px;
-      font-size:12px;
-      color:var(--muted);
-      line-height:1.45;
-    }
-
-    .controlCard,.resultsCard{
-      border-radius:20px;
-      border:1px solid var(--line-2);
-      background:var(--surface);
-      box-shadow:var(--shadow);
-      overflow:hidden;
-    }
-
-    .cardHead{
-      padding:18px 20px 16px;
-      border-bottom:1px solid var(--line-3);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      flex-wrap:wrap;
-      background:linear-gradient(180deg,#FFFFFF 0%, #FBFCFE 100%);
-    }
-    .cardTitle{
-      display:flex;
-      flex-direction:column;
-      gap:5px;
-    }
-    .cardKicker{
-      font-size:11px;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-      color:var(--muted);
-      font-weight:800;
-    }
-    .cardName{
-      font-size:17px;
-      line-height:1.2;
-      font-weight:800;
-      color:var(--ink);
-    }
-    .cardInfo{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      min-height:34px;
-      padding:0 12px;
-      border-radius:999px;
-      background:var(--surface-4);
-      border:1px solid var(--line);
-      font-size:12px;
-      font-weight:700;
-      color:var(--ink-2);
-    }
-
-    .controlBody{
-      padding:18px 20px 20px;
-    }
-    .field{margin-bottom:16px}
-    .field:last-child{margin-bottom:0}
-    .label{
-      display:block;
-      margin-bottom:8px;
-      font-size:12px;
-      font-weight:800;
-      letter-spacing:.04em;
-      text-transform:uppercase;
-      color:var(--ink-2);
-    }
-    .inputWrap{position:relative}
-    .searchIcon{
-      position:absolute;
-      left:12px;
-      top:50%;
-      transform:translateY(-50%);
-      color:#7B8796;
-      pointer-events:none;
-      font-size:15px;
-    }
-    input,select{
-      width:100%;
-      min-height:46px;
-      border-radius:12px;
-      border:1px solid var(--line);
-      background:#fff;
-      color:var(--ink);
-      padding:0 14px;
-      outline:none;
-      transition:border-color .18s ease, box-shadow .18s ease, background .18s ease;
-    }
-    #q{padding-left:38px}
-    input:focus,select:focus{
-      border-color:#8CB4F5;
-      box-shadow:0 0 0 4px rgba(38,99,235,.12);
-    }
-
-    .buttonStack{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:10px;
-    }
-    .buttonRow{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-    .btn{
-      appearance:none;
-      min-height:42px;
-      padding:0 14px;
-      border-radius:12px;
-      border:1px solid var(--line);
-      background:#fff;
-      color:var(--ink-2);
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:8px;
-      cursor:pointer;
-      font-size:13px;
-      font-weight:700;
-      transition:all .18s ease;
-      white-space:nowrap;
-    }
-    .btn:hover{
-      transform:translateY(-1px);
-      box-shadow:var(--shadow-soft);
-      border-color:#BFD0E1;
-    }
-    .btn:active{transform:translateY(0)}
-    .btn.primary{
-      background:var(--brand);
-      border-color:var(--brand);
-      color:#fff;
-    }
-    .btn.primary:hover{
-      background:#0D468C;
-      border-color:#0D468C;
-    }
-    .btn.soft{
-      background:var(--brand-soft);
-      border-color:#D8E8FF;
-      color:var(--brand);
-    }
-    .btn.ghost{
-      background:#fff;
-    }
-    .btn:disabled{
-      opacity:.56;
-      cursor:not-allowed;
-      transform:none;
-      box-shadow:none;
-    }
-
-    .note{
-      margin-top:14px;
-      padding:14px;
-      border-radius:14px;
-      border:1px solid var(--line);
-      background:var(--surface-3);
-      font-size:12px;
-      line-height:1.6;
-      color:var(--muted);
-    }
-    .note strong{color:var(--ink-2)}
-
-    .shortcutRow{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      margin-top:14px;
-    }
-    .shortcut{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      min-height:34px;
-      padding:0 10px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background:#fff;
-      color:var(--muted);
-      font-size:12px;
-      font-weight:700;
-    }
-    kbd{
-      display:inline-flex;
-      min-width:22px;
-      height:22px;
-      border-radius:8px;
-      align-items:center;
-      justify-content:center;
-      border:1px solid var(--line);
-      background:var(--surface-3);
-      color:var(--ink-2);
-      font-size:11px;
-      font-weight:800;
-      box-shadow:inset 0 -1px 0 rgba(15,23,42,.05);
-    }
-
-    .resultsTop{
-      padding:16px 20px 0;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      flex-wrap:wrap;
-    }
-    .resultMain{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      flex-wrap:wrap;
-    }
-    .scope{
-      font-size:13px;
-      color:var(--muted);
-      font-weight:700;
-    }
-    .resultBadge{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      min-height:34px;
       padding:0 11px;
       border-radius:999px;
-      background:var(--surface-4);
-      border:1px solid var(--line);
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.06);
       font-size:12px;
-      font-weight:700;
-      color:var(--ink-2);
-    }
-
-    .tabs{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-    }
-    .tab{
-      appearance:none;
-      min-height:38px;
-      padding:0 14px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background:#fff;
-      color:var(--ink-2);
-      font-size:13px;
-      font-weight:700;
-      cursor:pointer;
-      transition:all .18s ease;
-    }
-    .tab.active{
-      background:var(--ink);
-      border-color:var(--ink);
-      color:#fff;
-      box-shadow:0 10px 18px rgba(15,23,42,.14);
-    }
-
-    .filterChips{
-      padding:12px 20px 0;
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      min-height:12px;
-    }
-    .chip{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      min-height:32px;
-      padding:0 10px;
-      border-radius:999px;
-      background:#fff;
-      border:1px solid var(--line);
-      color:var(--ink-2);
-      font-size:12px;
+      color:#d9e6f7;
       font-weight:700;
     }
-    .chip .x{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      width:18px;
-      height:18px;
-      border-radius:999px;
-      background:var(--surface-4);
-      font-size:11px;
-      font-weight:900;
-      cursor:pointer;
-    }
-
-    .toolbar{
-      padding:12px 20px 0;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
-      flex-wrap:wrap;
-    }
-    .toolbarLeft,.toolbarRight{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-    .pageInfo{
-      font-size:13px;
-      color:var(--muted);
-      font-weight:700;
-    }
-    .pageSizeWrap{
-      display:flex;
-      align-items:center;
-      gap:8px;
-      color:var(--muted);
-      font-size:12px;
-      font-weight:700;
-    }
-    .pageSizeWrap select{
-      width:104px;
-      min-height:40px;
-    }
-
-    .resultsBody{
-      padding:16px 20px 20px;
-    }
-    .desktopTableWrap{
-      border:1px solid var(--line-2);
-      border-radius:16px;
+    .dot{width:8px;height:8px;border-radius:999px;background:#22c55e;box-shadow:0 0 0 4px rgba(34,197,94,.14)}
+    .page{max-width:var(--max);margin:auto;padding:22px 18px 28px}
+    .hero{
       overflow:hidden;
-      background:#fff;
+      position:relative;
+      border-radius:26px;
+      padding:26px;
+      color:#fff;
+      background:linear-gradient(140deg,#082653 0%,#0b3a75 48%,#1154a3 100%);
+      box-shadow:0 24px 54px rgba(11,58,117,.22);
     }
-    .desktopTable{
-      width:100%;
-      border-collapse:separate;
-      border-spacing:0;
+    .hero:before{
+      content:"";position:absolute;right:-90px;bottom:-120px;width:330px;height:330px;border-radius:999px;
+      background:radial-gradient(circle,rgba(255,255,255,.18),transparent 68%);
     }
-    .desktopTable thead th{
-      position:sticky;
-      top:0;
-      z-index:2;
-      text-align:left;
-      padding:14px 14px;
-      background:#F8FAFC;
-      border-bottom:1px solid var(--line-2);
-      color:var(--muted);
-      font-size:12px;
-      font-weight:800;
-      text-transform:uppercase;
-      letter-spacing:.06em;
+    .heroGrid{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(300px,.9fr);gap:22px;align-items:end}
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:8px 11px;border-radius:999px;
+      background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);
+      font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.09em;
     }
-    .desktopTable tbody td{
-      padding:15px 14px;
-      border-bottom:1px solid var(--line-3);
-      vertical-align:middle;
-      font-size:14px;
+    h1{margin:14px 0 10px;font-size:clamp(28px,4vw,46px);line-height:1.02;letter-spacing:-.04em}
+    .hero p{margin:0;color:#e7eff9;line-height:1.62;font-size:14px;max-width:760px}
+    .statusLine{margin-top:16px;display:flex;gap:9px;flex-wrap:wrap}
+    .statusBadge{
+      display:inline-flex;align-items:center;gap:8px;min-height:34px;padding:0 12px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.10);font-size:12px;font-weight:800;color:#f8fbff;
     }
-    .desktopTable tbody tr:hover{
-      background:#FBFDFF;
-    }
-    .desktopTable tbody tr:last-child td{
-      border-bottom:none;
-    }
-    .codeBadge{
-      display:inline-flex;
-      align-items:center;
-      min-height:30px;
-      padding:0 10px;
-      border-radius:999px;
-      background:var(--surface-4);
-      border:1px solid var(--line);
-      color:var(--ink-2);
-      font-size:12px;
-      font-weight:800;
-    }
-    .clientName{
-      margin:0 0 4px;
-      font-size:14px;
-      font-weight:800;
-      color:var(--ink);
-    }
-    .clientMeta{
-      font-size:12px;
-      color:var(--muted);
-      line-height:1.45;
-    }
-    .actionRow{
-      display:flex;
-      justify-content:flex-end;
-      gap:8px;
-      flex-wrap:wrap;
-    }
-    .miniBtn{
-      appearance:none;
-      min-height:36px;
-      padding:0 12px;
-      border-radius:10px;
-      border:1px solid var(--line);
-      background:#fff;
-      color:var(--ink-2);
-      font-size:12px;
-      font-weight:700;
-      cursor:pointer;
-      transition:all .18s ease;
-    }
-    .miniBtn:hover{
-      box-shadow:var(--shadow-soft);
-      border-color:#BFD0E1;
-    }
-    .miniBtn.primary{
-      background:var(--brand-soft);
-      color:var(--brand);
-      border-color:#D8E8FF;
-    }
-
-    .cards{
-      display:none;
-      flex-direction:column;
-      gap:12px;
-    }
-    .resultCard{
-      border:1px solid var(--line-2);
-      border-radius:16px;
-      background:#fff;
-      box-shadow:var(--shadow-soft);
-      padding:14px;
-    }
-    .cardTop{
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      gap:12px;
-    }
-    .cardClientName{
-      margin:0 0 6px;
-      font-size:15px;
-      line-height:1.3;
-      font-weight:800;
-      color:var(--ink);
-    }
-    .cardMeta{
-      font-size:12px;
-      color:var(--muted);
-      line-height:1.45;
-    }
-    .cardActions{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      margin-top:12px;
-    }
-
-    .vendorList{
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:12px;
-    }
-    .vendorCard{
+    .heroSearch{
       padding:16px;
-      border-radius:16px;
-      border:1px solid var(--line-2);
-      background:#fff;
-      box-shadow:var(--shadow-soft);
+      background:rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.18);
+      border-radius:22px;
+      box-shadow:0 18px 34px rgba(0,0,0,.12);
     }
-    .vendorCard h3{
-      margin:0 0 6px;
-      font-size:15px;
-      color:var(--ink);
+    .heroSearch label{display:block;font-size:12px;font-weight:900;color:#fff;margin:0 0 8px;text-transform:uppercase;letter-spacing:.05em}
+    .searchBox{position:relative}
+    .searchBox .icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#64748b;font-size:18px}
+    .searchInput{
+      width:100%;min-height:54px;padding:0 44px 0 44px;border:0;outline:none;border-radius:16px;background:#fff;color:var(--ink);
+      font-size:16px;font-weight:800;box-shadow:0 10px 28px rgba(0,0,0,.10);
     }
-    .vendorCard p{
-      margin:0 0 14px;
-      font-size:12px;
-      color:var(--muted);
-      line-height:1.5;
+    .searchInput::placeholder{font-weight:650;color:#94a3b8}
+    .clearSmall{
+      position:absolute;right:10px;top:50%;transform:translateY(-50%);border:0;background:#eef3f8;color:#334155;border-radius:11px;padding:7px 9px;font-weight:900;display:none;
     }
-
-    .empty{
-      display:none;
-      padding:28px;
-      border:1px dashed var(--line);
-      border-radius:16px;
-      background:var(--surface-3);
-      text-align:center;
-      color:var(--muted);
-      font-size:14px;
-      font-weight:700;
+    .hint{margin-top:10px;color:#dbeafe;font-size:12px;line-height:1.45}
+    .metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:18px}
+    .metric{background:rgba(255,255,255,.96);border:1px solid var(--line-soft);border-radius:18px;padding:16px;box-shadow:var(--shadow-soft);min-height:104px}
+    .metricLabel{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:900}
+    .metricValue{margin-top:8px;font-size:28px;font-weight:950;letter-spacing:-.04em;color:var(--ink)}
+    .metricSub{margin-top:6px;color:var(--muted);font-size:12px;line-height:1.4}
+    .layout{margin-top:18px;display:grid;grid-template-columns:340px minmax(0,1fr);gap:18px;align-items:start}
+    .panel{background:rgba(255,255,255,.96);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden}
+    .panelHead{padding:16px 18px;border-bottom:1px solid var(--line-soft);display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .panelKicker{display:block;color:var(--brand);font-size:11px;font-weight:950;text-transform:uppercase;letter-spacing:.08em}
+    .panelTitle{display:block;margin-top:3px;font-size:16px;font-weight:950;color:var(--ink)}
+    .panelTag{display:inline-flex;align-items:center;min-height:28px;padding:0 10px;border-radius:999px;background:var(--brand-3);color:var(--brand);font-size:12px;font-weight:900;white-space:nowrap}
+    .panelBody{padding:16px 18px 18px}
+    .field{margin-bottom:14px}
+    .label{display:block;margin:0 0 7px;color:#334155;font-size:12px;font-weight:950;letter-spacing:.02em}
+    .inputWrap{position:relative}
+    .inputWrap .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#94a3b8;font-size:15px}
+    input,select{
+      width:100%;min-height:46px;border:1px solid var(--line);border-radius:14px;background:#fff;color:var(--ink);outline:none;
+      padding:0 12px;font-weight:750;
     }
-
-    .statusLine{
-      margin-top:14px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      flex-wrap:wrap;
-      color:var(--muted);
-      font-size:12px;
-      font-weight:700;
+    .inputWrap input{padding-left:38px}
+    input:focus,select:focus{border-color:#7aa7df;box-shadow:0 0 0 4px rgba(17,84,163,.12)}
+    .btnRow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+    .btnRow.single{grid-template-columns:1fr}
+    .btn{
+      min-height:43px;border:1px solid var(--line);border-radius:14px;background:#fff;color:#1e293b;font-weight:950;padding:0 13px;
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:transform .12s ease,box-shadow .12s ease,border-color .12s ease;
     }
-
-    details{
-      margin-top:14px;
-      border-radius:14px;
-      border:1px solid var(--line-2);
-      overflow:hidden;
-      background:var(--surface-3);
-    }
-    details summary{
-      list-style:none;
-      cursor:pointer;
-      padding:12px 14px;
-      font-size:12px;
-      font-weight:800;
-      color:var(--ink-2);
-    }
-    details summary::-webkit-details-marker{display:none}
-    details[open] summary{
-      border-bottom:1px solid var(--line-2);
-    }
-    pre{
-      margin:0;
-      padding:14px;
-      white-space:pre-wrap;
-      overflow:auto;
-      font-size:12px;
-      line-height:1.5;
-      color:#DDE7F3;
-      background:#0F172A;
-    }
-
-    .compact .desktopTable thead th{padding:11px 12px}
-    .compact .desktopTable tbody td{padding:11px 12px}
-    .compact .resultCard{padding:12px}
-    .compact .controlBody{padding:15px 16px 16px}
-
-    .bottombar{
-      position:fixed;
-      left:0;right:0;bottom:0;
-      z-index:85;
-      padding:10px 10px calc(10px + var(--safe-b));
-      background:rgba(255,255,255,.92);
-      backdrop-filter:blur(12px);
-      border-top:1px solid rgba(15,23,42,.08);
-    }
-    .bnav{
-      max-width:var(--max);
-      margin:0 auto;
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:8px;
-    }
-    .btab{
-      min-height:58px;
-      border-radius:14px;
-      border:1px solid var(--line);
-      background:#fff;
-      color:var(--ink-2);
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      gap:4px;
-      cursor:pointer;
-      font-size:11px;
-      font-weight:800;
-    }
-    .btab.active{
-      background:var(--ink);
-      border-color:var(--ink);
-      color:#fff;
-    }
-    .ico{font-size:16px;line-height:1}
-
-    .toastWrap{
-      position:fixed;
-      right:16px;
-      top:calc(16px + var(--safe-t));
-      z-index:100;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      pointer-events:none;
-    }
-    .toast{
-      min-width:220px;
-      max-width:360px;
-      border-radius:12px;
-      background:#0F172A;
-      color:#fff;
-      padding:12px 14px;
-      box-shadow:0 18px 30px rgba(15,23,42,.24);
-      font-size:13px;
-      font-weight:600;
-      opacity:0;
-      transform:translateY(-6px);
-      animation:toastIn .18s ease forwards;
-    }
-    @keyframes toastIn{to{opacity:1;transform:translateY(0)}}
-
-    @media (max-width:1180px){
-      .workspace{grid-template-columns:1fr}
+    .btn:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(15,23,42,.08)}
+    .btn.primary{border-color:transparent;background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#fff}
+    .btn.soft{border-color:#cfe1f7;background:var(--brand-3);color:var(--brand)}
+    .btn.danger{border-color:#ffd6d6;background:#fff1f2;color:var(--danger)}
+    .btn.ghost{background:#f8fafc}
+    .note{margin-top:14px;border:1px dashed #c9d8ea;border-radius:16px;background:#f8fbff;padding:12px;color:#475569;font-size:12px;line-height:1.5}
+    .shortcutRow{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+    .shortcut{display:inline-flex;align-items:center;gap:6px;padding:7px 9px;border-radius:999px;background:#f1f5f9;color:#64748b;font-size:11px;font-weight:850}
+    kbd{font:inherit;background:#fff;border:1px solid var(--line);border-radius:7px;padding:2px 6px;color:#334155;box-shadow:inset 0 -1px 0 rgba(15,23,42,.08)}
+    details{margin-top:12px;border-top:1px solid var(--line-soft);padding-top:12px;color:#64748b;font-size:12px}
+    summary{cursor:pointer;font-weight:900;color:#475569}
+    pre{white-space:pre-wrap;word-break:break-word;background:#0f172a;color:#e2e8f0;border-radius:14px;padding:12px;font-size:11px;line-height:1.5;overflow:auto}
+    .tabs{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}
+    .tab{border:1px solid var(--line);background:#fff;border-radius:999px;min-height:34px;padding:0 13px;font-size:12px;font-weight:950;color:#475569}
+    .tab.active{background:var(--brand);border-color:var(--brand);color:#fff}
+    .resultsTop{padding:14px 18px;border-bottom:1px solid var(--line-soft);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:#fbfdff}
+    .resultBadge{display:inline-flex;align-items:center;min-height:30px;padding:0 10px;border-radius:999px;background:#eef6ff;color:var(--brand);font-size:12px;font-weight:950}
+    .scope{color:#64748b;font-size:12px;font-weight:800}
+    .chips{padding:12px 18px 0;display:flex;gap:8px;flex-wrap:wrap}
+    .chip{display:inline-flex;align-items:center;gap:7px;min-height:30px;padding:0 10px;border-radius:999px;background:#eef2ff;color:#263b74;font-size:12px;font-weight:900}
+    .chip button{border:0;background:transparent;color:#263b74;font-weight:950;padding:0;font-size:16px;line-height:1}
+    .toolbar{padding:12px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--line-soft)}
+    .toolbarLeft,.toolbarRight{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+    .pageInfo{color:#64748b;font-size:12px;font-weight:900;min-width:92px;text-align:center}
+    .miniSelect{width:auto;min-height:38px;border-radius:12px;font-size:12px;padding:0 28px 0 10px}
+    .resultsBody{padding:0}
+    .tableWrap{overflow:auto;display:block}
+    table{width:100%;border-collapse:collapse;min-width:850px}
+    th,td{padding:13px 16px;border-bottom:1px solid var(--line-soft);text-align:left;vertical-align:middle}
+    th{position:sticky;top:0;z-index:2;background:#f8fafc;color:#475569;font-size:11px;text-transform:uppercase;letter-spacing:.07em;font-weight:950}
+    tbody tr:hover{background:#fbfdff}
+    .codeBadge{display:inline-flex;align-items:center;justify-content:center;min-height:30px;padding:0 10px;border-radius:999px;background:#f1f5f9;color:#334155;font-size:12px;font-weight:950;white-space:nowrap}
+    .clientName{font-size:14px;font-weight:950;color:var(--ink);letter-spacing:-.01em}
+    .clientMeta{margin-top:4px;color:#64748b;font-size:12px;font-weight:700;line-height:1.35}
+    .matchTag{display:inline-flex;align-items:center;min-height:24px;margin-top:6px;padding:0 8px;border-radius:999px;background:#ecfdf5;color:#047857;font-size:11px;font-weight:950}
+    .actions{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+    .miniBtn{min-height:34px;border:1px solid var(--line);border-radius:12px;background:#fff;color:#334155;padding:0 10px;font-size:12px;font-weight:950}
+    .miniBtn.primary{background:var(--brand);border-color:var(--brand);color:#fff}
+    .cards{display:none;padding:14px;gap:12px}
+    .resultCard{border:1px solid var(--line);border-radius:18px;background:#fff;padding:14px;box-shadow:var(--shadow-soft)}
+    .cardTop{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+    .cardClientName{margin:0;font-size:15px;line-height:1.25;font-weight:950;color:var(--ink)}
+    .cardActions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+    .vendorGrid{display:none;padding:14px;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+    .vendorCard{border:1px solid var(--line);border-radius:18px;background:#fff;padding:14px;box-shadow:var(--shadow-soft)}
+    .vendorCard h3{margin:0;color:var(--ink);font-size:15px;line-height:1.25;font-weight:950}
+    .vendorCard p{margin:8px 0 13px;color:#64748b;font-size:12px;font-weight:750;line-height:1.45}
+    .empty{display:none;margin:18px;border:1px dashed #cbd5e1;border-radius:20px;background:#f8fafc;color:#64748b;text-align:center;padding:28px;font-weight:850;line-height:1.5}
+    .bottomNav{display:none;position:fixed;left:0;right:0;bottom:0;z-index:55;padding:10px 12px calc(10px + var(--safe-bottom));background:rgba(255,255,255,.92);border-top:1px solid var(--line);backdrop-filter:blur(14px)}
+    .bottomNavInner{max-width:560px;margin:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+    .btab{min-height:48px;border:1px solid var(--line);border-radius:17px;background:#fff;color:#64748b;font-size:11px;font-weight:950;display:grid;place-items:center;gap:2px}
+    .btab.active{background:var(--brand);border-color:var(--brand);color:#fff}
+    .btab .ico{font-size:16px;line-height:1}
+    .toastWrap{position:fixed;right:18px;bottom:calc(20px + var(--safe-bottom));z-index:80;display:grid;gap:10px}
+    .toast{background:#0f172a;color:#fff;border-radius:14px;padding:12px 14px;box-shadow:0 14px 34px rgba(15,23,42,.22);font-size:13px;font-weight:850}
+    body.compact .hero{padding:20px}
+    body.compact .metric{min-height:84px;padding:13px}
+    body.compact .metricValue{font-size:23px}
+    body.compact th,body.compact td{padding:10px 12px}
+    body.compact .clientName{font-size:13px}
+    @media(max-width:1100px){
+      .heroGrid{grid-template-columns:1fr}
+      .layout{grid-template-columns:1fr}
       .metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
-      .vendorList{grid-template-columns:1fr 1fr}
+      .vendorGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
     }
-    @media (max-width:900px){
-      .desktopTableWrap{display:none}
-      .cards{display:flex}
-      .vendorList{grid-template-columns:1fr}
+    @media(max-width:740px){
+      body{padding-bottom:calc(86px + var(--safe-bottom))}
+      .topbarInner{padding-left:14px;padding-right:14px}
+      .topPills{display:none}
+      .page{padding:14px 12px 22px}
+      .hero{border-radius:22px;padding:18px}
+      .heroSearch{padding:12px;border-radius:18px}
+      .searchInput{min-height:52px;font-size:15px}
+      .metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+      .metric{min-height:94px;padding:13px;border-radius:16px}
+      .metricValue{font-size:23px}
+      .layout{gap:14px}
+      .panel{border-radius:20px}
+      .panelHead{align-items:flex-start;flex-direction:column;padding:14px}
+      .panelTag{align-self:flex-start}
+      .panelBody{padding:14px}
+      .tabs{width:100%;display:grid;grid-template-columns:repeat(3,1fr)}
+      .tab{padding:0 7px}
+      .btnRow{grid-template-columns:1fr}
+      .toolbar{align-items:stretch;padding:12px 14px}
+      .toolbarLeft,.toolbarRight{width:100%;justify-content:space-between}
+      .miniSelect{width:100%}
+      .tableWrap{display:none}
+      .cards{display:grid}
+      .vendorGrid{grid-template-columns:1fr}
+      .bottomNav{display:block}
+      .toastWrap{left:12px;right:12px;bottom:calc(76px + var(--safe-bottom))}
+      .brandSub{max-width:78vw}
     }
-    @media (min-width:981px){
-      body{padding-bottom:0}
-      .bottombar{display:none}
+  
+
+    /* Identidad visual Toyo Foods: azul de logotipo, blanco y grises limpios como la web */
+    :root{
+      --bg:#f5f7fa;
+      --card:#ffffff;
+      --card-2:#f9fbfd;
+      --ink:#111827;
+      --muted:#667085;
+      --line:#e5eaf0;
+      --line-soft:#eef2f6;
+      --brand:#104F9E;
+      --brand-2:#1F5AA4;
+      --brand-3:#EAF2FF;
+      --brand-dark:#073B78;
+      --shadow:0 16px 34px rgba(16,79,158,.09);
+      --shadow-soft:0 8px 22px rgba(16,79,158,.07);
     }
-    @media (max-width:640px){
-      .page{padding:14px}
-      .shellInner{padding-left:14px;padding-right:14px}
-      .hero{padding:18px}
-      .hero h1{font-size:24px}
-      .cardHead,.controlBody,.resultsTop,.filterChips,.toolbar,.resultsBody{padding-left:14px;padding-right:14px}
-      .metrics{grid-template-columns:1fr 1fr}
-      .buttonStack{grid-template-columns:1fr}
-      .toolbar{padding-top:8px}
-      .toastWrap{left:12px;right:12px}
-      .toast{min-width:0;max-width:none}
+    body{
+      background:
+        radial-gradient(circle at 8% -10%, rgba(16,79,158,.10), transparent 28%),
+        radial-gradient(circle at 92% 0%, rgba(31,90,164,.08), transparent 24%),
+        linear-gradient(180deg,#ffffff 0%,#f7f9fc 48%,#eef4fb 100%);
     }
+    .topbar{
+      color:var(--ink);
+      background:rgba(255,255,255,.96);
+      border-bottom:1px solid var(--line);
+      box-shadow:0 8px 24px rgba(16,79,158,.08);
+    }
+    .topbarInner{padding-bottom:10px}
+    .mark{
+      width:48px;
+      height:48px;
+      border-radius:16px;
+      overflow:hidden;
+      background:transparent;
+      box-shadow:0 10px 24px rgba(16,79,158,.20);
+    }
+    .mark img{width:100%;height:100%;display:block;object-fit:contain}
+    .brandTitle{color:var(--brand);font-size:15px;letter-spacing:.005em}
+    .brandSub{color:#667085}
+    .topPill{
+      background:#f8fbff;
+      border-color:#dbe7f7;
+      color:#334155;
+    }
+    .dot{background:#104F9E;box-shadow:0 0 0 4px rgba(16,79,158,.14)}
+    .hero{
+      color:var(--ink);
+      background:linear-gradient(135deg,#ffffff 0%,#f7fbff 58%,#eaf2ff 100%);
+      border:1px solid #d9e7f7;
+      border-top:6px solid var(--brand);
+      box-shadow:0 22px 48px rgba(16,79,158,.14);
+    }
+    .hero:before{background:radial-gradient(circle,rgba(16,79,158,.12),transparent 67%)}
+    .eyebrow{
+      color:var(--brand);
+      background:#eef6ff;
+      border-color:#cfe1f7;
+    }
+    h1{color:#0f172a}
+    .hero p{color:#475467}
+    .statusBadge{
+      border-color:#cfe1f7;
+      background:#ffffff;
+      color:#104F9E;
+      box-shadow:0 8px 18px rgba(16,79,158,.07);
+    }
+    .heroSearch{
+      background:#ffffff;
+      border-color:#d9e7f7;
+      box-shadow:0 16px 34px rgba(16,79,158,.10);
+    }
+    .heroSearch label{color:var(--brand)}
+    .hint{color:#475467}
+    .hint strong{color:var(--brand)}
+    .searchInput{border:1px solid #dbe7f7;box-shadow:0 10px 24px rgba(16,79,158,.08)}
+    .clearSmall{background:#eef6ff;color:var(--brand)}
+    .metric{border-color:#e0e9f5;box-shadow:var(--shadow-soft)}
+    .metricValue{color:var(--brand)}
+    .panel{border-color:#e0e9f5;box-shadow:var(--shadow)}
+    .panelHead,.resultsTop{background:#fbfdff}
+    .panelKicker,.panelTag,.resultBadge{color:var(--brand)}
+    .panelTag,.resultBadge{background:#eef6ff}
+    input:focus,select:focus{border-color:var(--brand);box-shadow:0 0 0 4px rgba(16,79,158,.13)}
+    .btn.primary,.tab.active,.miniBtn.primary,.btab.active{background:var(--brand);border-color:var(--brand);color:#fff}
+    .btn.primary{background:linear-gradient(135deg,#104F9E,#1F5AA4)}
+    .btn.soft{background:#eef6ff;border-color:#cfe1f7;color:var(--brand)}
+    .chip{background:#eef6ff;color:#104F9E}
+    .chip button{color:#104F9E}
+    th{background:#f8fbff;color:#344054}
+    tbody tr:hover{background:#f8fbff}
+    .codeBadge{background:#eef6ff;color:#104F9E}
+    .bottomNav{background:rgba(255,255,255,.96);box-shadow:0 -10px 24px rgba(16,79,158,.08)}
+    .toast{background:var(--brand-dark)}
+    @media(max-width:740px){
+      .mark{width:44px;height:44px;border-radius:15px}
+      .brandTitle{font-size:14px}
+      .hero{border-radius:20px;border-top-width:5px}
+    }
+
   </style>
 </head>
 <body>
-  <div class="shellBar">
-    <div class="shellInner">
-      <div class="shellLeft">
-        <span class="shellBadge"><span class="shellDot"></span><span id="shellStatus">Portal operativo</span></span>
-        <span class="shellLabel">Toyo Foods México · Plataforma interna</span>
+  <div class="topbar">
+    <div class="topbarInner">
+      <div class="brandBlock">
+        <div class="mark" aria-label="Toyo Foods"><img src="data:image/png;base64,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" alt="Toyo Foods" /></div>
+        <div>
+          <div class="brandTitle">Toyo Foods · Portal de Clientes</div>
+          <div class="brandSub" id="topSubtitle">Cargando base comercial…</div>
+        </div>
       </div>
-      <div class="shellRight">
-        <span class="shellStat"><span>Entorno</span><strong>Producción</strong></span>
-        <span class="shellStat"><span>Actualización</span><strong id="shellSync">Pendiente</strong></span>
+      <div class="topPills">
+        <span class="topPill"><span class="dot"></span><span id="portalState">Sincronizando</span></span>
+        <span class="topPill">Actualizado: <strong id="syncStamp">—</strong></span>
       </div>
     </div>
   </div>
 
-  <div class="toastWrap" id="toastWrap"></div>
-
   <main class="page">
     <section class="hero">
-      <div class="heroTop">
+      <div class="heroGrid">
         <div>
-          <span class="eyebrow">Workspace comercial</span>
-          <h1>Portal de Pedidos</h1>
-          <p id="subtitle">Cargando información de clientes, directorio comercial y accesos recientes…</p>
+          <span class="eyebrow">Portal comercial</span>
+          <h1>Busca y abre formatos de pedido más rápido.</h1>
+          <p>
+            Búsqueda inteligente por nombre del cliente, código, vendedor/sucursal o ruta del archivo.
+            Mantiene el formato actual y mejora la claridad para escritorio y celular.
+          </p>
+          <div class="statusLine">
+            <span class="statusBadge" id="statusText">Preparando datos…</span>
+            <span class="statusBadge" id="sourceText">Fuente pendiente</span>
+          </div>
         </div>
-        <div class="heroMeta">
-          <span class="heroMetaItem">Sin logo · versión ejecutiva</span>
-          <span class="heroMetaItem">Enfoque corporativo global</span>
+        <div class="heroSearch">
+          <label for="qHero">Búsqueda principal</label>
+          <div class="searchBox">
+            <span class="icon">🔎</span>
+            <input class="searchInput" id="qHero" type="search" placeholder="Ej. Genki, C020980, Maricela, Rio Nilo" autocomplete="off" />
+            <button class="clearSmall" id="clearHero" type="button" aria-label="Limpiar búsqueda">✕</button>
+          </div>
+          <div class="hint">Tip: puedes escribir varias palabras. Ejemplo: <strong>“sushi factory gdl”</strong> o <strong>“C018920”</strong>.</div>
         </div>
-      </div>
-      <div class="statusLine">
-        <span id="statusText">Preparando datos del portal…</span>
-        <span id="lastUpdate">Sincronización pendiente</span>
       </div>
     </section>
 
     <section class="metrics">
-      <article class="metric">
-        <div>
-          <div class="metricLabel">Clientes</div>
-          <div class="metricValue" id="kpiClients">—</div>
-        </div>
-        <div class="metricSub">Base operativa disponible para consulta</div>
-      </article>
-      <article class="metric">
-        <div>
-          <div class="metricLabel">Vendedores</div>
-          <div class="metricValue" id="kpiVendors">—</div>
-        </div>
-        <div class="metricSub">Directorio comercial sincronizado</div>
-      </article>
-      <article class="metric">
-        <div>
-          <div class="metricLabel">Recientes</div>
-          <div class="metricValue" id="kpiRecents">0</div>
-        </div>
-        <div class="metricSub">Accesos guardados localmente</div>
-      </article>
-      <article class="metric">
-        <div>
-          <div class="metricLabel">Vista</div>
-          <div class="metricValue" id="kpiMode">Lista</div>
-        </div>
-        <div class="metricSub">Densidad actual del workspace</div>
-      </article>
+      <article class="metric"><div class="metricLabel">Clientes</div><div class="metricValue" id="kpiClients">—</div><div class="metricSub">Formatos disponibles</div></article>
+      <article class="metric"><div class="metricLabel">Vendedores / grupos</div><div class="metricValue" id="kpiVendors">—</div><div class="metricSub">Filtro comercial</div></article>
+      <article class="metric"><div class="metricLabel">Resultados</div><div class="metricValue" id="kpiResults">—</div><div class="metricSub">Coincidencias actuales</div></article>
+      <article class="metric"><div class="metricLabel">Recientes</div><div class="metricValue" id="kpiRecents">0</div><div class="metricSub">Accesos guardados en este equipo</div></article>
     </section>
 
-    <section class="workspace" style="margin-top:18px">
-      <aside class="leftCol">
-        <section class="controlCard">
-          <div class="cardHead">
-            <div class="cardTitle">
-              <span class="cardKicker">Control center</span>
-              <span class="cardName">Búsqueda y filtros</span>
-            </div>
-            <span class="cardInfo">Enterprise UI</span>
+    <section class="layout">
+      <aside class="panel">
+        <div class="panelHead">
+          <div><span class="panelKicker">Control center</span><span class="panelTitle">Filtros rápidos</span></div>
+          <span class="panelTag">Búsqueda mejorada</span>
+        </div>
+        <div class="panelBody">
+          <div class="field">
+            <label class="label" for="qSide">Cliente, código, vendedor o archivo</label>
+            <div class="inputWrap"><span class="icon">🔎</span><input id="qSide" type="search" placeholder="Buscar en toda la base" autocomplete="off" /></div>
           </div>
-          <div class="controlBody">
-            <div class="field">
-              <label class="label" for="q">Buscar cliente</label>
-              <div class="inputWrap">
-                <span class="searchIcon">🔎</span>
-                <input id="q" type="text" placeholder="Nombre del cliente o código" autocomplete="off" />
-              </div>
-            </div>
-
-            <div class="field">
-              <label class="label" for="vendorFilter">Vendedor</label>
-              <select id="vendorFilter">
-                <option value="ALL">Todos</option>
-              </select>
-            </div>
-
-            <div class="buttonStack">
-              <button class="btn ghost" id="btnClear" type="button">Limpiar filtros</button>
-              <button class="btn soft" id="btnCompact" type="button">Vista compacta</button>
-            </div>
-
-            <div class="buttonRow" style="margin-top:10px">
-              <button class="btn primary" id="btnCopyBase" type="button">Copiar enlace base</button>
-            </div>
-
-            <div class="note">
-              <strong>Recomendación:</strong> usa la búsqueda por nombre o código, filtra por vendedor y comparte enlaces directos con el equipo comercial.
-            </div>
-
-            <div class="shortcutRow">
-              <span class="shortcut"><kbd>/</kbd> Buscar</span>
-              <span class="shortcut"><kbd>Esc</kbd> Limpiar búsqueda</span>
-            </div>
-
-            <details id="diag">
-              <summary>Diagnóstico técnico</summary>
-              <pre id="diagText">—</pre>
-            </details>
+          <div class="field">
+            <label class="label" for="vendorText">Buscar vendedor / sucursal</label>
+            <div class="inputWrap"><span class="icon">👔</span><input id="vendorText" type="search" placeholder="Ej. GDL, CDMX, Rio Nilo, Maricela" autocomplete="off" /></div>
           </div>
-        </section>
+          <div class="field">
+            <label class="label" for="vendorSelect">Filtrar por vendedor / sucursal</label>
+            <select id="vendorSelect"><option value="ALL">Todos</option></select>
+          </div>
+          <div class="field">
+            <label class="label" for="sortSelect">Ordenar resultados</label>
+            <select id="sortSelect">
+              <option value="score">Mejor coincidencia</option>
+              <option value="client">Cliente A-Z</option>
+              <option value="code">Código</option>
+              <option value="vendor">Vendedor / sucursal</option>
+            </select>
+          </div>
+          <div class="btnRow">
+            <button class="btn danger" id="btnClear" type="button">Limpiar</button>
+            <button class="btn soft" id="btnCompact" type="button">Vista compacta</button>
+          </div>
+          <div class="btnRow single">
+            <button class="btn primary" id="btnExport" type="button">Exportar resultados CSV</button>
+          </div>
+          <div class="btnRow single">
+            <button class="btn ghost" id="btnCopyBase" type="button">Copiar enlace base</button>
+          </div>
+          <div class="note">
+            <strong>Mejora aplicada:</strong> ahora la búsqueda no se limita al cliente. También encuentra por código, vendedor/sucursal y nombre del archivo, evitando que se pierdan clientes por mayúsculas, acentos o palabras incompletas.
+          </div>
+          <div class="shortcutRow">
+            <span class="shortcut"><kbd>/</kbd> Buscar</span>
+            <span class="shortcut"><kbd>Esc</kbd> Limpiar texto</span>
+          </div>
+          <details id="diag"><summary>Diagnóstico técnico</summary><pre id="diagText">—</pre></details>
+        </div>
       </aside>
 
-      <section class="rightCol">
-        <section class="resultsCard">
-          <div class="cardHead">
-            <div class="cardTitle">
-              <span class="cardKicker">Workspace</span>
-              <span class="cardName" id="viewTitle">Clientes disponibles</span>
-            </div>
-            <div class="tabs">
-              <button class="tab active" id="tabSearch" type="button">Buscar</button>
-              <button class="tab" id="tabRecent" type="button">Recientes</button>
-              <button class="tab" id="tabVendors" type="button">Vendedores</button>
-            </div>
+      <section class="panel">
+        <div class="panelHead">
+          <div><span class="panelKicker">Workspace</span><span class="panelTitle" id="viewTitle">Clientes disponibles</span></div>
+          <div class="tabs">
+            <button class="tab active" id="tabSearch" type="button">Buscar</button>
+            <button class="tab" id="tabRecent" type="button">Recientes</button>
+            <button class="tab" id="tabVendors" type="button">Vendedores</button>
           </div>
-
-          <div class="resultsTop">
-            <div class="resultMain">
-              <div class="scope" id="scope">Mostrando: todos</div>
-              <div class="resultBadge" id="resultCount">0 resultados</div>
-            </div>
-            <div class="scope">Portal comercial Toyo Foods</div>
+        </div>
+        <div class="resultsTop">
+          <div>
+            <div class="scope" id="scope">Mostrando: todos</div>
+            <div class="resultBadge" id="resultCount">0 resultados</div>
           </div>
-
-          <div class="filterChips" id="filterChips"></div>
-
-          <div class="toolbar" id="toolbar">
-            <div class="toolbarLeft">
-              <button class="btn ghost" id="btnPrev" type="button">Anterior</button>
-              <button class="btn ghost" id="btnNext" type="button">Siguiente</button>
-              <span class="pageInfo" id="pageInfo">Página 1 de 1</span>
-            </div>
-            <div class="toolbarRight">
-              <div class="pageSizeWrap">
-                <span>Registros por página</span>
-                <select id="pageSize">
-                  <option value="50">50</option>
-                  <option value="100" selected>100</option>
-                  <option value="200">200</option>
-                </select>
-              </div>
-            </div>
+          <div class="scope" id="helperText">Selecciona “Abrir” para entrar al formato del cliente.</div>
+        </div>
+        <div class="chips" id="chips"></div>
+        <div class="toolbar" id="toolbar">
+          <div class="toolbarLeft">
+            <button class="miniBtn" id="btnPrev" type="button">Anterior</button>
+            <span class="pageInfo" id="pageInfo">Página 1 de 1</span>
+            <button class="miniBtn" id="btnNext" type="button">Siguiente</button>
           </div>
-
-          <div class="resultsBody">
-            <div class="desktopTableWrap" id="desktopTableWrap">
-              <table class="desktopTable">
-                <thead>
-                  <tr>
-                    <th style="width:150px">Código</th>
-                    <th>Cliente</th>
-                    <th style="width:230px">Vendedor</th>
-                    <th style="width:230px;text-align:right">Acciones</th>
-                  </tr>
-                </thead>
-                <tbody id="tableBody"></tbody>
-              </table>
-            </div>
-
-            <div class="cards" id="cards"></div>
-            <div class="vendorList" id="vendorList" style="display:none"></div>
-            <div class="empty" id="empty">Sin resultados.</div>
+          <div class="toolbarRight">
+            <select class="miniSelect" id="pageSize">
+              <option value="25">25 por página</option>
+              <option value="50" selected>50 por página</option>
+              <option value="100">100 por página</option>
+              <option value="200">200 por página</option>
+            </select>
           </div>
-        </section>
+        </div>
+        <div class="resultsBody">
+          <div class="tableWrap" id="tableWrap">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width:130px">Código</th>
+                  <th>Cliente</th>
+                  <th style="width:260px">Vendedor / sucursal</th>
+                  <th style="width:220px;text-align:right">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody"></tbody>
+            </table>
+          </div>
+          <div class="cards" id="cards"></div>
+          <div class="vendorGrid" id="vendorGrid"></div>
+          <div class="empty" id="empty">Sin resultados.</div>
+        </div>
       </section>
     </section>
   </main>
 
-  <div class="bottombar">
-    <div class="bnav">
+  <nav class="bottomNav" aria-label="Navegación móvil">
+    <div class="bottomNavInner">
       <button class="btab active" id="bSearch" type="button"><span class="ico">🔎</span><span>Buscar</span></button>
       <button class="btab" id="bRecent" type="button"><span class="ico">🕘</span><span>Recientes</span></button>
       <button class="btab" id="bVendors" type="button"><span class="ico">👔</span><span>Vendedores</span></button>
     </div>
-  </div>
+  </nav>
+  <div class="toastWrap" id="toastWrap"></div>
 
 <script>
 (() => {
   const $ = (q) => document.querySelector(q);
+  const fmt = (n) => Number(n || 0).toLocaleString("es-MX");
   const esc = (s) => (s ?? "").toString()
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
+    .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;").replaceAll("'","&#039;");
+  const norm = (s) => (s ?? "").toString().trim().toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, " ").replace(/\s+/g, " ").trim();
+  const termsOf = (s) => norm(s).split(" ").filter(Boolean);
+  const lsGet = (k, fb) => { try { return JSON.parse(localStorage.getItem(k) || JSON.stringify(fb)); } catch { return fb; } };
+  const lsSet = (k, v) => localStorage.setItem(k, JSON.stringify(v));
 
-  const norm = (s) => (s || "").toString().trim().toLowerCase()
-    .normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const REC_KEY = "toyo_index_recent_v5";
+  const COMPACT_KEY = "toyo_index_compact_v6";
 
-  const loadJSON = (key, fallback) => {
-    try { return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback)); }
-    catch { return fallback; }
-  };
-
-  const saveJSON = (key, value) => localStorage.setItem(key, JSON.stringify(value));
-  const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
-
-  const LS_REC = "toyo_index_recent_v5";
-  const LS_COMPACT = "toyo_index_compact_v5";
-
-  const subtitle = $("#subtitle");
-  const statusText = $("#statusText");
-  const lastUpdate = $("#lastUpdate");
-  const shellStatus = $("#shellStatus");
-  const shellSync = $("#shellSync");
-  const q = $("#q");
-  const vendorFilter = $("#vendorFilter");
-  const btnClear = $("#btnClear");
-  const btnCompact = $("#btnCompact");
-  const btnCopyBase = $("#btnCopyBase");
-  const tabSearch = $("#tabSearch");
-  const tabRecent = $("#tabRecent");
-  const tabVendors = $("#tabVendors");
-  const bSearch = $("#bSearch");
-  const bRecent = $("#bRecent");
-  const bVendors = $("#bVendors");
-  const viewTitle = $("#viewTitle");
-  const scope = $("#scope");
-  const resultCount = $("#resultCount");
-  const filterChips = $("#filterChips");
-  const toolbar = $("#toolbar");
-  const btnPrev = $("#btnPrev");
-  const btnNext = $("#btnNext");
-  const pageInfo = $("#pageInfo");
-  const pageSizeSel = $("#pageSize");
-  const tableBody = $("#tableBody");
-  const cards = $("#cards");
-  const vendorList = $("#vendorList");
-  const empty = $("#empty");
-  const diag = $("#diag");
-  const diagText = $("#diagText");
-  const kpiClients = $("#kpiClients");
-  const kpiVendors = $("#kpiVendors");
-  const kpiRecents = $("#kpiRecents");
-  const kpiMode = $("#kpiMode");
-  const toastWrap = $("#toastWrap");
+  const topSubtitle = $("#topSubtitle"), portalState = $("#portalState"), syncStamp = $("#syncStamp");
+  const statusText = $("#statusText"), sourceText = $("#sourceText"), qHero = $("#qHero"), qSide = $("#qSide"), clearHero = $("#clearHero");
+  const vendorText = $("#vendorText"), vendorSelect = $("#vendorSelect"), sortSelect = $("#sortSelect");
+  const btnClear = $("#btnClear"), btnCompact = $("#btnCompact"), btnExport = $("#btnExport"), btnCopyBase = $("#btnCopyBase");
+  const tabSearch = $("#tabSearch"), tabRecent = $("#tabRecent"), tabVendors = $("#tabVendors"), bSearch = $("#bSearch"), bRecent = $("#bRecent"), bVendors = $("#bVendors");
+  const kpiClients = $("#kpiClients"), kpiVendors = $("#kpiVendors"), kpiResults = $("#kpiResults"), kpiRecents = $("#kpiRecents");
+  const viewTitle = $("#viewTitle"), scope = $("#scope"), resultCount = $("#resultCount"), helperText = $("#helperText"), chips = $("#chips");
+  const toolbar = $("#toolbar"), btnPrev = $("#btnPrev"), btnNext = $("#btnNext"), pageInfo = $("#pageInfo"), pageSize = $("#pageSize");
+  const tableBody = $("#tableBody"), cards = $("#cards"), vendorGrid = $("#vendorGrid"), empty = $("#empty"), diag = $("#diag"), diagText = $("#diagText"), toastWrap = $("#toastWrap");
 
   let ALL = [];
   let VENDORS = [];
   let MODE = "search";
-  let ACTIVE_VENDOR = "ALL";
   let PAGE = 1;
-  let PAGE_SIZE = 100;
-  let LAST_TOTAL = 0;
-  let compact = localStorage.getItem(LS_COMPACT) === "1";
-  let searchTimer = null;
+  let PAGE_SIZE = 50;
+  let ACTIVE_VENDOR = "ALL";
+  let LAST_ROWS = [];
+  let compact = localStorage.getItem(COMPACT_KEY) === "1";
+  let renderTimer = null;
 
-  function showToast(message) {
+  function toast(msg){
     const el = document.createElement("div");
     el.className = "toast";
-    el.textContent = message;
+    el.textContent = msg;
     toastWrap.appendChild(el);
-    setTimeout(() => {
-      el.style.opacity = "0";
-      el.style.transform = "translateY(-8px)";
-      el.style.transition = "all .18s ease";
-    }, 1700);
-    setTimeout(() => el.remove(), 2100);
+    setTimeout(() => { el.style.opacity = "0"; el.style.transform = "translateY(-6px)"; el.style.transition = "all .18s ease"; }, 1700);
+    setTimeout(() => el.remove(), 2200);
   }
-
-  function setDiag(data) {
-    diagText.textContent = typeof data === "string" ? data : JSON.stringify(data, null, 2);
-  }
-
-  function setPortalStatus(text, mode = "ok") {
-    const labels = {
-      ok: "Portal operativo",
-      loading: "Sincronizando",
-      error: "Incidencia detectada"
-    };
-    shellStatus.textContent = labels[mode] || labels.ok;
+  function setState(text, mode="ok"){
+    portalState.textContent = mode === "loading" ? "Sincronizando" : mode === "error" ? "Incidencia" : "Operativo";
     statusText.textContent = text;
   }
-
-  function updateLastSync() {
-    const now = new Date();
-    const stamp = `${now.toLocaleDateString('es-MX')} ${now.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' })}`;
-    lastUpdate.textContent = `Última sincronización: ${stamp}`;
-    shellSync.textContent = stamp;
+  function setDiag(data){ diagText.textContent = typeof data === "string" ? data : JSON.stringify(data, null, 2); }
+  function syncInputs(value){
+    if (qHero.value !== value) qHero.value = value;
+    if (qSide.value !== value) qSide.value = value;
+    clearHero.style.display = value.trim() ? "block" : "none";
   }
-
-  function pushRecent(path) {
-    let rec = loadJSON(LS_REC, []);
-    rec.unshift(path);
-    rec = [...new Set(rec)].slice(0, 30);
-    saveJSON(LS_REC, rec);
-    updateRecentsKpi();
-  }
-
-  function updateRecentsKpi() {
-    kpiRecents.textContent = loadJSON(LS_REC, []).length;
-  }
-
-  function setCompact(on) {
+  function scheduleRender(){ clearTimeout(renderTimer); renderTimer = setTimeout(render, 70); }
+  function resetPage(){ PAGE = 1; }
+  function updateRecents(){ kpiRecents.textContent = fmt(lsGet(REC_KEY, []).length); }
+  function setCompact(on){
     compact = !!on;
     document.body.classList.toggle("compact", compact);
-    localStorage.setItem(LS_COMPACT, compact ? "1" : "0");
+    localStorage.setItem(COMPACT_KEY, compact ? "1" : "0");
     btnCompact.textContent = compact ? "Vista amplia" : "Vista compacta";
-    kpiMode.textContent = compact ? "Compacta" : "Lista";
+  }
+  function pushRecent(path){
+    let rec = lsGet(REC_KEY, []);
+    rec.unshift(path);
+    rec = [...new Set(rec)].slice(0, 40);
+    lsSet(REC_KEY, rec);
+    updateRecents();
+  }
+  async function copyText(text, msg){
+    try { await navigator.clipboard.writeText(text); toast(msg || "Copiado"); }
+    catch {
+      const ta = document.createElement("textarea");
+      ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand("copy"); ta.remove();
+      toast(msg || "Copiado");
+    }
+  }
+  function getQuery(){ return qHero.value || qSide.value || ""; }
+  function currentVendorLabel(){ return ACTIVE_VENDOR === "ALL" ? "Todos" : (VENDORS.find(v => v.folder === ACTIVE_VENDOR)?.label || ACTIVE_VENDOR); }
+  function fileName(path){ return (path || "").split("/").pop() || path || ""; }
+
+  function matchTokens(haystack, tokens){ return tokens.every(t => haystack.includes(t)); }
+  function clientScore(c, qTokens, vendorTokens){
+    if (ACTIVE_VENDOR !== "ALL" && c.vendor_folder !== ACTIVE_VENDOR) return -1;
+    if (vendorTokens.length && !matchTokens(c._vendorSearch, vendorTokens)) return -1;
+    if (!qTokens.length) return 0;
+    if (!matchTokens(c._search, qTokens)) return -1;
+
+    let score = 0;
+    for (const t of qTokens) {
+      const numeric = t.replace(/^c/, "");
+      if (c._code === t || c._codeNoC === numeric) score += 120;
+      else if (c._code.includes(t) || (numeric && c._codeNoC.includes(numeric))) score += 85;
+      if (c._name.startsWith(t)) score += 42;
+      else if (c._name.includes(" " + t)) score += 32;
+      else if (c._name.includes(t)) score += 24;
+      if (c._vendorSearch.startsWith(t)) score += 20;
+      else if (c._vendorSearch.includes(t)) score += 13;
+      if (c._file.includes(t)) score += 8;
+    }
+    return score;
+  }
+  function matchReason(c){
+    const qTokens = termsOf(getQuery());
+    if (!qTokens.length) return "Lista general";
+    if (qTokens.some(t => c._code.includes(t) || c._codeNoC.includes(t.replace(/^c/, "")))) return "Coincide con código";
+    if (qTokens.some(t => c._name.includes(t))) return "Coincide con cliente";
+    if (qTokens.some(t => c._vendorSearch.includes(t))) return "Coincide con vendedor/sucursal";
+    if (qTokens.some(t => c._file.includes(t))) return "Coincide con archivo";
+    return "Coincidencia";
+  }
+  function applySort(rows){
+    const mode = sortSelect.value;
+    if (mode === "client") rows.sort((a,b) => a.client_name.localeCompare(b.client_name,"es") || a.client_code.localeCompare(b.client_code,"es"));
+    else if (mode === "code") rows.sort((a,b) => a.client_code.localeCompare(b.client_code,"es") || a.client_name.localeCompare(b.client_name,"es"));
+    else if (mode === "vendor") rows.sort((a,b) => (a.vendor_label || "").localeCompare(b.vendor_label || "","es") || a.client_name.localeCompare(b.client_name,"es"));
+    else rows.sort((a,b) => (b._score - a._score) || a.client_name.localeCompare(b.client_name,"es"));
+    return rows;
+  }
+  function getFilteredRows(){
+    const qTokens = termsOf(getQuery());
+    const vendorTokens = termsOf(vendorText.value);
+    const rows = [];
+    for (const c of ALL) {
+      const score = clientScore(c, qTokens, vendorTokens);
+      if (score >= 0) rows.push({...c, _score: score});
+    }
+    return applySort(rows);
   }
 
-  function resetPage(){ PAGE = 1; }
+  function renderChips(){
+    chips.innerHTML = "";
+    const add = (label, type) => {
+      const span = document.createElement("span");
+      span.className = "chip";
+      span.innerHTML = `${esc(label)} <button type="button" data-chip="${type}" aria-label="Quitar filtro">×</button>`;
+      chips.appendChild(span);
+    };
+    if (getQuery().trim()) add(`Búsqueda: ${getQuery().trim()}`, "query");
+    if (vendorText.value.trim()) add(`Vendedor contiene: ${vendorText.value.trim()}`, "vendorText");
+    if (ACTIVE_VENDOR !== "ALL") add(`Filtro: ${currentVendorLabel()}`, "vendor");
+  }
+  chips.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-chip]");
+    if (!btn) return;
+    const type = btn.getAttribute("data-chip");
+    if (type === "query") syncInputs("");
+    if (type === "vendorText") vendorText.value = "";
+    if (type === "vendor") { ACTIVE_VENDOR = "ALL"; vendorSelect.value = "ALL"; }
+    resetPage(); render();
+  });
 
-  function setPager(total) {
-    LAST_TOTAL = total || 0;
-    const pages = Math.max(1, Math.ceil(LAST_TOTAL / PAGE_SIZE));
-    PAGE = clamp(PAGE, 1, pages);
+  function setMode(mode){
+    MODE = mode;
+    const active = (el, on) => el.classList.toggle("active", on);
+    active(tabSearch, mode === "search"); active(tabRecent, mode === "recent"); active(tabVendors, mode === "vendors");
+    active(bSearch, mode === "search"); active(bRecent, mode === "recent"); active(bVendors, mode === "vendors");
+    viewTitle.textContent = mode === "search" ? "Clientes disponibles" : mode === "recent" ? "Accesos recientes" : "Directorio de vendedores / sucursales";
+    helperText.textContent = mode === "vendors" ? "Selecciona un vendedor para filtrar sus clientes." : "Selecciona “Abrir” para entrar al formato del cliente.";
+    resetPage(); render(); window.scrollTo({top:0,behavior:"smooth"});
+  }
+
+  function setPager(total){
+    const pages = Math.max(1, Math.ceil((total || 0) / PAGE_SIZE));
+    PAGE = Math.max(1, Math.min(PAGE, pages));
     pageInfo.textContent = `Página ${PAGE} de ${pages}`;
     btnPrev.disabled = PAGE <= 1;
     btnNext.disabled = PAGE >= pages;
   }
-
-  function getPageSlice(arr) {
+  function slicePage(rows){
     const start = (PAGE - 1) * PAGE_SIZE;
-    return arr.slice(start, start + PAGE_SIZE);
+    return rows.slice(start, start + PAGE_SIZE);
   }
-
-  function currentVendorLabel() {
-    return ACTIVE_VENDOR === "ALL"
-      ? "todos"
-      : (VENDORS.find(v => v.folder === ACTIVE_VENDOR)?.label || ACTIVE_VENDOR);
-  }
-
-  function renderChips() {
-    filterChips.innerHTML = "";
-    if (MODE !== "search" && MODE !== "recent") return;
-
-    if (ACTIVE_VENDOR !== "ALL") {
-      const chip = document.createElement("span");
-      chip.className = "chip";
-      chip.innerHTML = `Vendedor: ${esc(currentVendorLabel())} <span class="x" data-chip="vendor">×</span>`;
-      filterChips.appendChild(chip);
-    }
-
-    if ((q.value || "").trim()) {
-      const chip = document.createElement("span");
-      chip.className = "chip";
-      chip.innerHTML = `Búsqueda: ${esc(q.value.trim())} <span class="x" data-chip="query">×</span>`;
-      filterChips.appendChild(chip);
-    }
-  }
-
-  filterChips.addEventListener("click", (e) => {
-    const x = e.target.closest("[data-chip]");
-    if (!x) return;
-    const type = x.getAttribute("data-chip");
-    if (type === "vendor") {
-      ACTIVE_VENDOR = "ALL";
-      vendorFilter.value = "ALL";
-    }
-    if (type === "query") {
-      q.value = "";
-    }
-    resetPage();
-    render();
-  });
-
-  function setActiveTab(which) {
-    MODE = which;
-    const mark = (el, on) => el.classList.toggle("active", on);
-    mark(tabSearch, MODE === "search");
-    mark(tabRecent, MODE === "recent");
-    mark(tabVendors, MODE === "vendors");
-    mark(bSearch, MODE === "search");
-    mark(bRecent, MODE === "recent");
-    mark(bVendors, MODE === "vendors");
-
-    viewTitle.textContent = MODE === "search"
-      ? "Clientes disponibles"
-      : MODE === "recent"
-        ? "Accesos recientes"
-        : "Directorio comercial";
-
-    resetPage();
-    render();
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-
-  function applyQuery(arr) {
-    const s = norm(q.value);
-    if (!s) return arr;
-    const looksCode = /^c?\d/.test(s.replace(/\s+/g, "")) || /\d{3,}/.test(s);
-    return arr.filter(c => {
-      const code = norm(c.client_code);
-      const name = norm(c.client_name);
-      return looksCode ? (code.includes(s) || name.includes(s)) : (name.includes(s) || code.includes(s));
-    });
-  }
-
-  function renderEmpty(text) {
-    tableBody.innerHTML = "";
-    cards.innerHTML = "";
-    vendorList.innerHTML = "";
-    vendorList.style.display = "none";
+  function showEmpty(text){
+    tableBody.innerHTML = ""; cards.innerHTML = ""; vendorGrid.innerHTML = "";
+    vendorGrid.style.display = "none";
     empty.style.display = "block";
     empty.textContent = text;
   }
-
-  function renderClientRows(rows) {
-    tableBody.innerHTML = rows.map(c => `
+  function renderClientRows(rows){
+    empty.style.display = "none";
+    vendorGrid.style.display = "none";
+    const tableHtml = rows.map(c => `
       <tr>
         <td><span class="codeBadge">${esc(c.client_code || "—")}</span></td>
         <td>
           <div class="clientName">${esc(c.client_name)}</div>
-          <div class="clientMeta">Formato listo para abrir o compartir</div>
+          <div class="clientMeta">Archivo: ${esc(fileName(c.path))}</div>
+          <span class="matchTag">${esc(matchReason(c))}</span>
         </td>
         <td>
-          <div class="clientName" style="font-size:14px;font-weight:700">${esc(c.vendor_label || c.vendor_folder || "—")}</div>
+          <div class="clientName">${esc(c.vendor_label || c.vendor_folder || "—")}</div>
           <div class="clientMeta">${esc(c.vendor_folder || "—")}</div>
         </td>
-        <td>
-          <div class="actionRow">
-            <button class="miniBtn primary" type="button" data-act="open" data-path="${esc(c.path)}">Abrir</button>
-            <button class="miniBtn" type="button" data-act="copy" data-path="${esc(c.path)}">Copiar enlace</button>
-          </div>
-        </td>
-      </tr>
-    `).join("");
+        <td><div class="actions">
+          <button class="miniBtn primary" type="button" data-act="open" data-path="${esc(c.path)}">Abrir</button>
+          <button class="miniBtn" type="button" data-act="copy" data-path="${esc(c.path)}">Copiar enlace</button>
+        </div></td>
+      </tr>`).join("");
+    tableBody.innerHTML = tableHtml;
 
     cards.innerHTML = rows.map(c => `
       <article class="resultCard">
         <div class="cardTop">
           <div>
             <h3 class="cardClientName">${esc(c.client_name)}</h3>
-            <div class="cardMeta">Código: ${esc(c.client_code || "—")}</div>
-            <div class="cardMeta">Vendedor: ${esc(c.vendor_label || c.vendor_folder || "—")}</div>
+            <div class="clientMeta">Código: ${esc(c.client_code || "—")}</div>
+            <div class="clientMeta">Vendedor: ${esc(c.vendor_label || c.vendor_folder || "—")}</div>
+            <div class="clientMeta">Archivo: ${esc(fileName(c.path))}</div>
+            <span class="matchTag">${esc(matchReason(c))}</span>
           </div>
           <span class="codeBadge">${esc(c.client_code || "—")}</span>
         </div>
@@ -1318,327 +747,225 @@
           <button class="miniBtn primary" type="button" data-act="open" data-path="${esc(c.path)}">Abrir</button>
           <button class="miniBtn" type="button" data-act="copy" data-path="${esc(c.path)}">Copiar enlace</button>
         </div>
-      </article>
-    `).join("");
+      </article>`).join("");
   }
-
-  function renderVendors() {
-    renderChips();
-    tableBody.innerHTML = "";
-    cards.innerHTML = "";
-    vendorList.innerHTML = "";
-    empty.style.display = "none";
-    vendorList.style.display = "grid";
-    toolbar.style.display = "none";
-
-    if (!VENDORS.length) {
-      renderEmpty("No hay vendedores disponibles.");
-      return;
-    }
-
-    resultCount.textContent = `${VENDORS.length} vendedores`;
-    scope.textContent = "Selecciona un vendedor para ver sus clientes";
-
-    VENDORS.forEach(v => {
-      const el = document.createElement("article");
-      el.className = "vendorCard";
-      el.innerHTML = `
-        <h3>${esc(v.label)}</h3>
-        <p>${esc(v.folder)} · ${v.count} cliente(s)</p>
-        <button class="btn soft" type="button">Ver clientes</button>
-      `;
-      el.querySelector("button").addEventListener("click", () => {
-        ACTIVE_VENDOR = v.folder;
-        vendorFilter.value = v.folder;
-        setActiveTab("search");
-        q.value = "";
-      });
-      vendorList.appendChild(el);
-    });
-  }
-
-  function renderRecent() {
+  function renderSearch(){
     toolbar.style.display = "flex";
-    vendorList.style.display = "none";
-    renderChips();
-
-    const rec = loadJSON(LS_REC, []);
-    const pos = new Map(rec.map((p, i) => [p, i]));
-    let base = ALL.filter(c => pos.has(c.path)).sort((a, b) => pos.get(a.path) - pos.get(b.path));
-    if (ACTIVE_VENDOR !== "ALL") base = base.filter(c => c.vendor_folder === ACTIVE_VENDOR);
-
-    if (!base.length) {
-      resultCount.textContent = "0 resultados";
-      scope.textContent = "Últimos accesos";
-      setPager(0);
-      renderEmpty("Aún no hay accesos recientes. Abre un cliente desde la pestaña Buscar.");
-      return;
-    }
-
-    const rows = getPageSlice(base);
-    setPager(base.length);
-    resultCount.textContent = `${base.length} resultado(s)`;
-    scope.textContent = ACTIVE_VENDOR === "ALL" ? "Últimos accesos" : `Últimos accesos · ${currentVendorLabel()}`;
-    empty.style.display = "none";
-    renderClientRows(rows);
-  }
-
-  function renderSearch() {
-    toolbar.style.display = "flex";
-    vendorList.style.display = "none";
-    renderChips();
-
-    let base = ALL.slice();
-    if (ACTIVE_VENDOR !== "ALL") base = base.filter(c => c.vendor_folder === ACTIVE_VENDOR);
-    base = applyQuery(base);
-    base.sort((a, b) => (a.client_name || "").localeCompare((b.client_name || ""), "es"));
-
-    if (!base.length) {
-      resultCount.textContent = "0 resultados";
-      scope.textContent = ACTIVE_VENDOR === "ALL" ? "Mostrando: todos" : `Mostrando: ${currentVendorLabel()}`;
-      setPager(0);
-      renderEmpty("Sin resultados para la búsqueda actual.");
-      return;
-    }
-
-    const rows = getPageSlice(base);
-    setPager(base.length);
-    resultCount.textContent = `${base.length} resultado(s)`;
+    const rows = getFilteredRows();
+    LAST_ROWS = rows;
+    setPager(rows.length);
+    const pageRows = slicePage(rows);
+    kpiResults.textContent = fmt(rows.length);
+    resultCount.textContent = `${fmt(rows.length)} resultado(s)`;
     scope.textContent = ACTIVE_VENDOR === "ALL" ? "Mostrando: todos" : `Mostrando: ${currentVendorLabel()}`;
-    empty.style.display = "none";
-    renderClientRows(rows);
+    renderChips();
+    if (!rows.length) return showEmpty("Sin resultados. Prueba con el código del cliente, una palabra del nombre o el vendedor/sucursal.");
+    renderClientRows(pageRows);
+  }
+  function renderRecent(){
+    toolbar.style.display = "flex";
+    renderChips();
+    const rec = lsGet(REC_KEY, []);
+    const order = new Map(rec.map((p,i) => [p,i]));
+    let rows = ALL.filter(c => order.has(c.path)).sort((a,b) => order.get(a.path) - order.get(b.path));
+    if (ACTIVE_VENDOR !== "ALL") rows = rows.filter(c => c.vendor_folder === ACTIVE_VENDOR);
+    const vendorTokens = termsOf(vendorText.value);
+    if (vendorTokens.length) rows = rows.filter(c => matchTokens(c._vendorSearch, vendorTokens));
+    LAST_ROWS = rows;
+    setPager(rows.length);
+    kpiResults.textContent = fmt(rows.length);
+    resultCount.textContent = `${fmt(rows.length)} reciente(s)`;
+    scope.textContent = ACTIVE_VENDOR === "ALL" ? "Últimos formatos abiertos" : `Últimos accesos · ${currentVendorLabel()}`;
+    if (!rows.length) return showEmpty("Aún no hay accesos recientes en este equipo. Abre un formato desde la pestaña Buscar.");
+    renderClientRows(slicePage(rows));
+  }
+  function renderVendors(){
+    toolbar.style.display = "none";
+    tableBody.innerHTML = ""; cards.innerHTML = ""; empty.style.display = "none";
+    renderChips();
+    const qTokens = termsOf(vendorText.value || getQuery());
+    let vendors = VENDORS.filter(v => !qTokens.length || matchTokens(v.search, qTokens));
+    if (ACTIVE_VENDOR !== "ALL") vendors = vendors.filter(v => v.folder === ACTIVE_VENDOR);
+    resultCount.textContent = `${fmt(vendors.length)} vendedor(es)`;
+    kpiResults.textContent = fmt(vendors.length);
+    scope.textContent = qTokens.length ? "Directorio filtrado por texto" : "Directorio completo";
+    vendorGrid.style.display = "grid";
+    vendorGrid.innerHTML = vendors.map(v => `
+      <article class="vendorCard">
+        <h3>${esc(v.label)}</h3>
+        <p>${esc(v.folder)} · ${fmt(v.count)} cliente(s)</p>
+        <button class="btn soft" type="button" data-act="vendor" data-vendor="${esc(v.folder)}">Ver clientes</button>
+      </article>`).join("");
+    if (!vendors.length) showEmpty("No encontré vendedores/sucursales con ese texto.");
+  }
+  function render(){
+    if (!ALL.length) return showEmpty("No se pudo cargar la base de clientes.");
+    if (MODE === "vendors") return renderVendors();
+    if (MODE === "recent") return renderRecent();
+    return renderSearch();
   }
 
-  function render() {
-    empty.style.display = "none";
-    tableBody.innerHTML = "";
-    cards.innerHTML = "";
-    vendorList.innerHTML = "";
-    vendorList.style.display = "none";
-
-    if (!ALL.length) {
-      toolbar.style.display = "none";
-      renderChips();
-      renderEmpty("Sin datos. No se pudo cargar el archivo de clientes.");
-      return;
-    }
-
-    if (MODE === "vendors") {
-      renderVendors();
-      return;
-    }
-    if (MODE === "recent") {
-      renderRecent();
-      return;
-    }
-    renderSearch();
+  async function fetchText(url){
+    const glue = url.includes("?") ? "&" : "?";
+    const res = await fetch(url + glue + "v=" + Date.now(), { cache:"no-store" });
+    if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+    return await res.text();
   }
-
-  async function copyText(value, successMessage) {
-    try {
-      await navigator.clipboard.writeText(value);
-      showToast(successMessage || "Enlace copiado");
-    } catch {
-      const ta = document.createElement("textarea");
-      ta.value = value;
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand("copy");
-      ta.remove();
-      showToast(successMessage || "Enlace copiado");
-    }
-  }
-
-  async function fetchFirstOk(urls) {
-    for (const url of urls) {
-      try {
-        const glue = url.includes("?") ? "&" : "?";
-        const res = await fetch(url + glue + "v=" + Date.now(), { cache: "no-store" });
-        if (!res.ok) continue;
-        const text = await res.text();
-        return { url, data: JSON.parse(text) };
-      } catch {}
-    }
-    return null;
-  }
-
-  function getParam(name) {
-    const u = new URL(window.location.href);
-    return u.searchParams.get(name);
-  }
-
-  async function loadClients() {
-    setPortalStatus("Cargando base de clientes y estructura comercial…", "loading");
-
-    const override = getParam("clients");
-    const candidates = override ? [override] : [
-      "clients.json",
-      "clients_historial_oct_marzo.json",
-      "Clients.json"
-    ];
-
-    const result = await fetchFirstOk(candidates);
-    if (!result) {
-      subtitle.textContent = "No se pudo cargar el archivo de clientes. Verifica que clients.json esté en la raíz del repositorio.";
-      setPortalStatus("Error al cargar la base de clientes.", "error");
-      diag.open = true;
-      setDiag({
-        status: "fatal",
-        error: "No se pudo cargar clients.json",
-        ayuda: "Sube el archivo a la raíz del repositorio, al mismo nivel que index.html."
-      });
-      renderEmpty("No se pudo cargar el archivo de clientes. Revisa el diagnóstico técnico.");
-      return;
-    }
-
-    const raw = result.data;
-    const arr = Array.isArray(raw) ? raw : (Array.isArray(raw.clients) ? raw.clients : []);
-
-    ALL = arr.map(x => {
-      const vendor_folder = (x.vendor_folder || x.seller || "").toString().trim();
-      const vendor_label = (x.vendor_label || x.vendor_name || x.seller_name || vendor_folder).toString().trim();
-      const client_name = (x.client_name || x.client || "").toString().trim();
-      const client_code = (x.client_code || x.code || "").toString().trim();
-      let path = (x.path || "").toString().trim();
-      if (!path) {
-        const file = (x.file || "").toString().trim();
-        if (vendor_folder && file) path = `${vendor_folder}/${file}`;
+  function parseCsv(text){
+    const clean = text.replace(/^\uFEFF/, "");
+    const rows = [];
+    let row = [], cell = "", q = false;
+    for (let i=0;i<clean.length;i++) {
+      const ch = clean[i], nx = clean[i+1];
+      if (ch === '"' && q && nx === '"') { cell += '"'; i++; continue; }
+      if (ch === '"') { q = !q; continue; }
+      if (ch === ',' && !q) { row.push(cell); cell = ""; continue; }
+      if ((ch === '\n' || ch === '\r') && !q) {
+        if (cell || row.length) { row.push(cell); rows.push(row); row = []; cell = ""; }
+        if (ch === '\r' && nx === '\n') i++;
+        continue;
       }
-      return { vendor_folder, vendor_label, client_name, client_code, path };
-    }).filter(x => x.vendor_folder && x.client_name && x.path);
+      cell += ch;
+    }
+    if (cell || row.length) { row.push(cell); rows.push(row); }
+    const headers = (rows.shift() || []).map(h => h.trim().replace(/^\uFEFF/, ""));
+    return rows.map(r => Object.fromEntries(headers.map((h,i) => [h, r[i] || ""])));
+  }
+  function prepareData(arr){
+    ALL = arr.map(x => {
+      const vendor_folder = (x.vendor_folder || x.seller || x.folder || "").toString().trim();
+      const vendor_label = (x.vendor_label || x.vendor_name || x.seller_name || vendor_folder).toString().trim();
+      const client_name = (x.client_name || x.client || x.name || "").toString().trim();
+      const client_code = (x.client_code || x.code || "").toString().trim().toUpperCase();
+      let path = (x.path || "").toString().trim();
+      if (!path && vendor_folder && x.file) path = `${vendor_folder}/${x.file}`;
+      const file = fileName(path);
+      const vendorSearch = norm(`${vendor_label} ${vendor_folder}`);
+      const code = norm(client_code);
+      return {
+        vendor_folder, vendor_label, client_name, client_code, path,
+        _name: norm(client_name),
+        _code: code,
+        _codeNoC: code.replace(/^c/, ""),
+        _vendorSearch: vendorSearch,
+        _file: norm(file),
+        _search: norm(`${client_name} ${client_code} ${vendor_label} ${vendor_folder} ${path}`)
+      };
+    }).filter(c => c.vendor_folder && c.client_name && c.path);
 
     const map = new Map();
-    ALL.forEach(c => {
-      if (!map.has(c.vendor_folder)) {
-        map.set(c.vendor_folder, {
-          folder: c.vendor_folder,
-          label: c.vendor_label || c.vendor_folder,
-          count: 0
-        });
-      }
+    for (const c of ALL) {
+      if (!map.has(c.vendor_folder)) map.set(c.vendor_folder, { folder:c.vendor_folder, label:c.vendor_label || c.vendor_folder, count:0, search:"" });
       map.get(c.vendor_folder).count++;
-    });
-
-    VENDORS = [...map.values()].sort((a, b) => a.label.localeCompare(b.label, "es"));
-
-    subtitle.textContent = `${ALL.length.toLocaleString('es-MX')} clientes disponibles en ${VENDORS.length.toLocaleString('es-MX')} vendedor(es). Diseño ejecutivo sin logo y optimizado para escritorio y móvil.`;
-    setPortalStatus("Portal cargado correctamente.", "ok");
-    updateLastSync();
-
-    kpiClients.textContent = ALL.length.toLocaleString('es-MX');
-    kpiVendors.textContent = VENDORS.length.toLocaleString('es-MX');
-    updateRecentsKpi();
-
-    vendorFilter.innerHTML = `<option value="ALL">Todos</option>` + VENDORS.map(v => `<option value="${esc(v.folder)}">${esc(v.label)} (${v.count})</option>`).join("");
-    vendorFilter.value = ACTIVE_VENDOR;
-
-    setDiag({
-      status: "ok",
-      source: result.url,
-      total_clients: ALL.length,
-      total_vendors: VENDORS.length,
-      sample: ALL[0] || null
-    });
-
+    }
+    VENDORS = [...map.values()].sort((a,b) => a.label.localeCompare(b.label,"es"));
+    VENDORS.forEach(v => v.search = norm(`${v.label} ${v.folder}`));
+  }
+  async function loadClients(){
+    setState("Cargando base de clientes…", "loading");
+    const params = new URL(window.location.href).searchParams;
+    const override = params.get("clients");
+    const jsonCandidates = override ? [override] : ["clients.json", "Clients.json", "clients_historial_oct_marzo.json"];
+    const csvCandidates = ["resumen_clientes.csv"];
+    let source = "", raw = [];
+    let lastError = "";
+    for (const url of jsonCandidates) {
+      try {
+        const text = await fetchText(url);
+        const data = JSON.parse(text);
+        raw = Array.isArray(data) ? data : (Array.isArray(data.clients) ? data.clients : []);
+        source = url;
+        break;
+      } catch (err) { lastError = `${url}: ${err.message}`; }
+    }
+    if (!raw.length) {
+      for (const url of csvCandidates) {
+        try { raw = parseCsv(await fetchText(url)); source = url; break; }
+        catch (err) { lastError += ` | ${url}: ${err.message}`; }
+      }
+    }
+    if (!raw.length) {
+      setState("No se pudo cargar clients.json.", "error");
+      sourceText.textContent = "Fuente no disponible";
+      diag.open = true;
+      setDiag({ status:"error", error:lastError, ayuda:"Verifica que clients.json esté en la misma carpeta que index.html." });
+      return render();
+    }
+    prepareData(raw);
+    const stamp = new Date().toLocaleString("es-MX", { dateStyle:"short", timeStyle:"short" });
+    syncStamp.textContent = stamp;
+    topSubtitle.textContent = `${fmt(ALL.length)} clientes · ${fmt(VENDORS.length)} vendedores/sucursales`;
+    sourceText.textContent = `Fuente: ${source}`;
+    setState("Portal cargado correctamente.", "ok");
+    kpiClients.textContent = fmt(ALL.length);
+    kpiVendors.textContent = fmt(VENDORS.length);
+    updateRecents();
+    vendorSelect.innerHTML = `<option value="ALL">Todos</option>` + VENDORS.map(v => `<option value="${esc(v.folder)}">${esc(v.label)} (${fmt(v.count)})</option>`).join("");
+    const qParam = params.get("q") || "";
+    const vendorParam = params.get("vendor") || "ALL";
+    if (qParam) syncInputs(qParam);
+    if (vendorParam && VENDORS.some(v => v.folder === vendorParam)) { ACTIVE_VENDOR = vendorParam; vendorSelect.value = vendorParam; }
+    setDiag({ status:"ok", source, total_clients:ALL.length, total_vendors:VENDORS.length, sample:ALL[0] || null });
     render();
   }
 
-  function openClient(path) {
-    pushRecent(path);
-    window.open(path, "_blank");
-  }
-
-  async function copyClientPath(path) {
-    const full = new URL(path, window.location.href).href;
-    await copyText(full, "Enlace del cliente copiado");
-  }
-
-  document.addEventListener("click", (e) => {
+  document.addEventListener("click", async (e) => {
     const btn = e.target.closest("[data-act]");
     if (!btn) return;
     const act = btn.getAttribute("data-act");
-    const path = btn.getAttribute("data-path") || "";
-    if (!path) return;
-    if (act === "open") openClient(path);
-    if (act === "copy") copyClientPath(path);
+    if (act === "open") {
+      const path = btn.getAttribute("data-path") || "";
+      if (!path) return;
+      pushRecent(path);
+      window.open(path, "_blank", "noopener");
+    }
+    if (act === "copy") {
+      const path = btn.getAttribute("data-path") || "";
+      const href = new URL(path, window.location.href).href;
+      await copyText(href, "Enlace del cliente copiado");
+    }
+    if (act === "vendor") {
+      ACTIVE_VENDOR = btn.getAttribute("data-vendor") || "ALL";
+      vendorSelect.value = ACTIVE_VENDOR;
+      syncInputs("");
+      setMode("search");
+    }
   });
-
-  q.addEventListener("input", () => {
-    if (MODE !== "search") setActiveTab("search");
-    resetPage();
-    clearTimeout(searchTimer);
-    searchTimer = setTimeout(render, 120);
-  });
-
-  vendorFilter.addEventListener("change", () => {
-    ACTIVE_VENDOR = vendorFilter.value || "ALL";
-    if (MODE === "vendors") setActiveTab("search");
-    resetPage();
-    render();
-  });
-
-  btnClear.addEventListener("click", () => {
-    q.value = "";
-    ACTIVE_VENDOR = "ALL";
-    vendorFilter.value = "ALL";
-    if (MODE !== "search") setActiveTab("search");
-    resetPage();
-    render();
-    q.focus();
-  });
-
+  qHero.addEventListener("input", () => { syncInputs(qHero.value); if (MODE !== "search") setMode("search"); resetPage(); scheduleRender(); });
+  qSide.addEventListener("input", () => { syncInputs(qSide.value); if (MODE !== "search") setMode("search"); resetPage(); scheduleRender(); });
+  clearHero.addEventListener("click", () => { syncInputs(""); resetPage(); render(); qHero.focus(); });
+  vendorText.addEventListener("input", () => { resetPage(); scheduleRender(); });
+  vendorSelect.addEventListener("change", () => { ACTIVE_VENDOR = vendorSelect.value || "ALL"; if (MODE === "vendors") setMode("search"); resetPage(); render(); });
+  sortSelect.addEventListener("change", () => { resetPage(); render(); });
+  pageSize.addEventListener("change", () => { PAGE_SIZE = parseInt(pageSize.value, 10) || 50; resetPage(); render(); });
+  btnPrev.addEventListener("click", () => { PAGE = Math.max(1, PAGE - 1); render(); });
+  btnNext.addEventListener("click", () => { PAGE += 1; render(); });
+  btnClear.addEventListener("click", () => { syncInputs(""); vendorText.value = ""; ACTIVE_VENDOR = "ALL"; vendorSelect.value = "ALL"; sortSelect.value = "score"; if (MODE !== "search") setMode("search"); resetPage(); render(); qHero.focus(); });
   btnCompact.addEventListener("click", () => setCompact(!compact));
-
-  btnCopyBase.addEventListener("click", async () => {
-    const base = window.location.href.split("?")[0].replace(/index\.html$/i, "");
-    await copyText(base, "Enlace base copiado");
+  btnCopyBase.addEventListener("click", () => copyText(window.location.href.split("?")[0].replace(/index\.html$/i, ""), "Enlace base copiado"));
+  btnExport.addEventListener("click", () => {
+    const rows = LAST_ROWS.length ? LAST_ROWS : getFilteredRows();
+    const header = ["client_code","client_name","vendor_label","vendor_folder","path"];
+    const csv = [header.join(",")].concat(rows.map(c => header.map(h => `"${(c[h] ?? "").toString().replaceAll('"','""')}"`).join(","))).join("\n");
+    const blob = new Blob(["\uFEFF" + csv], {type:"text/csv;charset=utf-8"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = "clientes_toyo_resultado.csv"; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    toast("CSV descargado");
   });
-
-  tabSearch.addEventListener("click", () => setActiveTab("search"));
-  tabRecent.addEventListener("click", () => setActiveTab("recent"));
-  tabVendors.addEventListener("click", () => setActiveTab("vendors"));
-  bSearch.addEventListener("click", () => setActiveTab("search"));
-  bRecent.addEventListener("click", () => setActiveTab("recent"));
-  bVendors.addEventListener("click", () => setActiveTab("vendors"));
-
-  pageSizeSel.value = String(PAGE_SIZE);
-  pageSizeSel.addEventListener("change", () => {
-    const v = parseInt(pageSizeSel.value || "100", 10);
-    PAGE_SIZE = Number.isFinite(v) ? v : 100;
-    resetPage();
-    render();
-  });
-
-  btnPrev.addEventListener("click", () => {
-    PAGE = Math.max(1, PAGE - 1);
-    render();
-  });
-
-  btnNext.addEventListener("click", () => {
-    PAGE += 1;
-    render();
-  });
-
+  tabSearch.addEventListener("click", () => setMode("search"));
+  tabRecent.addEventListener("click", () => setMode("recent"));
+  tabVendors.addEventListener("click", () => setMode("vendors"));
+  bSearch.addEventListener("click", () => setMode("search"));
+  bRecent.addEventListener("click", () => setMode("recent"));
+  bVendors.addEventListener("click", () => setMode("vendors"));
   document.addEventListener("keydown", (e) => {
-    if (e.key === "/" && document.activeElement !== q) {
-      e.preventDefault();
-      q.focus();
-      q.select();
-    }
-    if (e.key === "Escape" && document.activeElement === q) {
-      q.value = "";
-      resetPage();
-      render();
-      q.blur();
-    }
-  });
-
-  window.addEventListener("resize", () => {
-    if (MODE !== "vendors") render();
+    if (e.key === "/" && !["INPUT","SELECT","TEXTAREA"].includes(document.activeElement.tagName)) { e.preventDefault(); qHero.focus(); qHero.select(); }
+    if (e.key === "Escape" && [qHero,qSide,vendorText].includes(document.activeElement)) { document.activeElement.value = ""; syncInputs(getQuery()); resetPage(); render(); }
   });
 
   setCompact(compact);
-  updateRecentsKpi();
+  updateRecents();
   loadClients();
 })();
 </script>
