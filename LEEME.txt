@@ -1,17 +1,40 @@
-AJUSTE V3 LISTO
+ESTA ES LA VERSION FUERTE PARA QUE SI SE ACTUALICE
 
-CAMBIO:
-- se corrigió el cruce de imagen/descripción en Promociones
-- AQUAMAR ahora queda con:
-  Promoción Aquamar
-  Compra 12 cajas y recibe 1 caja gratis
-- TAKAOKAYA ahora queda con:
-  Promoción Takaokaya
-  Hoja de soya ajonjoli · 4x3 · 18 mayo al 19 junio 2026
+¿Por qué no se veía el cambio?
+Lo más probable es caché del navegador / GitHub Pages y que los HTML siguen apuntando al archivo viejo.
 
-Se mantienen:
-- promos más chicas
-- Productos nuevos:
-  - SE-TE651-14109 YAMASHIRO MATCHA KAN 20 G
-  - Takaokaya Soy Crepe
-- reconstruir_clients_json.py para regenerar clients.json respetando mayúsculas/minúsculas reales
+Qué hace este paquete:
+1) Copia una nueva version de assets:
+   - pedido_app_v4.js
+   - pedido_app_v4.css
+2) Actualiza TODOS los HTML del repo para que apunten a esos archivos nuevos
+   con version ?v=2026-05-05-v4
+3) Reconstruye clients.json respetando mayúsculas y minúsculas reales del repo
+
+COMO USARLO EN GITHUB DESKTOP / WINDOWS
+1. Abre tu repo Toyo-MX con "Show in Explorer"
+2. Descomprime este ZIP
+3. Copia al repo:
+   - carpeta pedido_assets
+   - aplicar_actualizacion_total.py
+   - actualizar_portal.bat
+4. Doble clic en:
+   actualizar_portal.bat
+
+Eso va a:
+- actualizar todos los HTML
+- regenerar clients.json
+- crear:
+  - validacion_rutas_case.csv
+  - patch_actualizacion_log.txt
+
+5. Regresa a GitHub Desktop
+6. Commit
+7. Push origin
+8. Espera 1-3 minutos y prueba de nuevo
+
+NOTA
+Si el .bat no corre, usa en la carpeta del repo:
+  py aplicar_actualizacion_total.py
+o
+  python aplicar_actualizacion_total.py
