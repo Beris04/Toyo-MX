@@ -1,40 +1,49 @@
-ESTA ES LA VERSION FUERTE PARA QUE SI SE ACTUALICE
+USA ESTE PAQUETE V5
 
-¿Por qué no se veía el cambio?
-Lo más probable es caché del navegador / GitHub Pages y que los HTML siguen apuntando al archivo viejo.
+Aquí sí van 2 correcciones reales:
 
-Qué hace este paquete:
-1) Copia una nueva version de assets:
-   - pedido_app_v4.js
-   - pedido_app_v4.css
-2) Actualiza TODOS los HTML del repo para que apunten a esos archivos nuevos
-   con version ?v=2026-05-05-v4
-3) Reconstruye clients.json respetando mayúsculas y minúsculas reales del repo
+1) PROMOCIONES / PRODUCTOS NUEVOS
+- Aquamar usa una imagen nueva con nombre NUEVO:
+  promo_aquamar_20260505_v5.jpeg
+- Takaokaya usa una imagen nueva con nombre NUEVO:
+  promo_takaokaya_20260518_v5.png
+- Productos nuevos:
+  - nuevo_yamashiro_matcha_kan_20g_v5.png
+  - nuevo_takaokaya_soy_crepe_v5.png
+- El JS/CSS también cambian a nombres NUEVOS:
+  - pedido_app_v5.js
+  - pedido_app_v5.css
 
-COMO USARLO EN GITHUB DESKTOP / WINDOWS
-1. Abre tu repo Toyo-MX con "Show in Explorer"
-2. Descomprime este ZIP
-3. Copia al repo:
-   - carpeta pedido_assets
-   - aplicar_actualizacion_total.py
-   - actualizar_portal.bat
-4. Doble clic en:
-   actualizar_portal.bat
+Esto evita que GitHub Pages o el navegador sigan mostrando el archivo viejo por caché.
 
-Eso va a:
-- actualizar todos los HTML
-- regenerar clients.json
-- crear:
-  - validacion_rutas_case.csv
-  - patch_actualizacion_log.txt
+2) CLIENTES CON MAYÚSCULAS
+- Este paquete trae un index NUEVO que abre la ruta exacta de clients.json.
+- El script PowerShell vuelve a generar clients.json con la ruta EXACTA real de cada archivo.
 
-5. Regresa a GitHub Desktop
-6. Commit
-7. Push origin
-8. Espera 1-3 minutos y prueba de nuevo
+CÓMO INSTALAR EN GITHUB DESKTOP
+1. En GitHub Desktop abre tu repo y usa:
+   Repository > Show in Explorer
 
-NOTA
-Si el .bat no corre, usa en la carpeta del repo:
-  py aplicar_actualizacion_total.py
-o
-  python aplicar_actualizacion_total.py
+2. Descomprime este ZIP.
+
+3. Copia TODO el contenido del ZIP a la raíz del repo y reemplaza archivos.
+
+4. Da doble clic a:
+   actualizar_portal_v5.bat
+
+5. Espera a que termine.
+   Debe generarte:
+   - clients.json
+   - validacion_rutas_case.csv
+   - patch_actualizacion_log.txt
+
+6. Regresa a GitHub Desktop:
+   - Commit to main
+   - Push origin
+
+7. Espera 1 a 3 minutos y vuelve a abrir el sitio.
+
+IMPORTANTE
+Si NO corres actualizar_portal_v5.bat:
+- tus HTML pueden seguir apuntando a los assets viejos
+- clients.json puede seguir con rutas en minúsculas
