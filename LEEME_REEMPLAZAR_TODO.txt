@@ -1,0 +1,23 @@
+PAQUETE LIMPIO REHECHO DESDE CERO
+
+Este paquete se rehizo tomando como base el portal limpio con todos los HTML.
+
+Incluye únicamente estos cambios:
+1) Promoción Aquamar correcta
+   - Imagen correcta
+   - Texto: Compra 12 cajas y recibe 1 caja gratis
+2) Promoción Takaokaya correcta
+   - Imagen correcta
+   - Texto: Hoja de soya ajonjoli · 4x3 · 18 mayo al 19 junio 2026
+3) Productos nuevos
+   - SE-TE651-14109 · Yamashiro Matcha Kan 20 G
+   - Takaokaya Soy Crepe
+4) Los HTML quedaron apuntando a assets nuevos:
+   - pedido_app_reset.js
+   - pedido_app_reset.css
+   Esto evita que se quede pegado el archivo viejo por caché.
+5) clients.json fue reconstruido desde las rutas reales del paquete.
+
+IMPORTANTE:
+Reemplaza TODO tu repo por el contenido de este paquete.
+No lo mezcles con parches anteriores.
