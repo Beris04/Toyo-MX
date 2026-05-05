@@ -1284,8 +1284,6 @@
   }
 
   function renderClientRows(rows) {
-    const actionAttrs = (c) => `data-path="${esc(c.path)}" data-vendor="${esc(c.vendor_folder || "")}" data-client-name="${esc(c.client_name || "")}" data-client-code="${esc(c.client_code || "")}"`;
-
     tableBody.innerHTML = rows.map(c => `
       <tr>
         <td><span class="codeBadge">${esc(c.client_code || "—")}</span></td>
@@ -1299,8 +1297,8 @@
         </td>
         <td>
           <div class="actionRow">
-            <button class="miniBtn primary" type="button" data-act="open" ${actionAttrs(c)}>Abrir</button>
-            <button class="miniBtn" type="button" data-act="copy" ${actionAttrs(c)}>Copiar enlace</button>
+            <button class="miniBtn primary" type="button" data-act="open" data-path="${esc(c.path)}">Abrir</button>
+            <button class="miniBtn" type="button" data-act="copy" data-path="${esc(c.path)}">Copiar enlace</button>
           </div>
         </td>
       </tr>
@@ -1317,8 +1315,8 @@
           <span class="codeBadge">${esc(c.client_code || "—")}</span>
         </div>
         <div class="cardActions">
-          <button class="miniBtn primary" type="button" data-act="open" ${actionAttrs(c)}>Abrir</button>
-          <button class="miniBtn" type="button" data-act="copy" ${actionAttrs(c)}>Copiar enlace</button>
+          <button class="miniBtn primary" type="button" data-act="open" data-path="${esc(c.path)}">Abrir</button>
+          <button class="miniBtn" type="button" data-act="copy" data-path="${esc(c.path)}">Copiar enlace</button>
         </div>
       </article>
     `).join("");
@@ -1545,99 +1543,24 @@
     render();
   }
 
-  const RESOLVED_PATH_CACHE = new Map();
-
-  function sanitizeKeepCase(s) {
-    return (s || "").toString()
-      .normalize("NFD").replace(/[̀-ͯ]/g, "")
-      .replace(/&/g, " and ")
-      .replace(/[^0-9A-Za-z]+/g, "_")
-      .replace(/^_+|_+$/g, "")
-      .replace(/_+/g, "_");
+  function openClient(path) {
+    pushRecent(path);
+    window.open(path, "_blank");
   }
 
-  function unique(items) {
-    return [...new Set(items.filter(Boolean))];
-  }
-
-  function buildClientCandidates(client) {
-    const rawPath = (client.path || "").toString().trim();
-    const folder = (client.vendor_folder || "").toString().trim() || rawPath.split("/").slice(0, -1).join("/");
-    const extMatch = rawPath.match(/\.[^.\/]+$/);
-    const ext = extMatch ? extMatch[0] : ".html";
-    const base = sanitizeKeepCase(client.client_name || "");
-    const code = sanitizeKeepCase(client.client_code || "").replace(/_/g, "");
-    const items = [rawPath];
-
-    if (folder && base && code) {
-      items.push(`${folder}/${base}_${code}${ext}`);
-      items.push(`${folder}/${base}_${code.toUpperCase()}${ext}`);
-      items.push(`${folder}/${base.toUpperCase()}_${code.toUpperCase()}${ext}`);
-      items.push(`${folder}/${base.toLowerCase()}_${code.toLowerCase()}${ext}`);
-      items.push(`${folder}/${base.toLowerCase()}_${code.toUpperCase()}${ext}`);
-      items.push(`${folder}/${base.toUpperCase()}_${code}${ext}`);
-    }
-
-    return unique(items);
-  }
-
-  async function pathExists(path) {
-    const url = new URL(path, window.location.href).href;
-    try {
-      const res = await fetch(url, { method: "HEAD", cache: "no-store" });
-      if (res.ok) return true;
-    } catch (_) {}
-    try {
-      const res = await fetch(url, { method: "GET", cache: "no-store" });
-      if (res.ok) return true;
-    } catch (_) {}
-    return false;
-  }
-
-  async function resolveClientPath(client) {
-    const cacheKey = [client.vendor_folder || "", client.client_code || "", client.path || ""].join("||");
-    if (RESOLVED_PATH_CACHE.has(cacheKey)) return RESOLVED_PATH_CACHE.get(cacheKey);
-    const candidates = buildClientCandidates(client);
-    for (const candidate of candidates) {
-      if (await pathExists(candidate)) {
-        RESOLVED_PATH_CACHE.set(cacheKey, candidate);
-        return candidate;
-      }
-    }
-    RESOLVED_PATH_CACHE.set(cacheKey, client.path || "");
-    return client.path || "";
-  }
-
-  function readClientFromButton(btn) {
-    return {
-      path: btn.getAttribute("data-path") || "",
-      vendor_folder: btn.getAttribute("data-vendor") || "",
-      client_name: btn.getAttribute("data-client-name") || "",
-      client_code: btn.getAttribute("data-client-code") || ""
-    };
-  }
-
-  async function openClient(client) {
-    const resolved = await resolveClientPath(client);
-    if (!resolved) return;
-    pushRecent(resolved);
-    window.open(resolved, "_blank");
-  }
-
-  async function copyClientPath(client) {
-    const resolved = await resolveClientPath(client);
-    const full = new URL(resolved || client.path, window.location.href).href;
+  async function copyClientPath(path) {
+    const full = new URL(path, window.location.href).href;
     await copyText(full, "Enlace del cliente copiado");
   }
 
-  document.addEventListener("click", async (e) => {
+  document.addEventListener("click", (e) => {
     const btn = e.target.closest("[data-act]");
     if (!btn) return;
     const act = btn.getAttribute("data-act");
-    const client = readClientFromButton(btn);
-    if (!client.path) return;
-    if (act === "open") await openClient(client);
-    if (act === "copy") await copyClientPath(client);
+    const path = btn.getAttribute("data-path") || "";
+    if (!path) return;
+    if (act === "open") openClient(path);
+    if (act === "copy") copyClientPath(path);
   });
 
   q.addEventListener("input", () => {
