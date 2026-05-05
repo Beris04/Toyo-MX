@@ -611,24 +611,6 @@
   function currentVendorLabel(){ return ACTIVE_VENDOR === "ALL" ? "Todos" : (VENDORS.find(v => v.folder === ACTIVE_VENDOR)?.label || ACTIVE_VENDOR); }
   function fileName(path){ return (path || "").split("/").pop() || path || ""; }
 
-  /*
-    OPCIÓN B · GitHub Pages distingue MAYÚSCULAS y minúsculas.
-    En tu repositorio los archivos aparecen como: PANCHOSFIT_C019771.html
-    Por eso el index convierte solamente el NOMBRE DEL ARCHIVO a mayúsculas,
-    conservando la carpeta igual y la extensión .html en minúsculas.
-  */
-  function githubFilePath(path){
-    path = (path || "").toString().trim();
-    if (!path) return "";
-    const parts = path.split("/").filter(Boolean);
-    const file = parts.pop() || "";
-    const dot = file.lastIndexOf(".");
-    let fixedFile = "";
-    if (dot >= 0) fixedFile = file.slice(0, dot).toUpperCase() + file.slice(dot).toLowerCase();
-    else fixedFile = file.toUpperCase();
-    return [...parts, fixedFile].join("/");
-  }
-
   function matchTokens(haystack, tokens){ return tokens.every(t => haystack.includes(t)); }
   function clientScore(c, qTokens, vendorTokens){
     if (ACTIVE_VENDOR !== "ALL" && c.vendor_folder !== ACTIVE_VENDOR) return -1;
@@ -857,7 +839,6 @@
       const client_code = (x.client_code || x.code || "").toString().trim().toUpperCase();
       let path = (x.path || "").toString().trim();
       if (!path && vendor_folder && x.file) path = `${vendor_folder}/${x.file}`;
-      path = githubFilePath(path);
       const file = fileName(path);
       const vendorSearch = norm(`${vendor_label} ${vendor_folder}`);
       const code = norm(client_code);
