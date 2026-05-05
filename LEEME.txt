@@ -1,0 +1,34 @@
+AJUSTE LISTO
+
+Este paquete hace 2 cosas:
+
+1) PROMOCIONES
+- quita el bloque superior de "Promociones y productos nuevos"
+- deja solo la sección de Promociones
+- elimina la sección de Productos nuevos
+- quita la leyenda "Trabajando en ello" sobre las imágenes
+- elimina las descripciones debajo de cada promo
+- hace más pequeña la segunda promo (Takaokaya)
+
+2) CLIENTES CON MAYÚSCULAS
+No puedo adivinar desde aquí cómo está escrito cada archivo en tu repo.
+La forma correcta de arreglarlo es reconstruir clients.json desde TU repo real.
+
+PASOS
+A) Reemplaza en tu repo:
+- pedido_assets/pedido_app.js
+- pedido_assets/pedido_app.css
+- pedido_assets/promo_aquamar_mayo2026.jpeg
+- pedido_assets/promo_takaokaya_mayo2026.jpeg
+- index.html
+
+B) Copia reconstruir_clients_json.py a la raíz del repo y ejecútalo ahí:
+   python reconstruir_clients_json.py
+
+Eso te genera un clients.json nuevo con las rutas EXACTAS tal como existen en tu repo
+(respetando mayúsculas y minúsculas).
+
+C) Haz commit y push.
+
+Si no corres el script, el problema de clientes con mayúsculas puede seguir,
+porque depende del nombre REAL de tus archivos.
