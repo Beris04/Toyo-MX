@@ -1,0 +1,33 @@
+ESTE ARREGLO ATACA LOS 2 ERRORES REALES
+
+1) ARCHIVOS QUE NO ABREN
+En varios HTML el JSON embebido trae valores inválidos como:
+"img":NaN
+
+Eso rompe toda la página.
+Este script corrige:
+- "img":NaN  -> "img":""
+- otros NaN / Infinity -> null
+
+2) CLIENTES EN MAYÚSCULAS
+Regenera clients.json usando la ruta EXACTA real de cada archivo en tu repo.
+Así deja de abrirse en minúsculas cuando el archivo real está con mayúsculas.
+
+CÓMO USARLO
+1. Abre el repo en GitHub Desktop
+2. Repository > Show in Explorer
+3. Copia estos 3 archivos a la raíz del repo:
+   - corregir_nan_y_rutas.ps1
+   - corregir_nan_y_rutas.bat
+   - LEEME.txt
+4. Doble clic en:
+   corregir_nan_y_rutas.bat
+
+Te va a generar:
+- clients.json
+- validacion_rutas_case.csv
+- fix_nan_log.txt
+
+Luego:
+5. Commit to main
+6. Push origin
