@@ -1,0 +1,9 @@
+PORTAL REHECHO DESDE EL HISTORIAL OCTUBRE-ABRIL
+
+Cambios aplicados:
+- carpetas y archivos HTML en minúsculas
+- clientes deduplicados por código de cliente
+- vendedores normalizados para no repetir carpetas
+- imagen agregada para SE-SAL549-1770 HFF SRIRACHA TAPA VERDE GRANDE 793 GRS.
+- JSON válido sin NaN
+- clients.json e index regenerados

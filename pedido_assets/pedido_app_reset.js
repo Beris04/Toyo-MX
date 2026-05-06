@@ -1,4 +1,4 @@
-const APP_BUILD = "2026-05-05-reset1";
+const APP_BUILD = "2026-05-06-history1";
 
 (() => {
   const ASSET_BASE = new URL("../pedido_assets/", window.location.href).href;
@@ -352,7 +352,7 @@ function buildUpdatesHTML() {
             </div>
             <div class="meta">
               <span>${esc(p.category)}</span>
-              <span>Histórico: ${Math.round(p.qty6m)} pzas</span>
+              <span>Histórico: ${Math.round(p.qty6m)} compras</span>
             </div>
             <div class="bottom">
               <div class="pieces-label">Selecciona número de piezas</div>
