@@ -1,0 +1,21 @@
+PORTAL TOYO FOODS - REPARACIÓN 2026-05-11 16:47
+
+Cambios aplicados:
+1. clients.json fue reconstruido desde cada HTML de pedido.
+2. Se corrigieron códigos y nombres cortados/cruzados del index.
+3. Se agregó el logo Toyo Foods como toyo_logo.png.
+4. Se repararon HTML con valores inválidos NaN dentro de pedido-data.
+5. Se agregó botón Compartir para WhatsApp/nativo además de Abrir y Copiar enlace.
+6. Se generó validacion_clientes_corregidos.csv para auditoría.
+
+Validación:
+- Pedidos HTML procesados: 9581
+- Clientes en clients.json: 9581
+- Registros de cliente/código corregidos contra el clients.json anterior: 5261
+- Archivos HTML con NaN reparados: 88
+- Valores NaN reparados: 115
+- Rutas faltantes: 0
+- Errores JSON después de reparar: 0
+
+Para GitHub Desktop:
+Sube el contenido de la carpeta "Respaldo App" a la raíz del repositorio de GitHub Pages.

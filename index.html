@@ -1,4 +1,4 @@
-<!-- RESET BUILD 2026-05-05-reset1 -->
+<!-- BUILD 2026-05-11-toyo-codigos-nombres-reparado -->
 <!doctype html>
 <html lang="es">
 <head>
@@ -68,6 +68,67 @@
       gap:14px;
       flex-wrap:wrap;
     }
+
+    .brandLockup{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:0;
+    }
+    .brandLogo{
+      width:46px;
+      height:46px;
+      border-radius:14px;
+      object-fit:cover;
+      background:#155BAA;
+      box-shadow:0 10px 22px rgba(0,0,0,.22);
+      border:1px solid rgba(255,255,255,.18);
+      flex:0 0 auto;
+    }
+    .heroBrand{
+      display:flex;
+      align-items:flex-start;
+      gap:16px;
+      min-width:0;
+    }
+    .heroLogo{
+      width:74px;
+      height:74px;
+      border-radius:20px;
+      object-fit:cover;
+      background:#155BAA;
+      box-shadow:0 18px 34px rgba(0,0,0,.18);
+      border:1px solid rgba(255,255,255,.22);
+      flex:0 0 auto;
+    }
+    .clientName{
+      white-space:normal;
+      overflow-wrap:anywhere;
+      word-break:normal;
+    }
+    .codeBadge{
+      white-space:nowrap;
+      letter-spacing:.01em;
+    }
+    .miniBtn.share{
+      background:#F0FDF4;
+      color:#166534;
+      border-color:#BBF7D0;
+    }
+    .qualityNote{
+      margin-top:12px;
+      padding:12px 14px;
+      border-radius:14px;
+      background:rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.14);
+      color:rgba(255,255,255,.90);
+      font-size:12px;
+      line-height:1.45;
+      font-weight:650;
+      position:relative;
+      z-index:1;
+    }
+
     .shellLeft,.shellRight{
       display:flex;
       align-items:center;
@@ -860,6 +921,11 @@
       .page{padding:14px}
       .shellInner{padding-left:14px;padding-right:14px}
       .hero{padding:18px}
+
+      .brandLogo{width:40px;height:40px;border-radius:12px}
+      .heroBrand{gap:12px}
+      .heroLogo{width:58px;height:58px;border-radius:16px}
+
       .hero h1{font-size:24px}
       .cardHead,.controlBody,.resultsTop,.filterChips,.toolbar,.resultsBody{padding-left:14px;padding-right:14px}
       .metrics{grid-template-columns:1fr 1fr}
@@ -873,7 +939,8 @@
 <body>
   <div class="shellBar">
     <div class="shellInner">
-      <div class="shellLeft">
+      <div class="shellLeft brandLockup">
+        <img class="brandLogo" src="toyo_logo.png" alt="Toyo Foods" />
         <span class="shellBadge"><span class="shellDot"></span><span id="shellStatus">Portal operativo</span></span>
         <span class="shellLabel">Toyo Foods México · Plataforma interna</span>
       </div>
@@ -889,16 +956,20 @@
   <main class="page">
     <section class="hero">
       <div class="heroTop">
-        <div>
-          <span class="eyebrow">Workspace comercial</span>
-          <h1>Portal de Pedidos</h1>
-          <p id="subtitle">Cargando información de clientes, directorio comercial y accesos recientes…</p>
+        <div class="heroBrand">
+          <img class="heroLogo" src="toyo_logo.png" alt="Toyo Foods" />
+          <div>
+            <span class="eyebrow">Workspace comercial</span>
+            <h1>Portal de Pedidos</h1>
+            <p id="subtitle">Cargando información real de clientes, códigos y formatos de pedido…</p>
+          </div>
         </div>
         <div class="heroMeta">
-          <span class="heroMetaItem">Sin logo · versión ejecutiva</span>
-          <span class="heroMetaItem">Enfoque corporativo global</span>
+          <span class="heroMetaItem">Logo Toyo Foods integrado</span>
+          <span class="heroMetaItem">Códigos y nombres validados</span>
         </div>
       </div>
+      <div class="qualityNote">Base reparada desde cada formato HTML: el código y el nombre se toman del pedido digital real, no del nombre abreviado del archivo.</div>
       <div class="statusLine">
         <span id="statusText">Preparando datos del portal…</span>
         <span id="lastUpdate">Sincronización pendiente</span>
@@ -1300,6 +1371,7 @@
           <div class="actionRow">
             <button class="miniBtn primary" type="button" data-act="open" data-path="${esc(c.path)}">Abrir</button>
             <button class="miniBtn" type="button" data-act="copy" data-path="${esc(c.path)}">Copiar enlace</button>
+            <button class="miniBtn share" type="button" data-act="share" data-path="${esc(c.path)}" data-name="${esc(c.client_name)}" data-code="${esc(c.client_code)}">Compartir</button>
           </div>
         </td>
       </tr>
@@ -1318,6 +1390,7 @@
         <div class="cardActions">
           <button class="miniBtn primary" type="button" data-act="open" data-path="${esc(c.path)}">Abrir</button>
           <button class="miniBtn" type="button" data-act="copy" data-path="${esc(c.path)}">Copiar enlace</button>
+          <button class="miniBtn share" type="button" data-act="share" data-path="${esc(c.path)}" data-name="${esc(c.client_name)}" data-code="${esc(c.client_code)}">Compartir</button>
         </div>
       </article>
     `).join("");
@@ -1522,7 +1595,7 @@
 
     VENDORS = [...map.values()].sort((a, b) => a.label.localeCompare(b.label, "es"));
 
-    subtitle.textContent = `${ALL.length.toLocaleString('es-MX')} clientes disponibles en ${VENDORS.length.toLocaleString('es-MX')} vendedor(es). Diseño ejecutivo sin logo y optimizado para escritorio y móvil.`;
+    subtitle.textContent = `${ALL.length.toLocaleString('es-MX')} clientes disponibles en ${VENDORS.length.toLocaleString('es-MX')} vendedor(es). Códigos y nombres reparados desde cada pedido digital.`;
     setPortalStatus("Portal cargado correctamente.", "ok");
     updateLastSync();
 
@@ -1554,6 +1627,20 @@
     await copyText(full, "Enlace del cliente copiado");
   }
 
+  async function shareClientPath(path, name, code) {
+    const full = new URL(path, window.location.href).href;
+    const title = `Pedido Toyo Foods · ${code || "Cliente"}`;
+    const text = `Hola, te comparto tu formato de pedido Toyo Foods para ${name || "el cliente"}${code ? " (" + code + ")" : ""}: ${full}`;
+    if (navigator.share) {
+      try {
+        await navigator.share({ title, text, url: full });
+        return;
+      } catch {}
+    }
+    const wa = `https://wa.me/?text=${encodeURIComponent(text)}`;
+    window.open(wa, "_blank");
+  }
+
   document.addEventListener("click", (e) => {
     const btn = e.target.closest("[data-act]");
     if (!btn) return;
@@ -1562,6 +1649,7 @@
     if (!path) return;
     if (act === "open") openClient(path);
     if (act === "copy") copyClientPath(path);
+    if (act === "share") shareClientPath(path, btn.getAttribute("data-name") || "", btn.getAttribute("data-code") || "");
   });
 
   q.addEventListener("input", () => {
