@@ -1,30 +1,23 @@
-const APP_BUILD = "2026-05-18-isekado1";
+const APP_BUILD = "2026-05-18-isekado2-sin-aquamar";
 
 (() => {
   const ASSET_BASE = new URL("../pedido_assets/", window.location.href).href;
   const PROMO_DATA = [
-  {
-    title: "Promoción Isekado Brewery",
-    imageTitle: "1 botella en $50 pesos · hasta agotar existencias",
-    image: ASSET_BASE + "promo_isekado_brewery_50_20260518.webp",
-    alt: "Promoción Isekado Brewery 50 pesos hasta agotar existencias",
-    featured: true
-  },
-  {
-    title: "Promoción Aquamar",
-    imageTitle: "Compra 12 cajas y recibe 1 caja gratis",
-    image: ASSET_BASE + "promo_aquamar_20260505_reset.jpeg",
-    alt: "Promoción Aquamar mayo 2026",
-    compact: true
-  },
   {
     title: "Promoción Takaokaya",
     imageTitle: "Hoja de soya ajonjoli · 4x3 · 18 mayo al 19 junio 2026",
     image: ASSET_BASE + "promo_takaokaya_20260518_reset.png",
     alt: "Promoción Takaokaya hoja de soya ajonjoli 4x3",
     compact: true
+  },
+  {
+    title: "Promoción Isekado Brewery",
+    imageTitle: "1 botella en $50 pesos · hasta agotar existencias",
+    image: ASSET_BASE + "promo_isekado_brewery_50_20260518.webp",
+    alt: "Promoción Isekado Brewery 50 pesos hasta agotar existencias",
+    compact: true
   }
-];
+]
 const NEW_PRODUCTS_DATA = [
   {
     title: "SE-TE651-14109",

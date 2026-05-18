@@ -1,0 +1,5 @@
+Cambios realizados:
+- Se retiró Promoción Aquamar de la sección de promociones porque ya terminó.
+- Se colocó Promoción Isekado Brewery como tarjeta compacta junto a Promoción Takaokaya 4x3.
+- Se actualizó versión de JS/CSS a 20260518isekado2 para evitar caché en GitHub Pages.
+- La imagen de Aquamar puede permanecer en pedido_assets pero ya no se muestra en el portal.
