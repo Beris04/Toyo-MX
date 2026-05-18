@@ -1,8 +1,15 @@
-const APP_BUILD = "2026-05-18-comentarios1";
+const APP_BUILD = "2026-05-18-isekado1";
 
 (() => {
   const ASSET_BASE = new URL("../pedido_assets/", window.location.href).href;
   const PROMO_DATA = [
+  {
+    title: "Promoción Isekado Brewery",
+    imageTitle: "1 botella en $50 pesos · hasta agotar existencias",
+    image: ASSET_BASE + "promo_isekado_brewery_50_20260518.webp",
+    alt: "Promoción Isekado Brewery 50 pesos hasta agotar existencias",
+    featured: true
+  },
   {
     title: "Promoción Aquamar",
     imageTitle: "Compra 12 cajas y recibe 1 caja gratis",
@@ -161,7 +168,7 @@ const NEW_PRODUCTS_DATA = [
 
 function buildUpdatesHTML() {
   const promoCards = PROMO_DATA.map(item => `
-    <article class="promo-card${item.compact ? ' promo-card-compact' : ''}">
+    <article class="promo-card${item.compact ? ' promo-card-compact' : ''}${item.featured ? ' promo-card-featured' : ''}">
       <div class="promo-thumb">
         <img src="${esc(item.image)}" alt="${esc(item.alt)}" loading="lazy">
       </div>

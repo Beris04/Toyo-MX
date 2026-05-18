@@ -19,3 +19,9 @@ Validación:
 
 Para GitHub Desktop:
 Sube el contenido de la carpeta "Respaldo App" a la raíz del repositorio de GitHub Pages.
+
+
+Actualización 2026-05-18:
+- Se agregó promoción Isekado Brewery en la sección Promociones.
+- Se optimizó la imagen para carga rápida en celular.
+- Se actualizó versión de CSS/JS para evitar caché en GitHub Pages.
