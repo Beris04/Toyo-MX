@@ -1,4 +1,4 @@
-const APP_BUILD = "2026-05-05-reset1";
+const APP_BUILD = "2026-05-18-comentarios1";
 
 (() => {
   const ASSET_BASE = new URL("../pedido_assets/", window.location.href).href;
@@ -529,8 +529,46 @@ function buildUpdatesHTML() {
     document.getElementById('sheetBackdrop').classList.remove('open');
   }
 
+  function fieldStateKey(id) {
+    return ({
+      clientName: 'clientName',
+      clientCode: 'clientCode',
+      seller: 'seller',
+      payment: 'payment',
+      notes: 'notes'
+    })[id] || '';
+  }
+
+  function isFieldVisible(el) {
+    if (!el) return false;
+    const style = window.getComputedStyle(el);
+    if (style.display === 'none' || style.visibility === 'hidden') return false;
+    return !!(el.offsetParent || el.getClientRects().length);
+  }
+
+  function syncSummaryStateFromDOM() {
+    ['clientName', 'clientCode', 'seller', 'payment', 'notes'].forEach(id => {
+      const key = fieldStateKey(id);
+      if (!key) return;
+      const fields = Array.from(document.querySelectorAll('#desktopBody #' + id + ', #mobileBody #' + id));
+      if (!fields.length) return;
+      const active = document.activeElement && document.activeElement.id === id ? document.activeElement : null;
+      const visible = fields.find(isFieldVisible);
+      const changed = fields.find(el => String(el.value ?? '') !== String(state[key] ?? ''));
+      const chosen = active || visible || changed || fields[0];
+      state[key] = chosen.value;
+    });
+    saveState();
+  }
+
   function summaryField(id, fallback) {
-    const el = document.querySelector('#desktopBody #' + id) || document.querySelector('#mobileBody #' + id);
+    syncSummaryStateFromDOM();
+    const key = fieldStateKey(id);
+    if (key && typeof state[key] === 'string') return state[key];
+    const fields = Array.from(document.querySelectorAll('#desktopBody #' + id + ', #mobileBody #' + id));
+    const active = document.activeElement && document.activeElement.id === id ? document.activeElement : null;
+    const visible = fields.find(isFieldVisible);
+    const el = active || visible || fields[0];
     return el ? el.value : fallback;
   }
 
@@ -628,6 +666,7 @@ tbody tr:nth-child(even){background:#fcfdff}
   }
 
   function downloadOrder() {
+    syncSummaryStateFromDOM();
     const html = generateDownloadHTML();
     const clientCode = summaryField('clientCode', APP_DATA.client_code || 'cliente');
     const blob = new Blob([html], {type: 'text/html;charset=utf-8'});
