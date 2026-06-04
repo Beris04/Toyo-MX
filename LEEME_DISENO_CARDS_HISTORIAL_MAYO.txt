@@ -1,0 +1,17 @@
+Actualización Toyo Portal · Diseño cards + Historial Dic-Mayo
+
+Cambios realizados:
+- Diseño de tarjetas de producto estilo catálogo visual: imagen arriba, franja azul con nombre, punto rojo, código, categoría e historial.
+- Historial actualizado con archivo: Historial Dic - Mayo.xlsx.
+- Clientes existentes actualizados: 9,045.
+- Clientes nuevos agregados desde historial: 9,725.
+- Clientes existentes sin historial nuevo conservados: 536.
+- Total clientes en clients.json: 19,306.
+- Total páginas HTML de pedido: 19,306.
+- Validación JSON dañados: 0.
+- Validación NaN: 0.
+
+Notas:
+- El archivo de historial no trae piezas vendidas; por eso el campo visual muestra “registro(s)” de historial Dic-Mayo.
+- Cuando un producto no tenía imagen en el catálogo maestro, se conserva como “Sin foto” con placeholder.
+- Subir todo el contenido del ZIP a la raíz de GitHub Pages.

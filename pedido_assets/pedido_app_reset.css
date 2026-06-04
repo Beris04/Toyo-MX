@@ -318,3 +318,123 @@ body.force-web .qty span{font-size:10px}
   .product-card-compact .product-thumb img{max-width:72%;max-height:156px}
   .promo-copy{padding:9px 11px 11px}
 }
+
+
+/* ===== Diseño visual de tarjetas tipo catálogo Toyo ===== */
+.product{
+  border-radius:20px;
+  background:#ffffff;
+  overflow:hidden;
+  border:1px solid rgba(15,23,42,.10);
+  box-shadow:0 10px 24px rgba(15,23,42,.08);
+}
+.product.has-qty{
+  border-color:#b9d0ee;
+  box-shadow:0 14px 28px rgba(11,74,162,.13);
+}
+.thumb{
+  background:#ffffff;
+  border-bottom:0;
+  aspect-ratio:1 / .72;
+  padding:12px 14px 8px;
+}
+.thumb img{
+  max-width:86%;
+  max-height:132px;
+  object-fit:contain;
+}
+.name-band{
+  background:#31516a;
+  color:#ffffff;
+  min-height:42px;
+  padding:8px 9px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  font-size:10.2px;
+  line-height:1.12;
+  font-weight:950;
+  text-transform:uppercase;
+  letter-spacing:.015em;
+}
+.visual-info{
+  padding:9px 9px 10px;
+  gap:8px;
+}
+.product-line{
+  display:flex;
+  gap:8px;
+  align-items:flex-start;
+  min-width:0;
+}
+.red-dot{
+  width:13px;
+  height:13px;
+  flex:0 0 13px;
+  margin-top:3px;
+  border-radius:999px;
+  background:#c91f2d;
+  border:2px solid #ffffff;
+  box-shadow:0 0 0 1px rgba(201,31,45,.28);
+}
+.product-details{min-width:0;line-height:1.18}
+.product-details .code{
+  font-size:8.5px;
+  color:#6b7280;
+  font-weight:800;
+  letter-spacing:.01em;
+}
+.origin-line{
+  margin-top:2px;
+  font-size:8.3px;
+  color:#18283b;
+  font-weight:900;
+  text-transform:uppercase;
+}
+.history-line{
+  margin-top:2px;
+  font-size:8.1px;
+  color:#5b6b82;
+  font-weight:800;
+}
+.clean-tags{
+  justify-content:flex-start;
+  gap:5px;
+}
+.clean-tags .tag{
+  font-size:8px;
+  padding:3px 6px;
+}
+.visual-info .bottom{gap:5px}
+.visual-info .pieces-label{
+  color:#607086;
+  font-size:9px;
+  font-weight:900;
+}
+.visual-info .qty{
+  border-radius:12px;
+  border-color:#dbe3ee;
+  background:#f6f9fd;
+  padding:5px;
+}
+.visual-info .qty button{
+  width:27px;
+  height:27px;
+  border-radius:9px;
+  color:#0b4aa2;
+  font-size:15px;
+}
+.visual-info .qty input.qty-input{
+  height:27px;
+  font-size:12px;
+  font-weight:950;
+}
+@media (max-width:430px){
+  .name-band{min-height:40px;font-size:9.2px;padding:7px 7px}
+  .thumb{padding:10px 10px 7px}
+  .thumb img{max-height:118px;max-width:84%}
+  .visual-info{padding:8px 8px 9px}
+}
+body.force-web .name-band{font-size:10.8px;min-height:44px}
+body.force-web .thumb img{max-height:145px}

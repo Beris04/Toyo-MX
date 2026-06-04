@@ -216,7 +216,7 @@ function buildUpdatesHTML() {
               <div class="hero-copy">
                 <div class="eyebrow">Pedido digital Toyo Foods</div>
                 <h1>${esc(APP_DATA.client_name || 'Cliente')}</h1>
-                <p>Catálogo generado desde historial de 6 meses, sin productos repetidos y con imágenes vinculadas al catálogo maestro.</p>
+                <p>Catálogo actualizado con historial Dic–Mayo, tarjetas visuales y captura rápida por piezas.</p>
               </div>
             </div>
             <div class="hero-aside">
@@ -339,23 +339,22 @@ function buildUpdatesHTML() {
       return `
         <article class="product ${qty > 0 ? 'has-qty' : ''}">
           <div class="thumb"><img src="${esc(p.img || placeholderFor(p.code))}" alt="${esc(p.name)}" loading="lazy"></div>
-          <div class="info">
-            <div class="topline">
-              <div style="min-width:0">
+          <div class="name-band" title="${esc(p.name)}">${esc(p.name)}</div>
+          <div class="info visual-info">
+            <div class="product-line">
+              <span class="red-dot" aria-hidden="true"></span>
+              <div class="product-details">
                 <div class="code">${esc(p.code)}</div>
-                <div class="name">${esc(p.name)}</div>
-              </div>
-              <div class="tagwrap">
-                ${p.badge ? `<span class="tag badge">${esc(p.badge)}</span>` : ''}
-                <span class="tag">${p.has_img ? 'Catálogo' : 'Demo'}</span>
+                <div class="origin-line">${esc(p.category || 'Catálogo Toyo')}</div>
+                <div class="history-line">Historial Dic–Mayo: ${Math.round(p.qty6m)} registro(s)</div>
               </div>
             </div>
-            <div class="meta">
-              <span>${esc(p.category)}</span>
-              <span>Histórico: ${Math.round(p.qty6m)} pzas</span>
+            <div class="tagwrap clean-tags">
+              ${p.badge ? `<span class="tag badge">${esc(p.badge)}</span>` : ''}
+              <span class="tag">${p.has_img ? 'Con foto' : 'Sin foto'}</span>
             </div>
             <div class="bottom">
-              <div class="pieces-label">Selecciona número de piezas</div>
+              <div class="pieces-label">Piezas a pedir</div>
               <div class="qty">
                 <button type="button" aria-label="Quitar pieza" data-action="minus" data-code="${esc(p.code)}">−</button>
                 <input class="qty-input" type="number" min="0" step="1" inputmode="numeric" value="${qty}" data-input-code="${esc(p.code)}" aria-label="Piezas"/>
