@@ -1,0 +1,4 @@
+Actualización pedido descargado:
+- El bloque Copiar al sistema ahora incluye Código producto, Nombre producto y Piezas totales.
+- La tabla del formato descargado conserva el estilo visual y agrega la columna Nombre producto.
+- Se actualizó la versión del JS en los HTML para evitar caché en GitHub Pages.
