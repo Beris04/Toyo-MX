@@ -1,0 +1,18 @@
+Actualización captura por cajas y piezas
+Versión: 20260615cajas1
+
+Cambios aplicados:
+- Se integró el archivo Productos por Caja.xlsx.
+- Solo se tomaron productos con CANT.ART POR CAJA diferente de 1.
+- Cada producto con caja muestra: Caja: X pzas.
+- El cliente puede capturar por Piezas o por Cajas.
+- Si captura cajas, el pedido calcula automáticamente el total de piezas.
+- El resumen muestra Total productos, Total cajas y Total piezas.
+- El archivo descargado del pedido incluye Cantidad, Tipo, Pzas/caja y Total piezas.
+
+Validación:
+- Productos con caja en Excel: 5061
+- Códigos con caja encontrados en el portal: 2876
+- Apariciones de productos con caja en HTML: 591979
+- HTML actualizados: 19306
+- JSON dañados: 0

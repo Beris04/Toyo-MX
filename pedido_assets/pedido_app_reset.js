@@ -1,4 +1,4 @@
-const APP_BUILD = "2026-05-18-isekado2-sin-aquamar";
+const APP_BUILD = "20260615fav1-favoritos-cajas";
 
 (() => {
   const ASSET_BASE = new URL("../pedido_assets/", window.location.href).href;
@@ -73,8 +73,10 @@ const NEW_PRODUCTS_DATA = [
     qty6m: Number(p.qty6m || 0),
     orders6m: Number(p.orders6m || 0),
     badge: p.badge || '',
+    boxQty: Number(p.box_qty || p.units_per_box || 0),
     index: idx
   }));
+  const productByCode = Object.fromEntries(products.map(p => [p.code, p]));
 
   const categoryOrder = ['Abarrotes','Salsas','Bebidas','Congelados','Frescos','Pescados y Mariscos','Arroces','Fideos y Pastas','Masas y Pieles','Harinas','Tofu','Aceites','Pan y Deli','Pan','Carnes','Utensilios','Accesorios','Dulces y Botanas','Mascotas','Cuidado Personal','Otros'];
   const categoryRank = Object.fromEntries(categoryOrder.map((c, i) => [c, i]));
@@ -83,9 +85,12 @@ const NEW_PRODUCTS_DATA = [
     query: '',
     activeCategory: '',
     selectedOnly: false,
+    favoriteOnly: false,
     page: 1,
     viewMode: localStorage.getItem(VIEW_KEY) || 'mobile',
     quantities: {},
+    unitModes: {},
+    favorites: {},
     clientName: APP_DATA.client_name || '',
     clientCode: APP_DATA.client_code || '',
     seller: APP_DATA.vendor_label || '',
@@ -98,6 +103,8 @@ const NEW_PRODUCTS_DATA = [
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
       if (saved && typeof saved === 'object') {
         if (saved.quantities && typeof saved.quantities === 'object') state.quantities = saved.quantities;
+        if (saved.unitModes && typeof saved.unitModes === 'object') state.unitModes = saved.unitModes;
+        if (saved.favorites && typeof saved.favorites === 'object') state.favorites = saved.favorites;
         if (typeof saved.clientName === 'string') state.clientName = saved.clientName;
         if (typeof saved.clientCode === 'string') state.clientCode = saved.clientCode;
         if (typeof saved.seller === 'string') state.seller = saved.seller;
@@ -108,11 +115,16 @@ const NEW_PRODUCTS_DATA = [
     products.forEach(p => {
       if (!Number.isFinite(state.quantities[p.code])) state.quantities[p.code] = Number(state.quantities[p.code] || 0);
       if (state.quantities[p.code] < 0) state.quantities[p.code] = 0;
+      if (state.unitModes[p.code] !== 'box') state.unitModes[p.code] = 'piece';
+      if (!(p.boxQty > 1)) state.unitModes[p.code] = 'piece';
+      state.favorites[p.code] = !!state.favorites[p.code];
     });
   }
   function saveState() {
     const payload = {
       quantities: state.quantities,
+      unitModes: state.unitModes,
+      favorites: state.favorites,
       clientName: state.clientName,
       clientCode: state.clientCode,
       seller: state.seller,
@@ -143,7 +155,8 @@ const NEW_PRODUCTS_DATA = [
       const matchQuery = !state.query || normalize(p.name).includes(normalize(state.query)) || normalize(p.code).includes(normalize(state.query));
       const matchCategory = !state.activeCategory || normalize(p.category) === normalize(state.activeCategory);
       const matchSelected = !state.selectedOnly || (state.quantities[p.code] || 0) > 0;
-      return matchQuery && matchCategory && matchSelected;
+      const matchFavorite = !state.favoriteOnly || !!state.favorites[p.code];
+      return matchQuery && matchCategory && matchSelected && matchFavorite;
     });
     rows.sort((a, b) => (b.qty6m - a.qty6m) || (b.orders6m - a.orders6m) || a.name.localeCompare(b.name, 'es'));
     return rows;
@@ -151,11 +164,37 @@ const NEW_PRODUCTS_DATA = [
   function totalProductsSelected() {
     return products.filter(p => (state.quantities[p.code] || 0) > 0).length;
   }
+  function totalFavoritesSelected() {
+    return products.filter(p => !!state.favorites[p.code]).length;
+  }
+  function getUnitMode(code) {
+    const p = productByCode[code];
+    return (p && p.boxQty > 1 && state.unitModes[code] === 'box') ? 'box' : 'piece';
+  }
+  function unitLabel(unit, qty) {
+    if (unit === 'box') return qty === 1 ? 'caja' : 'cajas';
+    return qty === 1 ? 'pieza' : 'piezas';
+  }
+  function totalPiecesFor(code) {
+    const p = productByCode[code];
+    const qty = Number(state.quantities[code] || 0);
+    if (!p) return qty;
+    return qty * (getUnitMode(code) === 'box' ? Number(p.boxQty || 1) : 1);
+  }
   function totalPieces() {
-    return products.reduce((acc, p) => acc + Number(state.quantities[p.code] || 0), 0);
+    return products.reduce((acc, p) => acc + totalPiecesFor(p.code), 0);
+  }
+  function totalBoxes() {
+    return products.reduce((acc, p) => acc + (getUnitMode(p.code) === 'box' ? Number(state.quantities[p.code] || 0) : 0), 0);
   }
   function cartItems() {
-    return products.filter(p => (state.quantities[p.code] || 0) > 0).map(p => ({...p, qty: Number(state.quantities[p.code] || 0)}));
+    return products.filter(p => (state.quantities[p.code] || 0) > 0).map(p => {
+      const qty = Number(state.quantities[p.code] || 0);
+      const unitMode = getUnitMode(p.code);
+      const boxQty = Number(p.boxQty || 0);
+      const totalPcs = totalPiecesFor(p.code);
+      return {...p, qty, unitMode, boxQty, totalPieces: totalPcs};
+    });
   }
 
 
@@ -216,7 +255,7 @@ function buildUpdatesHTML() {
               <div class="hero-copy">
                 <div class="eyebrow">Pedido digital Toyo Foods</div>
                 <h1>${esc(APP_DATA.client_name || 'Cliente')}</h1>
-                <p>Catálogo actualizado con historial Dic–Mayo, tarjetas visuales y captura rápida por piezas.</p>
+                <p>Catálogo actualizado con historial Dic–Mayo, favoritos y captura por piezas o cajas.</p>
               </div>
             </div>
             <div class="hero-aside">
@@ -236,10 +275,11 @@ function buildUpdatesHTML() {
                     <input id="searchInput" placeholder="Buscar artículo o código"/>
                   </div>
                   <button class="toolbtn" id="selectedBtn" type="button">Solo capturados</button>
+                  <button class="toolbtn" id="favoriteBtn" type="button">Favoritos</button>
                   <button class="toolbtn" id="clearBtn" type="button">Limpiar todo</button>
                   <button class="toolbtn" id="viewToggleBtn" type="button">Vista web</button>
                 </div>
-                <div class="helper">Puedes buscar por nombre o SKU, usar las categorías y capturar piezas con teclado o con los botones + / −. El pedido se guarda automáticamente en este navegador.</div>
+                <div class="helper">Puedes buscar por nombre o SKU, marcar favoritos ⭐ y capturar por piezas o cajas. El pedido y favoritos se guardan en este navegador.</div>
                 <div class="chip-row" id="categoryChips"></div>
                 <div class="helper" id="viewNote">Vista móvil activa</div>
               </div>
@@ -306,6 +346,12 @@ function buildUpdatesHTML() {
     });
     const selectedBtn = document.getElementById('selectedBtn');
     selectedBtn.classList.toggle('primary', state.selectedOnly);
+    const favoriteBtn = document.getElementById('favoriteBtn');
+    if (favoriteBtn) {
+      favoriteBtn.classList.toggle('primary', state.favoriteOnly);
+      const n = totalFavoritesSelected();
+      favoriteBtn.textContent = state.favoriteOnly ? `Ver todos (${n})` : `Favoritos (${n})`;
+    }
   }
 
   function renderProducts() {
@@ -323,7 +369,7 @@ function buildUpdatesHTML() {
     const list = document.getElementById('productList');
 
     pageBadge.textContent = `Página ${state.page} / ${totalPages} · ${rows.length} artículo(s)`;
-    resultTitle.textContent = state.activeCategory ? `Catálogo · ${state.activeCategory}` : 'Catálogo del cliente';
+    resultTitle.textContent = state.favoriteOnly ? 'Productos favoritos' : (state.activeCategory ? `Catálogo · ${state.activeCategory}` : 'Catálogo del cliente');
     prevBtn.disabled = state.page <= 1;
     nextBtn.disabled = state.page >= totalPages;
 
@@ -336,8 +382,16 @@ function buildUpdatesHTML() {
 
     list.innerHTML = visible.map(p => {
       const qty = Number(state.quantities[p.code] || 0);
+      const hasBox = Number(p.boxQty || 0) > 1;
+      const unitMode = getUnitMode(p.code);
+      const totalPcs = totalPiecesFor(p.code);
+      const qtyLabel = unitMode === 'box' ? 'Cajas a pedir' : 'Piezas a pedir';
+      const conversion = hasBox && qty > 0
+        ? `<div class="conversion-hint">${unitMode === 'box' ? `${qty} ${unitLabel('box', qty)} × ${p.boxQty} = ${totalPcs} pzas` : `${qty} ${unitLabel('piece', qty)}`}</div>`
+        : '';
       return `
-        <article class="product ${qty > 0 ? 'has-qty' : ''}">
+        <article class="product ${qty > 0 ? 'has-qty' : ''} ${state.favorites[p.code] ? 'is-fav' : ''}">
+          <button class="fav-btn ${state.favorites[p.code] ? 'active' : ''}" type="button" data-fav-code="${esc(p.code)}" aria-label="Marcar favorito" title="${state.favorites[p.code] ? 'Quitar de favoritos' : 'Marcar favorito'}">${state.favorites[p.code] ? '★' : '☆'}</button>
           <div class="thumb"><img src="${esc(p.img || placeholderFor(p.code))}" alt="${esc(p.name)}" loading="lazy"></div>
           <div class="name-band" title="${esc(p.name)}">${esc(p.name)}</div>
           <div class="info visual-info">
@@ -347,27 +401,38 @@ function buildUpdatesHTML() {
                 <div class="code">${esc(p.code)}</div>
                 <div class="origin-line">${esc(p.category || 'Catálogo Toyo')}</div>
                 <div class="history-line">Historial Dic–Mayo: ${Math.round(p.qty6m)} registro(s)</div>
+                <div class="box-line">${hasBox ? `Caja: ${p.boxQty} pzas` : 'Venta por pieza'}</div>
               </div>
             </div>
             <div class="tagwrap clean-tags">
+              ${state.favorites[p.code] ? `<span class="tag fav-tag">Favorito</span>` : ''}
               ${p.badge ? `<span class="tag badge">${esc(p.badge)}</span>` : ''}
               <span class="tag">${p.has_img ? 'Con foto' : 'Sin foto'}</span>
+              ${hasBox ? `<span class="tag box-tag">Caja ${p.boxQty}</span>` : ''}
             </div>
+            ${hasBox ? `<div class="unit-row"><span>Capturar por</span><select class="unit-select" data-unit-code="${esc(p.code)}"><option value="piece" ${unitMode === 'piece' ? 'selected' : ''}>Piezas</option><option value="box" ${unitMode === 'box' ? 'selected' : ''}>Cajas</option></select></div>` : `<div class="unit-row single"><span>Captura por piezas</span></div>`}
             <div class="bottom">
-              <div class="pieces-label">Piezas a pedir</div>
+              <div class="pieces-label">${qtyLabel}</div>
               <div class="qty">
-                <button type="button" aria-label="Quitar pieza" data-action="minus" data-code="${esc(p.code)}">−</button>
-                <input class="qty-input" type="number" min="0" step="1" inputmode="numeric" value="${qty}" data-input-code="${esc(p.code)}" aria-label="Piezas"/>
-                <button type="button" aria-label="Agregar pieza" data-action="plus" data-code="${esc(p.code)}">+</button>
+                <button type="button" aria-label="Quitar cantidad" data-action="minus" data-code="${esc(p.code)}">−</button>
+                <input class="qty-input" type="number" min="0" step="1" inputmode="numeric" value="${qty}" data-input-code="${esc(p.code)}" aria-label="Cantidad"/>
+                <button type="button" aria-label="Agregar cantidad" data-action="plus" data-code="${esc(p.code)}">+</button>
               </div>
+              ${conversion}
             </div>
           </div>
         </article>
       `;
     }).join('');
 
+    list.querySelectorAll('button[data-fav-code]').forEach(btn => {
+      btn.addEventListener('click', () => toggleFavorite(btn.dataset.favCode));
+    });
     list.querySelectorAll('button[data-action]').forEach(btn => {
       btn.addEventListener('click', () => changeQty(btn.dataset.code, btn.dataset.action === 'plus' ? 1 : -1));
+    });
+    list.querySelectorAll('select[data-unit-code]').forEach(sel => {
+      sel.addEventListener('change', () => changeUnitMode(sel.dataset.unitCode, sel.value));
     });
     list.querySelectorAll('input[data-input-code]').forEach(input => {
       input.addEventListener('focus', () => input.select());
@@ -413,16 +478,24 @@ function buildUpdatesHTML() {
   function buildSummaryHTML() {
     const items = cartItems();
     const pieces = totalPieces();
+    const boxes = totalBoxes();
     const productsCount = totalProductsSelected();
-    const rows = items.length ? items.map(item => `
+    const rows = items.length ? items.map(item => {
+      const mainQty = `${item.qty} ${unitLabel(item.unitMode, item.qty)}`;
+      const detail = item.unitMode === 'box'
+        ? `Caja ${item.boxQty} pzas · Total ${item.totalPieces} pzas`
+        : `Total ${item.totalPieces} pzas`;
+      return `
       <div class="line-item">
         <div>
           <div class="lname">${esc(item.name)}</div>
           <div class="lcode">${esc(item.code)}</div>
+          <div class="lmeta">${esc(detail)}</div>
         </div>
-        <div class="lqty">${item.qty}</div>
+        <div class="lqty"><span>${esc(mainQty)}</span><small>${item.totalPieces} pzas</small></div>
       </div>
-    `).join('') : `<div style="color:var(--muted);font-weight:800">Aún no agregas productos al pedido.</div>`;
+    `;
+    }).join('') : `<div style="color:var(--muted);font-weight:800">Aún no agregas productos al pedido.</div>`;
 
     return `
       <div class="order-card">
@@ -457,7 +530,9 @@ function buildUpdatesHTML() {
         </div>
         <div class="statusline">
           <span class="statuspill">Productos: <strong>${productsCount}</strong></span>
-          <span class="statuspill">Piezas: <strong>${pieces}</strong></span>
+          <span class="statuspill">Favoritos: <strong>${totalFavoritesSelected()}</strong></span>
+          <span class="statuspill">Cajas: <strong>${boxes}</strong></span>
+          <span class="statuspill">Piezas totales: <strong>${pieces}</strong></span>
         </div>
       </div>
       <div class="order-card">
@@ -472,6 +547,7 @@ function buildUpdatesHTML() {
       </div>
       <div class="totalbox">
         <div class="totalrow"><span>Total productos</span><strong>${productsCount}</strong></div>
+        <div class="totalrow"><span>Total cajas</span><strong>${boxes}</strong></div>
         <div class="totalrow"><span>Total piezas</span><strong>${pieces}</strong></div>
         <div class="actions-row">
           <button class="ghostbtn" id="resetOrderBtn" type="button">Vaciar pedido</button>
@@ -488,12 +564,35 @@ function buildUpdatesHTML() {
     desktopBody.innerHTML = buildSummaryHTML();
     bindSummaryInputs(mobileBody);
     bindSummaryInputs(desktopBody);
-    document.getElementById('barPieces').textContent = `${totalPieces()} piezas`;
-    document.getElementById('barCount').textContent = `${totalProductsSelected()} productos seleccionados`;
+    document.getElementById('barPieces').textContent = `${totalPieces()} piezas totales`;
+    document.getElementById('barCount').textContent = `${totalProductsSelected()} productos · ${totalFavoritesSelected()} favoritos · ${totalBoxes()} cajas`;
+    const favoriteBtn = document.getElementById('favoriteBtn');
+    if (favoriteBtn) {
+      const n = totalFavoritesSelected();
+      favoriteBtn.textContent = state.favoriteOnly ? `Ver todos (${n})` : `Favoritos (${n})`;
+    }
+  }
+
+  function toggleFavorite(code) {
+    if (!code) return;
+    state.favorites[code] = !state.favorites[code];
+    if (state.favoriteOnly && totalFavoritesSelected() === 0) state.favoriteOnly = false;
+    saveState();
+    renderCategoryChips();
+    renderProducts();
+    renderSummary();
   }
 
   function changeQty(code, delta) {
     state.quantities[code] = Math.max(0, Number(state.quantities[code] || 0) + delta);
+    saveState();
+    renderProducts();
+    renderSummary();
+  }
+
+  function changeUnitMode(code, mode) {
+    const p = productByCode[code];
+    state.unitModes[code] = (mode === 'box' && p && p.boxQty > 1) ? 'box' : 'piece';
     saveState();
     renderProducts();
     renderSummary();
@@ -510,6 +609,7 @@ function buildUpdatesHTML() {
 
   function clearAll() {
     Object.keys(state.quantities).forEach(code => state.quantities[code] = 0);
+    Object.keys(state.unitModes).forEach(code => state.unitModes[code] = 'piece');
     state.notes = '';
     saveState();
     renderProducts();
@@ -581,13 +681,19 @@ function buildUpdatesHTML() {
     const seller = summaryField('seller', APP_DATA.vendor_label || '');
     const payment = summaryField('payment', APP_DATA.payment_default || 'Crédito');
     const notes = summaryField('notes', '');
-    const rows = items.length ? items.map(item => `
+    const rows = items.length ? items.map(item => {
+      const typeTxt = item.unitMode === 'box' ? 'Cajas' : 'Piezas';
+      const boxTxt = item.unitMode === 'box' ? item.boxQty : '—';
+      return `
       <tr>
         <td>${esc(item.code)}</td>
         <td class="desc">${esc(item.name)}</td>
         <td style="text-align:center">${item.qty}</td>
-      </tr>
-    `).join('') : `<tr><td colspan="3" style="text-align:center;color:#667085;padding:22px 16px">No se seleccionaron productos.</td></tr>`;
+        <td style="text-align:center">${typeTxt}</td>
+        <td style="text-align:center">${boxTxt}</td>
+        <td style="text-align:center"><strong>${item.totalPieces}</strong></td>
+      </tr>`;
+    }).join('') : `<tr><td colspan="6" style="text-align:center;color:#667085;padding:22px 16px">No se seleccionaron productos.</td></tr>`;
 
     return `<!doctype html>
 <html lang="es">
@@ -615,7 +721,7 @@ thead th{background:#f8fafc;color:#334155;font-size:12px;text-transform:uppercas
 tbody td{padding:14px 12px;border-bottom:1px solid #eef2f7;font-size:14px;vertical-align:top}
 tbody tr:nth-child(even){background:#fcfdff}
 .desc{overflow-wrap:anywhere;word-break:break-word}
-.summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:18px}
+.summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:18px}
 .sum{background:#0f172a;color:#fff;border-radius:18px;padding:16px 18px}
 .sum .k{font-size:12px;opacity:.72;text-transform:uppercase;letter-spacing:.05em}
 .sum .v{margin-top:8px;font-size:28px;font-weight:900}
@@ -646,12 +752,13 @@ tbody tr:nth-child(even){background:#fcfdff}
   </div>
   <div class="content">
     <table>
-      <thead><tr><th>Código</th><th>Descripción</th><th>Piezas</th></tr></thead>
+      <thead><tr><th>Código</th><th>Descripción</th><th>Cantidad</th><th>Tipo</th><th>Pzas/caja</th><th>Total piezas</th></tr></thead>
       <tbody>${rows}</tbody>
     </table>
     <div class="summary">
       <div class="sum"><div class="k">Productos</div><div class="v">${items.length}</div></div>
-      <div class="sum"><div class="k">Piezas</div><div class="v">${items.reduce((a,b) => a + b.qty, 0)}</div></div>
+      <div class="sum"><div class="k">Cajas</div><div class="v">${items.reduce((a,b) => a + (b.unitMode === 'box' ? b.qty : 0), 0)}</div></div>
+      <div class="sum"><div class="k">Piezas totales</div><div class="v">${items.reduce((a,b) => a + b.totalPieces, 0)}</div></div>
     </div>
     <div class="notes">
       <div class="title">Comentarios</div>
@@ -691,6 +798,12 @@ tbody tr:nth-child(even){background:#fcfdff}
   });
   document.getElementById('selectedBtn').addEventListener('click', () => {
     state.selectedOnly = !state.selectedOnly;
+    state.page = 1;
+    renderCategoryChips();
+    renderProducts();
+  });
+  document.getElementById('favoriteBtn').addEventListener('click', () => {
+    state.favoriteOnly = !state.favoriteOnly;
     state.page = 1;
     renderCategoryChips();
     renderProducts();

@@ -1,0 +1,12 @@
+Actualización: Favoritos de cliente
+
+Cambios agregados:
+- Cada producto tiene botón de estrella para marcarlo como favorito.
+- Se agregó botón Favoritos en la parte superior para ver solo los productos marcados.
+- El contador muestra cuántos favoritos tiene el cliente.
+- Los favoritos se guardan en el navegador del cliente junto con el pedido.
+- Vaciar pedido NO borra favoritos; solo limpia cantidades y comentarios.
+- Los productos favoritos quedan resaltados con borde dorado y etiqueta Favorito.
+- Se mantiene la funcionalidad de cajas/piezas y cálculo total de piezas.
+
+Versión assets: 20260615fav1
