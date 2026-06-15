@@ -1,0 +1,1 @@
+Actualización: el archivo descargado del pedido ahora muestra y permite copiar únicamente CODIGO PRODUCTO y PIEZAS TOTALES. Incluye bloque para copiar/pegar en Excel o sistema.
