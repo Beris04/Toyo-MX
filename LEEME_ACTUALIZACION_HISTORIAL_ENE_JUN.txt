@@ -1,0 +1,18 @@
+ACTUALIZACIÓN HISTORIAL ENE - JUN
+
+Se actualizó el portal tomando únicamente las filas visibles del Excel "Ene.Jun Historial.xlsx".
+Las filas ocultas por filtro/selección en Excel no se tomaron en cuenta.
+
+Se conserva el formato vigente: cards de producto, favoritos, cajas/piezas, formato de descarga limpio, botón Copiar pedido y promociones.
+
+Resumen:
+- Filas visibles procesadas: 561379
+- Filas ocultas omitidas: 237682
+- Clientes visibles en archivo: 13498
+- Clientes existentes actualizados: 12765
+- Clientes nuevos agregados: 733
+- Clientes totales en portal: 20039
+- Productos únicos visibles: 4268
+- Productos visibles sin foto: 2240
+- JSON dañados en actualizados: 0
+- NaN en actualizados: 0

@@ -1,0 +1,20 @@
+CAMBIO APLICADO - FORMATO DE DESCARGA LIMPIO
+
+Se respetó el mismo diseño del pedido descargado:
+- Encabezado azul con logo Toyo Foods.
+- Datos de cliente, código, vendedor y forma de pago.
+- Tabla ejecutiva de pedido.
+- Resumen de productos, cajas y piezas.
+- Comentarios al final.
+
+Se eliminó el cuadro grande de texto que repetía la información.
+Ahora el pedido descargado solo muestra una tabla limpia con:
+- Código producto
+- Nombre producto
+- Piezas
+
+Arriba de la tabla se agregó el botón "Copiar pedido".
+Ese botón copia al portapapeles el formato limpio para pegar en Excel o sistema:
+CODIGO PRODUCTO [tab] NOMBRE PRODUCTO [tab] PIEZAS
+
+Versión JS: 20260615formatocopialimpia1

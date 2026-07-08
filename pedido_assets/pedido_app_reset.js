@@ -682,6 +682,7 @@ function buildUpdatesHTML() {
     const payment = summaryField('payment', APP_DATA.payment_default || 'Crédito');
     const notes = summaryField('notes', '');
     const copyLines = items.map(item => `${item.code}\t${item.name}\t${item.totalPieces}`).join('\n');
+    const copyPayload = JSON.stringify(copyLines);
     const rows = items.length ? items.map(item => `
       <tr>
         <td><span class="code">${esc(item.code)}</span></td>
@@ -717,12 +718,13 @@ tbody tr:nth-child(even){background:#fcfdff}
 .code{font-family:Consolas,Menlo,monospace;font-weight:800;letter-spacing:.02em;color:#0f172a}
 .desc{font-weight:700;line-height:1.35;overflow-wrap:anywhere;word-break:break-word}
 .pieces{text-align:right;font-size:18px;width:140px}
-.copybox{margin-top:18px;background:#f8fafc;border:1px dashed #cbd5e1;border-radius:18px;padding:14px}
-.copyhead{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-bottom:10px}
+.orderhead{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-top:18px;background:#f8fafc;border:1px solid #e5eaf2;border-bottom:0;border-radius:18px 18px 0 0;padding:14px 16px}
 .copytitle{font-size:13px;font-weight:900;color:#0f172a;text-transform:uppercase;letter-spacing:.04em}
 .copyhint{font-size:12px;color:#64748b;margin-top:3px}
-.copybtn{border:0;border-radius:999px;background:#0b4aa2;color:#fff;font-weight:900;padding:10px 14px;cursor:pointer}
-.copydata{width:100%;min-height:120px;border:1px solid #dbe3ef;border-radius:14px;padding:12px;font-family:Consolas,Menlo,monospace;font-size:15px;line-height:1.5;resize:vertical;background:#fff;color:#0f172a}
+.copybtn{border:0;border-radius:999px;background:#0b4aa2;color:#fff;font-weight:900;padding:10px 16px;cursor:pointer;box-shadow:0 8px 18px rgba(11,74,162,.18)}
+.copybtn.ok{background:#16a34a}
+.orderTable{margin-top:0;border:1px solid #e5eaf2;border-top:0;border-radius:0 0 18px 18px;overflow:hidden}
+.orderTable table{margin-top:0}
 .summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:18px}
 .sum{background:#0f172a;color:#fff;border-radius:18px;padding:16px 18px}
 .sum .k{font-size:12px;opacity:.72;text-transform:uppercase;letter-spacing:.05em}
@@ -753,35 +755,53 @@ tbody tr:nth-child(even){background:#fcfdff}
     <div class="box"><div class="k">Forma de pago</div><div class="v">${esc(payment)}</div></div>
   </div>
   <div class="content">
-    <div class="copybox">
-      <div class="copyhead">
-        <div>
-          <div class="copytitle">Copiar al sistema</div>
-          <div class="copyhint">Formato limpio: código de producto + nombre del producto + piezas totales.</div>
-        </div>
-        <button class="copybtn" type="button" onclick="copyPedidoData()">Copiar</button>
+    <div class="orderhead">
+      <div>
+        <div class="copytitle">Pedido para copiar</div>
+        <div class="copyhint">Código producto + nombre producto + piezas. Usa el botón para pegarlo en Excel o sistema.</div>
       </div>
-      <textarea class="copydata" id="copyData" readonly>${esc(copyLines)}</textarea>
+      <button class="copybtn" type="button" onclick="copyPedidoData(this)">Copiar pedido</button>
     </div>
-    <table>
-      <thead><tr><th style="width:190px">Código producto</th><th>Nombre producto</th><th style="text-align:right;width:140px">Piezas</th></tr></thead>
-      <tbody>${rows}</tbody>
-    </table>
+    <div class="orderTable">
+      <table>
+        <thead><tr><th style="width:190px">Código producto</th><th>Nombre producto</th><th style="text-align:right;width:140px">Piezas</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+    <script type="application/json" id="copyDataJson">${esc(copyPayload)}</script>
     <script>
-      function copyPedidoData(){
-        var el = document.getElementById('copyData');
-        if(!el) return;
-        el.focus();
-        el.select();
+      function copyPedidoData(btn){
+        var dataEl = document.getElementById('copyDataJson');
+        if(!dataEl) return;
+        var text = '';
+        try{ text = JSON.parse(dataEl.textContent || '""'); }
+        catch(e){ text = dataEl.textContent || ''; }
+        function markDone(){
+          if(!btn) return;
+          var old = btn.textContent;
+          btn.textContent = 'Copiado';
+          btn.className = 'copybtn ok';
+          setTimeout(function(){ btn.textContent = old || 'Copiar pedido'; btn.className = 'copybtn'; }, 1400);
+        }
         try{
           if(navigator.clipboard && navigator.clipboard.writeText){
-            navigator.clipboard.writeText(el.value);
+            navigator.clipboard.writeText(text).then(markDone).catch(function(){ fallbackCopy(text); markDone(); });
           }else{
-            document.execCommand('copy');
+            fallbackCopy(text); markDone();
           }
-        }catch(e){
-          try{document.execCommand('copy');}catch(_){}
-        }
+        }catch(e){ fallbackCopy(text); markDone(); }
+      }
+      function fallbackCopy(text){
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly','');
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        try{document.execCommand('copy');}catch(e){}
+        document.body.removeChild(ta);
       }
     <\/script>
     <div class="summary">
