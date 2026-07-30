@@ -1,0 +1,14 @@
+ACTUALIZACIÓN DE PRODUCTOS NUEVOS
+
+Archivo fuente: data (10).xlsx
+Portal base: Toyo_Portal_Historial_Ene_Jun_Actualizado.zip
+Clientes del archivo de compras: 11,165
+Clientes localizados en el portal: 10,742
+Clientes con productos nuevos agregados: 5,606
+Productos nuevos agregados (cliente-producto): 34,159
+Clientes sin productos nuevos: 5,136
+Clientes no localizados en el portal: 423
+Productos sin referencia previa en el catálogo: 989
+Errores de validación: 0
+
+Se conservó el formato y diseño actual. Los productos ya existentes no fueron modificados; únicamente se agregaron los códigos que no estaban en el formato del cliente.
