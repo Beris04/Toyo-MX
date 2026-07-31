@@ -1,0 +1,6 @@
+CORRECCIÓN DE APERTURA DE CLIENTES
+
+Se integró la base de clientes dentro del index.html para que el portal funcione tanto al abrirlo desde una carpeta local como en GitHub Pages.
+Clientes válidos incluidos: 20024
+Registros eliminados del índice por no tener archivo HTML: 15
+No se modificaron los formatos individuales de los clientes.
