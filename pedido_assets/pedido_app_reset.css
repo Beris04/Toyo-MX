@@ -538,3 +538,71 @@ body.force-web .conversion-hint{font-size:8px;padding:4px}
 }
 body.force-web .search-grid{grid-template-columns:1fr auto auto auto auto}
 body.force-web .fav-btn{width:30px;height:30px;font-size:17px;top:7px;right:7px}
+
+
+/* ===== Refresh visual 20260915prod1 ===== */
+:root{--brand:#063b7a;--brand-2:#1164c5;--ink:#111827;--muted:#667085;--line:#d9e3f0;--soft:#f6f8fc;--bg:#eef3f9;--shadow:0 12px 30px rgba(15,23,42,.09)}
+html,body{background:linear-gradient(180deg,#edf3fa 0,#f8fafc 42%,#f4f7fb 100%)}
+.hero{padding:calc(14px + var(--safe-t)) 14px 16px;background:linear-gradient(135deg,#062f63 0%,#0b4aa2 52%,#1976d2 100%);border-bottom-left-radius:30px;border-bottom-right-radius:30px;box-shadow:0 16px 38px rgba(11,74,162,.20)}
+.hero-main,.hero-aside{background:rgba(255,255,255,.11);border-color:rgba(255,255,255,.20);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+.hero-main{padding:15px;border-radius:22px}.hero-aside{padding:11px;border-radius:22px}.brand-badge{width:64px;height:64px;flex-basis:64px;background:#fff;border-color:rgba(255,255,255,.40);box-shadow:0 10px 24px rgba(0,0,0,.13)}
+.hero h1{font-size:clamp(22px,4.7vw,36px);letter-spacing:-.02em}.hero p{font-size:12.5px;max-width:760px}.metric{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.17)}.metric .v{font-size:13.5px}
+.toolbar{padding-top:12px}.toolcard{border-radius:18px;border-color:#dfe7f2;background:rgba(255,255,255,.96);box-shadow:0 10px 28px rgba(15,23,42,.08)}.search{background:#f8fafc;border-color:#dce5f1;min-height:44px}.search input{font-size:14px}
+.toolbtn{min-height:42px;border-radius:11px;border-color:#d6e0ed;color:#21456f}.toolbtn.primary{background:#0b4aa2;border-color:#0b4aa2;color:#fff}.chip{border-color:#d9e3ef;box-shadow:0 2px 6px rgba(15,23,42,.03)}.chip.active{background:#0b4aa2;border-color:#0b4aa2}
+.section-head{padding-top:14px}.section-head h2{font-size:16px;letter-spacing:-.01em}.pagebadge{background:#eaf2ff;color:#0b4aa2;border:1px solid #d5e5ff}.list{gap:12px}.product{border-radius:18px;border-color:#dce5f0;box-shadow:0 8px 22px rgba(15,23,42,.07);transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease}
+.product:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(15,23,42,.11)}.product.has-qty{border:2px solid #76a9e8;box-shadow:0 14px 30px rgba(11,74,162,.14)}.thumb{background:linear-gradient(180deg,#fff 0%,#fbfcfe 100%);padding:14px 14px 10px}.name-band{background:linear-gradient(135deg,#234d6a,#315f7e);font-size:10.4px;min-height:44px}
+.visual-info{padding:10px;gap:8px}.product-details .code{font-size:9.2px;color:#475467}.origin-line{font-size:8.8px}.history-line,.box-line{font-size:8.7px}.red-dot{background:#e11d48}.unit-row{background:#f8fafc;border-color:#dce5ef}.unit-select{border-color:#cfdbea}.visual-info .qty{background:#f4f8fd;border-color:#d5e1ef}.visual-info .qty button{background:#fff;color:#0b4aa2;border:1px solid #d9e4f1}.visual-info .qty input.qty-input{color:#0f172a}
+.fav-btn{background:rgba(255,255,255,.96);border-color:#d7e0eb}.bar{background:rgba(244,247,251,.90)}.bar-inner{background:linear-gradient(135deg,#0d1b2a,#172a46);border:1px solid rgba(255,255,255,.07)}.sheet{border:1px solid #e1e8f1}.order-card{background:#f8fafc;border-color:#e1e8f1}
+@media (min-width:900px){.list{grid-template-columns:repeat(4,minmax(0,1fr))}}@media (min-width:1240px){.list{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media (max-width:720px){.hero-shell{grid-template-columns:1fr}.hero-aside{grid-template-columns:1fr 1fr}.toolbar{padding-left:8px;padding-right:8px}.list{padding:10px 8px;gap:10px}}
+@media (max-width:430px){.hero{padding-left:9px;padding-right:9px}.hero-main{padding:12px}.brand-badge{width:54px;height:54px;flex-basis:54px}.hero h1{font-size:21px}.hero-aside{padding:8px}.metric{padding:8px}.list{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.product{border-radius:15px}.name-band{font-size:9.3px;min-height:42px}.visual-info{padding:8px}.toolbtn{font-size:11px;padding:9px 10px}}
+body.force-web .list{gap:13px}
+
+/* ===== Novedades septiembre 2026 ===== */
+.campaign-board{
+  margin-top:12px;
+  padding:14px;
+}
+.panel-subtitle{
+  margin-top:4px;
+  font-size:12px;
+  line-height:1.35;
+  color:#64748b;
+  font-weight:700;
+}
+.campaign-grid{
+  display:grid;
+  grid-template-columns:minmax(260px,.82fr) minmax(360px,1.18fr);
+  gap:14px;
+  align-items:stretch;
+}
+.campaign-card{
+  overflow:hidden;
+  border-radius:18px;
+  border:1px solid #dbe5f2;
+  background:#f8fafc;
+  box-shadow:0 8px 20px rgba(15,23,42,.07);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-width:0;
+}
+.campaign-card img{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:contain;
+  background:#fff;
+}
+.campaign-portrait{max-height:520px}
+.campaign-landscape{max-height:520px}
+@media (max-width:900px){
+  .campaign-grid{grid-template-columns:1fr}
+  .campaign-card{max-height:none}
+  .campaign-portrait img{max-height:640px}
+}
+@media (max-width:430px){
+  .campaign-board{margin:8px 10px 0;padding:10px}
+  .campaign-grid{gap:10px}
+  .campaign-card{border-radius:14px}
+}
