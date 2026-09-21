@@ -1,4 +1,4 @@
-<!-- BUILD 2026-09-15-data33-productos-vendedores-diseno -->
+<!-- BUILD 2026-09-21-global-search-sellers-from-data33 -->
 <!doctype html>
 <html lang="es">
 <head>
@@ -936,7 +936,7 @@
     }
   </style>
 
-<script src="clients.js?v=20260915lite1"></script>
+<script src="clients.js?v=20260921global1"></script>
 </head>
 <body>
   <div class="shellBar">
@@ -1024,7 +1024,7 @@
               <label class="label" for="q">Buscar cliente</label>
               <div class="inputWrap">
                 <span class="searchIcon">🔎</span>
-                <input id="q" type="text" placeholder="Nombre del cliente o código" autocomplete="off" />
+                <input id="q" type="text" placeholder="Nombre, código o vendedor" autocomplete="off" />
               </div>
             </div>
 
@@ -1045,7 +1045,7 @@
             </div>
 
             <div class="note">
-              <strong>Recomendación:</strong> usa la búsqueda por nombre o código, filtra por vendedor y comparte enlaces directos con el equipo comercial.
+              <strong>Búsqueda global:</strong> escribe nombre, código o vendedor. El filtro de vendedor es opcional y sirve para acotar resultados.
             </div>
 
             <div class="shortcutRow">
@@ -1069,9 +1069,9 @@
               <span class="cardName" id="viewTitle">Directorio comercial</span>
             </div>
             <div class="tabs">
-              <button class="tab" id="tabSearch" type="button">Buscar</button>
+              <button class="tab active" id="tabSearch" type="button">Buscar</button>
               <button class="tab" id="tabRecent" type="button">Recientes</button>
-              <button class="tab active" id="tabVendors" type="button">Vendedores</button>
+              <button class="tab" id="tabVendors" type="button">Vendedores</button>
             </div>
           </div>
 
@@ -1129,9 +1129,9 @@
 
   <div class="bottombar">
     <div class="bnav">
-      <button class="btab" id="bSearch" type="button"><span class="ico">🔎</span><span>Buscar</span></button>
+      <button class="btab active" id="bSearch" type="button"><span class="ico">🔎</span><span>Buscar</span></button>
       <button class="btab" id="bRecent" type="button"><span class="ico">🕘</span><span>Recientes</span></button>
-      <button class="btab active" id="bVendors" type="button"><span class="ico">👔</span><span>Vendedores</span></button>
+      <button class="btab" id="bVendors" type="button"><span class="ico">👔</span><span>Vendedores</span></button>
     </div>
   </div>
 
@@ -1156,7 +1156,7 @@
   const saveJSON = (key, value) => localStorage.setItem(key, JSON.stringify(value));
   const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
 
-  const LS_REC = "toyo_index_recent_v5";
+  const LS_REC = "toyo_index_recent_v6";
   const LS_COMPACT = "toyo_index_compact_v5";
 
   const subtitle = $("#subtitle");
@@ -1198,7 +1198,7 @@
 
   let ALL = [];
   let VENDORS = [];
-  let MODE = "vendors";
+  let MODE = "search";
   let ACTIVE_VENDOR = "ALL";
   let PAGE = 1;
   let PAGE_SIZE = 100;
@@ -1279,7 +1279,7 @@
   function currentVendorLabel() {
     return ACTIVE_VENDOR === "ALL"
       ? "todos"
-      : (VENDORS.find(v => v.folder === ACTIVE_VENDOR)?.label || ACTIVE_VENDOR);
+      : (VENDORS.find(v => v.key === ACTIVE_VENDOR)?.label || ACTIVE_VENDOR);
   }
 
   function renderChips() {
@@ -1344,7 +1344,10 @@
     return arr.filter(c => {
       const code = norm(c.client_code);
       const name = norm(c.client_name);
-      return looksCode ? (code.includes(s) || name.includes(s)) : (name.includes(s) || code.includes(s));
+      const sellers = norm((c.vendors || []).join(" "));
+      return looksCode
+        ? (code.includes(s) || name.includes(s) || sellers.includes(s))
+        : (name.includes(s) || code.includes(s) || sellers.includes(s));
     });
   }
 
@@ -1367,7 +1370,7 @@
         </td>
         <td>
           <div class="clientName" style="font-size:14px;font-weight:700">${esc(c.vendor_label || c.vendor_folder || "—")}</div>
-          <div class="clientMeta">${esc(c.vendor_folder || "—")}</div>
+          <div class="clientMeta">Asignación según Excel</div>
         </td>
         <td>
           <div class="actionRow">
@@ -1413,19 +1416,19 @@
     }
 
     resultCount.textContent = `${VENDORS.length} vendedores`;
-    scope.textContent = "Selecciona un vendedor para ver sus clientes";
+    scope.textContent = "Directorio de vendedores · el buscador global funciona sin seleccionar uno";
 
     VENDORS.forEach(v => {
       const el = document.createElement("article");
       el.className = "vendorCard";
       el.innerHTML = `
         <h3>${esc(v.label)}</h3>
-        <p>${esc(v.folder)} · ${v.count} cliente(s)</p>
+        <p>${v.count} cliente(s)</p>
         <button class="btn soft" type="button">Ver clientes</button>
       `;
       el.querySelector("button").addEventListener("click", () => {
-        ACTIVE_VENDOR = v.folder;
-        vendorFilter.value = v.folder;
+        ACTIVE_VENDOR = v.key;
+        vendorFilter.value = v.key;
         setActiveTab("search");
         q.value = "";
       });
@@ -1441,7 +1444,7 @@
     const rec = loadJSON(LS_REC, []);
     const pos = new Map(rec.map((p, i) => [p, i]));
     let base = ALL.filter(c => pos.has(c.path)).sort((a, b) => pos.get(a.path) - pos.get(b.path));
-    if (ACTIVE_VENDOR !== "ALL") base = base.filter(c => c.vendor_folder === ACTIVE_VENDOR);
+    if (ACTIVE_VENDOR !== "ALL") base = base.filter(c => (c.vendor_keys || []).includes(ACTIVE_VENDOR));
 
     if (!base.length) {
       resultCount.textContent = "0 resultados";
@@ -1464,22 +1467,14 @@
     vendorList.style.display = "none";
     renderChips();
 
-    if (ACTIVE_VENDOR === "ALL") {
-      resultCount.textContent = "Selecciona vendedor";
-      scope.textContent = "Paso 1 · Elige un vendedor";
-      setPager(0);
-      renderEmpty("Selecciona un vendedor para cargar únicamente sus clientes.");
-      return;
-    }
-
     let base = ALL.slice();
-    if (ACTIVE_VENDOR !== "ALL") base = base.filter(c => c.vendor_folder === ACTIVE_VENDOR);
+    if (ACTIVE_VENDOR !== "ALL") base = base.filter(c => (c.vendor_keys || []).includes(ACTIVE_VENDOR));
     base = applyQuery(base);
     base.sort((a, b) => (a.client_name || "").localeCompare((b.client_name || ""), "es"));
 
     if (!base.length) {
       resultCount.textContent = "0 resultados";
-      scope.textContent = ACTIVE_VENDOR === "ALL" ? "Mostrando: todos" : `Mostrando: ${currentVendorLabel()}`;
+      scope.textContent = ACTIVE_VENDOR === "ALL" ? "Búsqueda global" : `Mostrando: ${currentVendorLabel()}`;
       setPager(0);
       renderEmpty("Sin resultados para la búsqueda actual.");
       return;
@@ -1488,7 +1483,7 @@
     const rows = getPageSlice(base);
     setPager(base.length);
     resultCount.textContent = `${base.length} resultado(s)`;
-    scope.textContent = ACTIVE_VENDOR === "ALL" ? "Mostrando: todos" : `Mostrando: ${currentVendorLabel()}`;
+    scope.textContent = ACTIVE_VENDOR === "ALL" ? "Búsqueda global · todos los vendedores" : `Mostrando: ${currentVendorLabel()}`;
     empty.style.display = "none";
     renderClientRows(rows);
   }
@@ -1552,7 +1547,7 @@
   }
 
   async function loadClients() {
-    setPortalStatus("Cargando base de clientes y estructura comercial…", "loading");
+    setPortalStatus("Cargando buscador global de clientes…", "loading");
 
     const raw = Array.isArray(window.TOYO_CLIENTS) ? window.TOYO_CLIENTS : [];
     if (!raw.length) {
@@ -1566,7 +1561,12 @@
 
     ALL = raw.map(x => {
       const vendor_folder = (x.vendor_folder || x.seller || "").toString().trim();
-      const vendor_label = (x.vendor_label || x.vendor_name || x.seller_name || vendor_folder).toString().trim();
+      let vendors = Array.isArray(x.vendors) ? x.vendors.map(v => (v || "").toString().trim()).filter(Boolean) : [];
+      const fallbackLabel = (x.vendor_label || x.vendor_name || x.seller_name || vendor_folder || "SIN AGENTE").toString().trim();
+      if (!vendors.length) vendors = [fallbackLabel];
+      vendors = [...new Map(vendors.map(v => [norm(v), v])).values()];
+      const vendor_keys = vendors.map(v => norm(v));
+      const vendor_label = vendors.join(" · ");
       const client_name = (x.client_name || x.client || "").toString().trim();
       const client_code = (x.client_code || x.code || "").toString().trim();
       let path = (x.path || "").toString().trim();
@@ -1574,26 +1574,29 @@
         const file = (x.file || "").toString().trim();
         if (vendor_folder && file) path = `${vendor_folder}/${file}`;
       }
-      return { vendor_folder, vendor_label, client_name, client_code, path };
-    }).filter(x => x.vendor_folder && x.client_name && x.path);
+      return { vendor_folder, vendor_label, vendors, vendor_keys, client_name, client_code, path };
+    }).filter(x => x.client_name && x.path);
 
     const map = new Map();
     ALL.forEach(c => {
-      if (!map.has(c.vendor_folder)) map.set(c.vendor_folder, { folder:c.vendor_folder, label:c.vendor_label || c.vendor_folder, count:0 });
-      map.get(c.vendor_folder).count++;
+      c.vendors.forEach((label, i) => {
+        const key = c.vendor_keys[i];
+        if (!map.has(key)) map.set(key, { key, label, count:0 });
+        map.get(key).count++;
+      });
     });
     VENDORS = [...map.values()].sort((a,b) => a.label.localeCompare(b.label, "es"));
 
-    subtitle.textContent = `${ALL.length.toLocaleString('es-MX')} clientes disponibles en ${VENDORS.length.toLocaleString('es-MX')} vendedor(es). Selecciona un vendedor para continuar.`;
-    setPortalStatus("Portal cargado correctamente.", "ok");
+    subtitle.textContent = `${ALL.length.toLocaleString('es-MX')} clientes disponibles. Busca globalmente por nombre, código o vendedor; el filtro de vendedor es opcional.`;
+    setPortalStatus("Buscador global listo.", "ok");
     updateLastSync();
     kpiClients.textContent = ALL.length.toLocaleString('es-MX');
     kpiVendors.textContent = VENDORS.length.toLocaleString('es-MX');
     updateRecentsKpi();
 
-    vendorFilter.innerHTML = `<option value="ALL">Selecciona vendedor</option>` + VENDORS.map(v => `<option value="${esc(v.folder)}">${esc(v.label)} (${v.count})</option>`).join("");
+    vendorFilter.innerHTML = `<option value="ALL">Todos los vendedores</option>` + VENDORS.map(v => `<option value="${esc(v.key)}">${esc(v.label)} (${v.count})</option>`).join("");
     vendorFilter.value = ACTIVE_VENDOR;
-    setDiag({ status:"ok", source:"clients.js", total_clients:ALL.length, total_vendors:VENDORS.length, sample:ALL[0] || null });
+    setDiag({ status:"ok", source:"clients.js", total_clients:ALL.length, total_vendors:VENDORS.length, search_mode:"global", sample:ALL[0] || null });
     render();
   }
 
