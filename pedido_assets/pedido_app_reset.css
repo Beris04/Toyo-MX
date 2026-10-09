@@ -606,3 +606,17 @@ body.force-web .list{gap:13px}
   .campaign-grid{gap:10px}
   .campaign-card{border-radius:14px}
 }
+
+/* Actualización de historial mayo-septiembre 2026 */
+.period-panel{margin-top:15px;padding:14px 16px;background:linear-gradient(110deg,#eff6ff,#fff);border:1px solid #cfe0fa;border-radius:16px}
+.period-heading{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:7px;color:#123b76;font-size:13px}
+.period-heading strong{font-weight:850}
+.period-heading span{font-size:12px;color:#5c708d;font-weight:500}
+.period-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.period-tabs button{border:1px solid #cddcf0;border-radius:11px;background:#fff;color:#294768;font-weight:700;font-size:12px;cursor:pointer;padding:10px 13px;min-height:40px;transition:background .15s,box-shadow .15s}
+.period-tabs button.active{background:#0b4aa2;color:#fff;border-color:#0b4aa2;box-shadow:0 5px 12px rgba(11,74,162,.18)}
+.period-tabs button:focus-visible{outline:3px solid #facc15;outline-offset:2px}
+.tag.period-new{background:#e6f4ed;color:#16623b;border:1px solid #b9dfc9}
+.tag.period-old{background:#f1f5f9;color:#58677c;border:1px solid #dce4ed}
+.history-line{line-height:1.4}
+@media(max-width:600px){.period-panel{padding:12px}.period-tabs{display:grid;grid-template-columns:1fr 1fr}.period-tabs button:last-child{grid-column:span 2}.period-heading{display:block}.period-heading span{display:block;margin-top:5px}}

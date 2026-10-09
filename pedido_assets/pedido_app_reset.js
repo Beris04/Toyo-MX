@@ -1,4 +1,4 @@
-const APP_BUILD = "20260915-nuevos-productos-v2";
+const APP_BUILD = "20261008-historial-mayo-septiembre-v1";
 
 (() => {
   const ASSET_BASE = new URL("../pedido_assets/", window.location.href).href;
@@ -54,6 +54,7 @@ const APP_BUILD = "20260915-nuevos-productos-v2";
     category: p.category || 'Otros',
     img: p.img || '',
     has_img: !!p.has_img,
+    periodCurrent: !!p.period_current,
     qty6m: Number(p.qty6m || 0),
     orders6m: Number(p.orders6m || 0),
     badge: p.badge || '',
@@ -70,6 +71,7 @@ const APP_BUILD = "20260915-nuevos-productos-v2";
     activeCategory: '',
     selectedOnly: false,
     favoriteOnly: false,
+    periodFilter: products.some(p => p.periodCurrent) ? 'recent' : 'all',
     page: 1,
     viewMode: localStorage.getItem(VIEW_KEY) || 'mobile',
     quantities: {},
@@ -89,9 +91,9 @@ const APP_BUILD = "20260915-nuevos-productos-v2";
         if (saved.quantities && typeof saved.quantities === 'object') state.quantities = saved.quantities;
         if (saved.unitModes && typeof saved.unitModes === 'object') state.unitModes = saved.unitModes;
         if (saved.favorites && typeof saved.favorites === 'object') state.favorites = saved.favorites;
-        if (typeof saved.clientName === 'string') state.clientName = saved.clientName;
+        if (saved.clientVersion === APP_DATA.client_name && typeof saved.clientName === 'string') state.clientName = saved.clientName;
         if (typeof saved.clientCode === 'string') state.clientCode = saved.clientCode;
-        if (typeof saved.seller === 'string') state.seller = saved.seller;
+        if (saved.vendorVersion === APP_DATA.vendor_label && typeof saved.seller === 'string') state.seller = saved.seller;
         if (typeof saved.payment === 'string') state.payment = saved.payment;
         if (typeof saved.notes === 'string') state.notes = saved.notes;
       }
@@ -110,8 +112,10 @@ const APP_BUILD = "20260915-nuevos-productos-v2";
       unitModes: state.unitModes,
       favorites: state.favorites,
       clientName: state.clientName,
+      clientVersion: APP_DATA.client_name,
       clientCode: state.clientCode,
       seller: state.seller,
+      vendorVersion: APP_DATA.vendor_label,
       payment: state.payment,
       notes: state.notes
     };
@@ -140,9 +144,10 @@ const APP_BUILD = "20260915-nuevos-productos-v2";
       const matchCategory = !state.activeCategory || normalize(p.category) === normalize(state.activeCategory);
       const matchSelected = !state.selectedOnly || (state.quantities[p.code] || 0) > 0;
       const matchFavorite = !state.favoriteOnly || !!state.favorites[p.code];
-      return matchQuery && matchCategory && matchSelected && matchFavorite;
+      const matchPeriod = state.periodFilter === 'all' || (state.periodFilter === 'recent' ? p.periodCurrent : !p.periodCurrent);
+      return matchQuery && matchCategory && matchSelected && matchFavorite && matchPeriod;
     });
-    rows.sort((a, b) => (b.qty6m - a.qty6m) || (b.orders6m - a.orders6m) || a.name.localeCompare(b.name, 'es'));
+    rows.sort((a, b) => Number(b.periodCurrent) - Number(a.periodCurrent) || (b.orders6m - a.orders6m) || (b.qty6m - a.qty6m) || a.name.localeCompare(b.name, 'es'));
     return rows;
   }
   function totalProductsSelected() {
@@ -212,7 +217,7 @@ function buildUpdatesHTML() {
               <div class="hero-copy">
                 <div class="eyebrow">Pedido digital Toyo Foods</div>
                 <h1>${esc(APP_DATA.client_name || 'Cliente')}</h1>
-                <p>Catálogo personalizado con tus productos recientes, favoritos y captura por piezas o cajas.</p>
+                <p>Historial mayo–septiembre 2026 · compra por piezas o cajas y conserva tus favoritos.</p>
               </div>
             </div>
             <div class="hero-aside">
@@ -237,6 +242,14 @@ function buildUpdatesHTML() {
                   <button class="toolbtn" id="viewToggleBtn" type="button">Vista web</button>
                 </div>
                 <div class="helper">Puedes buscar por nombre o SKU, marcar favoritos ⭐ y capturar por piezas o cajas. El pedido y favoritos se guardan en este navegador.</div>
+                <div class="period-panel">
+                  <div class="period-heading"><strong>Historial mayo–septiembre 2026</strong><span>Los productos anteriores siguen disponibles para pedir.</span></div>
+                  <div class="period-tabs" id="periodTabs" role="group" aria-label="Filtrar por historial">
+                    <button type="button" data-period="recent">Comprados may–sep (${products.filter(p => p.periodCurrent).length})</button>
+                    <button type="button" data-period="old">Catálogo anterior (${products.filter(p => !p.periodCurrent).length})</button>
+                    <button type="button" data-period="all">Todos (${products.length})</button>
+                  </div>
+                </div>
                 <div class="chip-row" id="categoryChips"></div>
                 <div class="helper" id="viewNote">Vista móvil activa</div>
               </div>
@@ -287,6 +300,16 @@ function buildUpdatesHTML() {
     `;
   }
 
+  function renderPeriodTabs() {
+    const wrap = document.getElementById('periodTabs');
+    if (!wrap) return;
+    wrap.querySelectorAll('button[data-period]').forEach(btn => {
+      const selected = btn.dataset.period === state.periodFilter;
+      btn.classList.toggle('active', selected);
+      btn.setAttribute('aria-pressed', selected ? 'true' : 'false');
+    });
+  }
+
   function renderCategoryChips() {
     const wrap = document.getElementById('categoryChips');
     const selectedClass = state.selectedOnly ? 'active' : '';
@@ -312,6 +335,7 @@ function buildUpdatesHTML() {
   }
 
   function renderProducts() {
+    renderPeriodTabs();
     const rows = filteredProducts();
     const totalPages = Math.max(1, Math.ceil(rows.length / currentPageSize()));
     if (state.page > totalPages) state.page = totalPages;
@@ -326,7 +350,7 @@ function buildUpdatesHTML() {
     const list = document.getElementById('productList');
 
     pageBadge.textContent = `Página ${state.page} / ${totalPages} · ${rows.length} artículo(s)`;
-    resultTitle.textContent = state.favoriteOnly ? 'Productos favoritos' : (state.activeCategory ? `Catálogo · ${state.activeCategory}` : 'Catálogo del cliente');
+    resultTitle.textContent = state.favoriteOnly ? 'Productos favoritos' : (state.activeCategory ? `Catálogo · ${state.activeCategory}` : (state.periodFilter === 'recent' ? 'Comprados mayo–septiembre' : state.periodFilter === 'old' ? 'Catálogo anterior' : 'Catálogo completo'));
     prevBtn.disabled = state.page <= 1;
     nextBtn.disabled = state.page >= totalPages;
 
@@ -357,12 +381,13 @@ function buildUpdatesHTML() {
               <div class="product-details">
                 <div class="code">${esc(p.code)}</div>
                 <div class="origin-line">${esc(p.category || 'Catálogo Toyo')}</div>
-                <div class="history-line">Compras registradas: ${Math.round(p.qty6m)}</div>
+                <div class="history-line">${p.periodCurrent ? `Cantidad registrada may–sep: ${p.qty6m.toLocaleString('es-MX')} · ${p.orders6m} registro(s)` : 'Catálogo anterior · sin compra registrada may–sep'}</div>
                 <div class="box-line">${hasBox ? `Caja: ${p.boxQty} pzas` : 'Venta por pieza'}</div>
               </div>
             </div>
             <div class="tagwrap clean-tags">
               ${state.favorites[p.code] ? `<span class="tag fav-tag">Favorito</span>` : ''}
+              ${p.periodCurrent ? '<span class="tag period-new">May–sep 2026</span>' : '<span class="tag period-old">Anterior</span>'}
               ${p.badge ? `<span class="tag badge">${esc(p.badge)}</span>` : ''}
               <span class="tag">${p.has_img ? 'Con foto' : 'Sin foto'}</span>
               ${hasBox ? `<span class="tag box-tag">Caja ${p.boxQty}</span>` : ''}
@@ -792,6 +817,13 @@ tbody tr:nth-child(even){background:#fcfdff}
   }
 
   buildAppChrome();
+  document.getElementById('periodTabs')?.addEventListener('click', e => {
+    const btn = e.target.closest('button[data-period]');
+    if (!btn) return;
+    state.periodFilter = btn.dataset.period;
+    state.page = 1;
+    renderProducts();
+  });
   renderCategoryChips();
   renderProducts();
   renderSummary();

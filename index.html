@@ -1,4 +1,4 @@
-<!-- BUILD 2026-09-21-global-search-sellers-from-data33 -->
+<!-- BUILD 2026-10-08-historial-mayo-septiembre-global-search -->
 <!doctype html>
 <html lang="es">
 <head>
@@ -936,7 +936,7 @@
     }
   </style>
 
-<script src="clients.js?v=20260921global1"></script>
+<script src="clients.js?v=20261008histmaysep1"></script>
 </head>
 <body>
   <div class="shellBar">
@@ -1234,9 +1234,8 @@
   }
 
   function updateLastSync() {
-    const now = new Date();
-    const stamp = `${now.toLocaleDateString('es-MX')} ${now.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' })}`;
-    lastUpdate.textContent = `Última sincronización: ${stamp}`;
+    const stamp = "Mayo–septiembre 2026";
+    lastUpdate.textContent = `Historial de compras: ${stamp}`;
     shellSync.textContent = stamp;
   }
 
@@ -1366,7 +1365,7 @@
         <td><span class="codeBadge">${esc(c.client_code || "—")}</span></td>
         <td>
           <div class="clientName">${esc(c.client_name)}</div>
-          <div class="clientMeta">Formato listo para abrir o compartir</div>
+          <div class="clientMeta">${c.recent_count ? `${c.recent_count} producto(s) en mayo–septiembre 2026` : "Catálogo anterior disponible"}</div>
         </td>
         <td>
           <div class="clientName" style="font-size:14px;font-weight:700">${esc(c.vendor_label || c.vendor_folder || "—")}</div>
@@ -1388,6 +1387,7 @@
           <div>
             <h3 class="cardClientName">${esc(c.client_name)}</h3>
             <div class="cardMeta">Código: ${esc(c.client_code || "—")}</div>
+            <div class="cardMeta">${c.recent_count ? `${c.recent_count} producto(s) comprados mayo–septiembre` : "Catálogo anterior disponible"}</div>
             <div class="cardMeta">Vendedor: ${esc(c.vendor_label || c.vendor_folder || "—")}</div>
           </div>
           <span class="codeBadge">${esc(c.client_code || "—")}</span>
@@ -1569,12 +1569,14 @@
       const vendor_label = vendors.join(" · ");
       const client_name = (x.client_name || x.client || "").toString().trim();
       const client_code = (x.client_code || x.code || "").toString().trim();
+      const recent_count = Number(x.recent_count || 0);
+      const catalog_count = Number(x.catalog_count || 0);
       let path = (x.path || "").toString().trim();
       if (!path) {
         const file = (x.file || "").toString().trim();
         if (vendor_folder && file) path = `${vendor_folder}/${file}`;
       }
-      return { vendor_folder, vendor_label, vendors, vendor_keys, client_name, client_code, path };
+      return { vendor_folder, vendor_label, vendors, vendor_keys, client_name, client_code, path, recent_count, catalog_count };
     }).filter(x => x.client_name && x.path);
 
     const map = new Map();
@@ -1587,8 +1589,8 @@
     });
     VENDORS = [...map.values()].sort((a,b) => a.label.localeCompare(b.label, "es"));
 
-    subtitle.textContent = `${ALL.length.toLocaleString('es-MX')} clientes disponibles. Busca globalmente por nombre, código o vendedor; el filtro de vendedor es opcional.`;
-    setPortalStatus("Buscador global listo.", "ok");
+    subtitle.textContent = `${ALL.length.toLocaleString('es-MX')} clientes disponibles. Historial mayo–septiembre 2026. Busca por nombre, código o vendedor; el filtro de vendedor es opcional.`;
+    setPortalStatus("Historial mayo–septiembre 2026 · buscador global listo.", "ok");
     updateLastSync();
     kpiClients.textContent = ALL.length.toLocaleString('es-MX');
     kpiVendors.textContent = VENDORS.length.toLocaleString('es-MX');
