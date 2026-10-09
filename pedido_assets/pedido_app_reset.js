@@ -1,4 +1,4 @@
-const APP_BUILD = "20261008-historial-mayo-septiembre-v1";
+const APP_BUILD = "20261008-historial-mayo-septiembre-tijuana-v2";
 
 (() => {
   const ASSET_BASE = new URL("../pedido_assets/", window.location.href).href;
