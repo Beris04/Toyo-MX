@@ -1,865 +1,106 @@
-const APP_BUILD = "20261008-historial-mayo-septiembre-tijuana-v2";
-
-(() => {
-  const ASSET_BASE = new URL("../pedido_assets/", window.location.href).href;
-  const FEATURED_UPDATES = [
-  {
-    title: "NIPPN Fried Chicken Mix",
-    image: ASSET_BASE + "nuevo_nippn_fried_chicken_mix_202609.webp",
-    alt: "NIPPN Fried Chicken Mix estilos coreano y japonés",
-    kind: "portrait"
-  },
-  {
-    title: "Sushi Panko",
-    image: ASSET_BASE + "nuevo_sushi_panko_202609.webp",
-    alt: "Sushi Panko para sushi y food service",
-    kind: "landscape"
-  }
-];
-  const LOGO = "data:image/png;base64,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";
-  const dataEl = document.getElementById('pedido-data');
-  if (!dataEl) return;
-  const APP_DATA = JSON.parse(dataEl.textContent || '{}');
-  const productsRaw = Array.isArray(APP_DATA.products) ? APP_DATA.products : [];
-  const pageSizeMobile = 30;
-  const pageSizeWeb = 45;
-  const clientCodeSafe = (APP_DATA.client_code || 'cliente').toString().trim() || 'cliente';
-  const STORAGE_KEY = 'toyo_pedido_' + clientCodeSafe;
-  const VIEW_KEY = STORAGE_KEY + '_view';
-
-  const PLACEHOLDER_CACHE = new Map();
-  function esc(s) {
-    return String(s ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
-  }
-  function normalize(s) {
-    return String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
-  }
-  function placeholderFor(code) {
-    if (PLACEHOLDER_CACHE.has(code)) return PLACEHOLDER_CACHE.get(code);
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="640" height="480">
-      <defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#eef3fb"/><stop offset="100%" stop-color="#dde7f8"/></linearGradient></defs>
-      <rect width="100%" height="100%" rx="36" fill="url(#g)"/>
-      <rect x="26" y="26" width="588" height="428" rx="26" fill="#ffffff" stroke="#d9e4f5"/>
-      <text x="50%" y="44%" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700" text-anchor="middle" fill="#0b3d91">Imagen no disponible</text>
-      <text x="50%" y="54%" font-family="Arial, Helvetica, sans-serif" font-size="19" font-weight="700" text-anchor="middle" fill="#42526b">${esc(code)}</text>
-      <text x="50%" y="63%" font-family="Arial, Helvetica, sans-serif" font-size="16" text-anchor="middle" fill="#5b6b82">Catálogo Toyo Foods</text>
-    </svg>`;
-    const uri = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
-    PLACEHOLDER_CACHE.set(code, uri);
-    return uri;
-  }
-  const products = productsRaw.map((p, idx) => ({
-    code: p.code || '',
-    name: p.name || '',
-    category: p.category || 'Otros',
-    img: p.img || '',
-    has_img: !!p.has_img,
-    periodCurrent: !!p.period_current,
-    qty6m: Number(p.qty6m || 0),
-    orders6m: Number(p.orders6m || 0),
-    badge: p.badge || '',
-    boxQty: Number(p.box_qty || p.units_per_box || 0),
-    index: idx
-  }));
-  const productByCode = Object.fromEntries(products.map(p => [p.code, p]));
-
-  const categoryOrder = ['Abarrotes','Salsas','Bebidas','Congelados','Frescos','Pescados y Mariscos','Arroces','Fideos y Pastas','Masas y Pieles','Harinas','Tofu','Aceites','Pan y Deli','Pan','Carnes','Utensilios','Accesorios','Dulces y Botanas','Mascotas','Cuidado Personal','Otros'];
-  const categoryRank = Object.fromEntries(categoryOrder.map((c, i) => [c, i]));
-  const categories = [...new Set(products.map(p => p.category))].sort((a, b) => ((categoryRank[a] ?? 999) - (categoryRank[b] ?? 999)) || a.localeCompare(b, 'es'));
-  let state = {
-    query: '',
-    activeCategory: '',
-    selectedOnly: false,
-    favoriteOnly: false,
-    periodFilter: products.some(p => p.periodCurrent) ? 'recent' : 'all',
-    page: 1,
-    viewMode: localStorage.getItem(VIEW_KEY) || 'mobile',
-    quantities: {},
-    unitModes: {},
-    favorites: {},
-    clientName: APP_DATA.client_name || '',
-    clientCode: APP_DATA.client_code || '',
-    seller: APP_DATA.vendor_label || '',
-    payment: APP_DATA.payment_default || 'Crédito',
-    notes: ''
+const ORDER_HTML_TEMPLATE="<!doctype html>\n<html lang=\"es\">\n<head>\n<meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n<title>Toyo Foods · Pedido {{CLIENT_CODE}} · {{CLIENT_NAME}}</title>\n<style>\n:root{--navy:#173b70;--blue:#1553a0;--muted:#6c7a8b;--line:#dce3ed;--ink:#172638;--surface:#f5f7fa}\n*{box-sizing:border-box}body{margin:0;background:#eef1f5;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,\"Segoe UI\",Arial,sans-serif;-webkit-font-smoothing:antialiased;font-size:12px}\n.sheet{max-width:820px;margin:24px auto;background:white;border:1px solid #e4e8ee;padding:35px 38px 43px;min-height:760px;box-shadow:0 5px 30px #0c244b0c}\n.top{border-bottom:2px solid var(--navy);display:flex;justify-content:space-between;align-items:center;gap:20px;padding-bottom:20px}\n.identity{display:flex;align-items:center;gap:13px}.identity img{width:58px;height:58px;object-fit:contain}.identity .brand{font-size:17px;font-weight:800;letter-spacing:-.4px}.identity .sub{font-size:10px;color:var(--muted);margin-top:4px;letter-spacing:1px}\n.order-title{text-align:right}h1{font-size:20px;line-height:1.1;letter-spacing:-.6px;margin:0 0 6px;color:var(--navy)}.order-title span{font-size:10px;color:var(--muted)}\n.customer-info{display:grid;grid-template-columns:1.8fr 1fr 1fr;gap:0;margin:18px 0;border:1px solid var(--line);border-radius:6px;overflow:hidden}.customer-info>div{padding:13px 15px;border-right:1px solid var(--line)}.customer-info>div:last-child{border:0}.field{font-size:9px;text-transform:uppercase;letter-spacing:.8px;font-weight:800;color:#7a899b;display:block;margin-bottom:5px}.customer-info strong{font-size:11.5px;line-height:1.45}\n.action-row{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#f2f6fb;padding:12px 14px;border:1px solid #dce6f4;border-radius:7px;margin-bottom:19px}\n.action-copy{border:0;border-radius:6px;color:#fff;background:var(--blue);font-size:12px;font-weight:800;padding:10px 17px;cursor:pointer;white-space:nowrap}.action-copy:hover{background:#0c3e7e}.action-copy:focus-visible{outline:3px solid #91baf0;outline-offset:2px}\n.action-description{font-size:10.5px;line-height:1.45;color:#4a627d}.action-description strong{display:block;font-size:11px;color:#203b57;margin-bottom:2px}\n#copyStatus{min-height:17px;color:#176848;font-weight:700;font-size:11px;margin:-11px 0 11px}\nh2{font-size:12px;text-transform:uppercase;letter-spacing:.7px;color:#234b76;margin:20px 0 9px}\ntable{width:100%;border-collapse:collapse;table-layout:fixed}th{background:#eef2f6;color:#42617f;text-align:left;font-size:9px;text-transform:uppercase;letter-spacing:.4px;padding:10px 9px;border-bottom:1px solid #cad6e3}td{padding:10px 9px;border-bottom:1px solid #e8edf3;vertical-align:top;font-size:11px;overflow-wrap:anywhere;line-height:1.4}th:first-child,td:first-child{width:21%;font-family:\"Consolas\",monospace}th:nth-child(2),td:nth-child(2){width:51%;font-weight:400;letter-spacing:0}th:nth-child(3),td:nth-child(3){width:13%;text-align:center;font-weight:750}th:nth-child(4),td:nth-child(4){width:15%}tbody tr:nth-child(even){background:#fbfcfd}\n.overview{display:flex;justify-content:space-between;gap:10px;margin-top:14px;padding:10px 12px;border-top:1px solid #d9e1eb;border-bottom:1px solid #d9e1eb;background:#fbfcfe}.overview b{color:var(--navy)}.note{white-space:pre-wrap;line-height:1.65;background:#fafbfd;border-left:3px solid #b3c6dd;padding:10px 12px;color:#4d6279;margin:0}\n.footer{margin-top:22px;padding-top:11px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;color:#8491a1;font-size:9px}.warn{font-size:10px;line-height:1.5;color:#667589;margin-top:13px}\n#manualWrap{display:none;border:1px solid #a5c7e6;border-radius:7px;padding:12px;margin-top:5px;background:#f8fbff}#manualWrap textarea{font:11px/1.5 monospace;width:100%;height:90px;border:1px solid #ccd9e7;padding:8px}\n@media(max-width:640px){body{background:#fff}.sheet{padding:16px 12px 25px;margin:0;min-height:0;box-shadow:none;border:0}.top{gap:6px}.identity img{width:42px;height:42px}.identity .brand{font-size:13px}.order-title h1,h1{font-size:16px}.customer-info{grid-template-columns:1fr 1fr}.customer-info>div:first-child{grid-column:1/-1;border-bottom:1px solid var(--line)}.customer-info>div:nth-child(2){border-right:1px solid var(--line)}.action-row{flex-wrap:wrap}.action-copy{width:100%}td,th{padding:8px 5px;font-size:9px}th{font-size:8px}th:first-child,td:first-child{width:23%}th:nth-child(2),td:nth-child(2){width:40%}th:nth-child(3),td:nth-child(3){width:16%}th:nth-child(4),td:nth-child(4){width:21%}.overview{flex-wrap:wrap}}\n@page{size:A4;margin:13mm}\n@media print{body{background:#fff}.sheet{border:0;box-shadow:none;padding:0;margin:0;min-height:0;max-width:none}.action-row,#copyStatus,#manualWrap,.warn{display:none!important}thead{display:table-header-group}tr{break-inside:avoid;page-break-inside:avoid}.footer{margin-top:16px}}\n</style>\n</head>\n<body><main class=\"sheet\">\n<header class=\"top\"><div class=\"identity\"><img alt=\"Toyo Foods\" src=\"{{LOGO_URI}}\"><div><div class=\"brand\">TOYO FOODS</div><div class=\"sub\">ORDEN COMERCIAL</div></div></div><div class=\"order-title\"><h1>ORDEN DE PEDIDO</h1><span>Generada {{ORDER_DATE}}</span></div></header>\n<section class=\"customer-info\" aria-label=\"Información del cliente\"><div><span class=\"field\">Cliente</span><strong>{{CLIENT_NAME}}</strong></div><div><span class=\"field\">Código cliente</span><strong>{{CLIENT_CODE}}</strong></div><div><span class=\"field\">Fecha</span><strong>{{DATE_SHORT}}</strong></div></section>\n<section class=\"action-row\"><div class=\"action-description\"><strong>Captura en SAP</strong>Copiar número de artículo, descripción y cantidad en tres columnas, sin encabezados.</div><button class=\"action-copy\" id=\"copyColumns\" type=\"button\">Copiar columnas</button></section>\n<div id=\"copyStatus\" role=\"status\" aria-live=\"polite\"></div>\n<div id=\"manualWrap\"><label for=\"manualText\">Copia estas filas con Ctrl+C (o Cmd+C) y pégalas en SAP:</label><textarea id=\"manualText\" readonly spellcheck=\"false\"></textarea></div>\n<section aria-label=\"Artículos solicitados\"><h2>Detalle de artículos</h2><table><thead><tr><th>Número de artículo</th><th>Descripción del artículo</th><th>Cantidad</th><th>Unidad</th></tr></thead><tbody>{{TABLE_ROWS}}</tbody></table>\n<div class=\"overview\"><span>Referencias: <b>{{ITEM_COUNT}}</b></span><span>Cantidad en piezas: <b>{{PCS_TOTAL}}</b></span><span>Cantidad en cajas: <b>{{BOX_TOTAL}}</b></span></div></section>\n<section><h2>Observaciones de entrega</h2><p class=\"note\">{{NOTES}}</p></section>\n<p class=\"warn\">Antes de confirmar la captura en SAP, verifica que la unidad de medida de cada artículo corresponda a las piezas o cajas solicitadas. La función de copia incluye únicamente las tres primeras columnas.</p>\n<footer class=\"footer\"><span>Toyo Foods · Resumen de pedido</span><span>Documento generado para captura administrativa</span></footer>\n</main>\n<script>\n(function(){\n  'use strict';\n  const rows={{ORDER_ROWS_JSON}};\n  const btn=document.getElementById('copyColumns');\n  const status=document.getElementById('copyStatus');\n  function cell(v){return String(v==null?'':v).replace(/[\\t\\r\\n]+/g,' ').trim();}\n  function sapText(){return rows.map(r=>[cell(r.id),cell(r.name),String(Number(r.qty)||0)].join('\\t')).join('\\r\\n');}\n  function manual(text){const box=document.getElementById('manualWrap');const textarea=document.getElementById('manualText');box.style.display='block';textarea.value=text;textarea.focus();textarea.select();status.textContent='Copia las filas seleccionadas con Ctrl+C o Cmd+C y pégalas en SAP.';}\n  async function copy(){\n    const text=sapText();\n    if(!text){status.textContent='Este pedido está vacío.';return;}\n    try{\n      if(!navigator.clipboard||!navigator.clipboard.writeText)throw new Error('Clipboard API no disponible');\n      await navigator.clipboard.writeText(text);\n      status.textContent='✓ '+rows.length+' renglones copiados. Abre SAP y usa Ctrl+V.';\n      document.getElementById('manualWrap').style.display='none';\n      return;\n    }catch(e){}\n    const t=document.createElement('textarea');t.value=text;t.setAttribute('readonly','');t.style.position='fixed';t.style.left='-9999px';document.body.appendChild(t);t.focus();t.select();\n    let ok=false;try{ok=!!document.execCommand('copy')}catch(e){}t.remove();\n    if(ok){status.textContent='✓ '+rows.length+' renglones copiados. Abre SAP y usa Ctrl+V.';document.getElementById('manualWrap').style.display='none'}\n    else manual(text);\n  }\n  btn.addEventListener('click',copy);\n})();\n</script>\n</body>\n</html>\n";
+const ORDER_LOGO_DATA_URI="data:image/png;base64,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";
+document.getElementById("app").innerHTML="<div class=\"top-line\"></div>\n<header class=\"site-head\"><div class=\"site-inner\">\n<div class=\"brand\"><img alt=\"Toyo Foods\" src=\"../pedido_assets/toyo_logo.png\"/><div><span>TOYO FOODS</span><strong>Portal de pedidos</strong></div></div>\n<div class=\"head-right\"><div class=\"client-head\" id=\"headerClientText\">Restaurante de ejemplo · C000000</div><button class=\"head-cart\" id=\"headerCart\" type=\"button\"><svg fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.9\" viewbox=\"0 0 24 24\"><path d=\"M4 8h16l-1 13H5L4 8Z\"></path><path d=\"M9 9V6a3 3 0 0 1 6 0v3\"></path></svg> Mi pedido <span id=\"headerCount\">0</span></button></div>\n</div></header>\n<main class=\"main\"><a class=\"client-back\" href=\"../index.html\" id=\"returnToInicio\">← Volver al inicio</a>\n<div class=\"intro\"><div><div class=\"eyebrow\">Catálogo de productos</div><h1>Elige tus productos</h1><p>Todos los productos en una lista fácil de revisar. Busca o selecciona una categoría.</p></div><div class=\"customer\"><span>Estás comprando para</span><strong id=\"introClientName\">Restaurante de ejemplo</strong></div></div>\n<section aria-label=\"Identificar al cliente en el pedido\" class=\"client-identification\">\n<label for=\"clientName\"><span>Nombre del cliente</span><input autocomplete=\"organization\" id=\"clientName\" maxlength=\"110\" placeholder=\"Nombre del cliente\" readonly=\"\" type=\"text\" value=\"Restaurante de ejemplo\"/></label>\n<label for=\"clientCode\"><span>Código del cliente</span><input autocomplete=\"off\" id=\"clientCode\" maxlength=\"35\" placeholder=\"Ej. C001234\" readonly=\"\" type=\"text\" value=\"C000000\"/></label>\n<span class=\"client-identification-note\">Información personalizada del cliente</span>\n</section>\n<label class=\"search\" for=\"searchInput\"><svg fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-width=\"1.9\" viewbox=\"0 0 24 24\"><circle cx=\"10.8\" cy=\"10.8\" r=\"7.2\"></circle><path d=\"m16.4 16.4 5 5\"></path></svg><input aria-label=\"Buscar productos\" autocomplete=\"off\" id=\"searchInput\" placeholder=\"Buscar producto, marca o código...\" type=\"search\"/><button aria-label=\"Borrar búsqueda\" hidden=\"\" id=\"clearSearch\" type=\"button\">×</button></label>\n<div class=\"filters\"><div aria-label=\"Filtrar por categoría\" class=\"tabs\" id=\"categoryTabs\" role=\"group\"></div><button aria-pressed=\"false\" class=\"favorite-toggle\" id=\"favoriteOnly\" type=\"button\"><svg fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.9\" viewbox=\"0 0 24 24\"><path d=\"M20.8 4.9a5.4 5.4 0 0 0-7.6 0L12 6.1l-1.2-1.2a5.4 5.4 0 0 0-7.6 7.6L12 21l8.8-8.5a5.4 5.4 0 0 0 0-7.6Z\"></path></svg> Solo favoritos</button></div>\n<div class=\"content\">\n<section aria-label=\"Catálogo\" class=\"catalog\"><div class=\"catalog-head\"><div><h2 id=\"catalogTitle\">Todos los productos</h2><p>Selecciona presentación y cantidad para agregar al pedido.</p></div><span class=\"count\" id=\"catalogCount\">12 productos</span></div>\n<div class=\"promo\"><svg fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" viewbox=\"0 0 24 24\"><path d=\"m5 12 4 4L19 6\"></path></svg> <span><b>También disponibles:</b> Sushi Panko y NIPPN Fried Chicken Mix.</span></div>\n<div id=\"products\"></div><div aria-hidden=\"true\" id=\"moreSentinel\"></div></section>\n<aside aria-label=\"Mi pedido\" class=\"cart\" id=\"cartDesktop\"><div class=\"cart-title\"><h2>Mi pedido</h2><svg fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.9\" viewbox=\"0 0 24 24\"><path d=\"M4 8h16l-1 13H5L4 8Z\"></path><path d=\"M9 9V6a3 3 0 0 1 6 0v3\"></path></svg></div><div class=\"cart-count\"><span>Unidades agregadas</span><strong id=\"cartCount\">0</strong></div><div class=\"cart-list\" id=\"cartRows\"></div><label class=\"note-label\" for=\"orderNote\">Comentario para tu pedido</label><textarea class=\"note\" id=\"orderNote\" placeholder=\"Indicaciones adicionales (opcional)\"></textarea><button class=\"primary\" id=\"downloadPdf\" type=\"button\"><svg fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.8\" viewbox=\"0 0 24 24\"><path d=\"M7 2h7l5 5v14a1 1 0 0 1-1 1H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Z\"></path><path d=\"M14 2v6h5M8 16h8M8 12h5\"></path></svg> Descargar pedido en HTML</button><p class=\"cart-foot\">Descarga un pedido HTML con el botón Copiar columnas para SAP.</p></aside>\n</div>\n<p class=\"foot-note\">Propuesta visual interactiva · Puedes editar el nombre y código del cliente. Productos y códigos de demostración; no realiza pedidos reales.</p>\n</main>\n<div class=\"mobile-bar\"><button id=\"openCartMobile\" type=\"button\"><svg fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.9\" viewbox=\"0 0 24 24\"><path d=\"M4 8h16l-1 13H5L4 8Z\"></path><path d=\"M9 9V6a3 3 0 0 1 6 0v3\"></path></svg> <span>Ver mi pedido</span><span id=\"mobileCount\">0 productos</span></button></div>\n<div class=\"shade\" id=\"shade\"></div>\n<section aria-label=\"Mi pedido\" aria-modal=\"true\" class=\"mobile-drawer\" id=\"mobileDrawer\" role=\"dialog\"><div class=\"drawer-top\"><h2>Mi pedido</h2><button aria-label=\"Cerrar\" class=\"drawer-close\" id=\"closeDrawer\"><svg fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-width=\"2\" viewbox=\"0 0 24 24\"><path d=\"M5 5l14 14M19 5 5 19\"></path></svg></button></div><div class=\"cart-count\"><span>Unidades agregadas</span><strong id=\"mobileCartCount\">0</strong></div><div class=\"cart-list\" id=\"mobileCartRows\"></div><label class=\"note-label\" for=\"mobileNote\">Comentario para tu pedido</label><textarea class=\"note\" id=\"mobileNote\" placeholder=\"Indicaciones adicionales (opcional)\"></textarea><button class=\"primary\" id=\"mobilePdf\" type=\"button\"><svg fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.8\" viewbox=\"0 0 24 24\"><path d=\"M7 2h7l5 5v14a1 1 0 0 1-1 1H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Z\"></path><path d=\"M14 2v6h5M8 16h8M8 12h5\"></path></svg> Descargar pedido en HTML</button></section>\n<div aria-live=\"polite\" class=\"toast\" id=\"toast\" role=\"status\"></div>";
+/* Toyo Foods · catálogo real · una columna · 22 oct 2026 */
+'use strict';
+(()=>{
+ const $=id=>document.getElementById(id);
+ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const norm=s=>String(s??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('es');
+ const raw=$('pedido-data');
+ if(!raw){$('app').textContent='No se encontraron los datos del cliente.';return;}
+ let DATA;
+ try{DATA=JSON.parse(raw.textContent);}catch(e){$('app').textContent='No se pudo leer el catálogo del cliente.';return;}
+ const PRODUCTS=(DATA.products||[]).map(p=>({
+  id:String(p.code||'').trim(),name:String(p.name||'Sin descripción'),category:String(p.category||'Otros').trim()||'Otros',
+  img:String(p.img||''),imgOk:!!p.has_img||!!p.img,detail: p.box_qty>1?'Caja: '+Number(p.box_qty)+' piezas':'Presentación por pieza',
+  box_qty:Math.max(1,Number(p.box_qty)||1),new:!!p.badge,orders:Number(p.orders6m)||0,period:!!p.period_current
+ })).filter(p=>p.id);
+ const FAVKEY='toyo_favs_v1_'+DATA.client_code;
+ const DRAFTKEY='toyo_draft_v20261022_'+DATA.client_code;
+ const fallback='data:image/svg+xml;charset=utf-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="140" height="120" viewBox="0 0 140 120"><rect width="140" height="120" fill="#f6f8fb"/><rect x="49" y="34" width="42" height="49" rx="6" fill="#e0e9f4"/><path d="M53 48l17-10 17 10v21L70 80 53 69z" fill="none" stroke="#8a9fba" stroke-width="2"/><text x="70" y="103" font-family="Arial" font-size="10" fill="#8796a8" text-anchor="middle">Toyo Foods</text></svg>');
+ const state={q:'',category:'Todos',favOnly:false,favs:new Set(),qty:{},unit:{},cart:new Map()};
+ try{state.favs=new Set(JSON.parse(localStorage.getItem(FAVKEY)||'[]'));}catch(e){}
+ try{const saved=JSON.parse(localStorage.getItem(DRAFTKEY)||'null');if(saved){state.cart=new Map((saved.cart||[]).filter(([key])=>typeof key==='string'));if(saved.note)$('orderNote').value=saved.note;}}catch(e){}
+ const t=document.querySelector('.brand strong');if(t)t.textContent='Toyo Foods';
+ $('headerClientText').textContent=DATA.client_name;
+ $('introClientName').textContent=DATA.client_name;
+ $('clientName').value=DATA.client_name;
+ $('clientCode').value=DATA.client_code;
+ document.title='Pedido · '+DATA.client_name+' · Toyo Foods';
+ const heading=document.querySelector('.intro h1');if(heading)heading.textContent='Elige tus productos';
+ const hint=document.querySelector('.intro p');if(hint)hint.textContent='Encuentra tus artículos por categoría o código y agrégalos a tu pedido.';
+ const categories=['Todos',...new Set(PRODUCTS.map(p=>p.category))].sort((a,b)=>a==='Todos'?-1:b==='Todos'?1:a.localeCompare(b,'es'));
+ const icons={heart:'<svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.9a5.4 5.4 0 0 0-7.6 0L12 6.1l-1.2-1.2a5.4 5.4 0 0 0-7.6 7.6L12 21l8.8-8.5a5.4 5.4 0 0 0 0-7.6Z"/></svg>'};
+ let toastTimer;
+ function toast(message){const el=$('toast');el.textContent=message;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),2600)}
+ function persist(){try{localStorage.setItem(DRAFTKEY,JSON.stringify({cart:[...state.cart],note:$('orderNote').value}));}catch(e){}}
+ function drawTabs(){
+  $('categoryTabs').innerHTML=categories.map(cat=>`<button type="button" class="tab ${cat===state.category?'active':''}" data-category="${esc(cat)}" aria-pressed="${cat===state.category}">${esc(cat)} <small>${cat==='Todos'?PRODUCTS.length:PRODUCTS.filter(p=>p.category===cat).length}</small></button>`).join('');
+  $('catalogTitle').textContent=state.category==='Todos'?'Todos los productos':state.category;
+ }
+ function filtered(){const q=norm(state.q);return PRODUCTS.filter(p=>(state.category==='Todos'||p.category===state.category)&&(!state.favOnly||state.favs.has(p.id))&&(!q||norm(p.name+' '+p.id+' '+p.category).includes(q)));}
+ let visibleProducts=[], loaded=0, pageChunk=90, renderToken=0;
+ function renderProducts(){
+  visibleProducts=filtered();loaded=0;renderToken++;
+  $('catalogCount').textContent=visibleProducts.length+' producto'+(visibleProducts.length===1?'':'s');
+  $('products').replaceChildren();
+  if(!visibleProducts.length){$('products').innerHTML='<div class="no-results">No encontramos productos con esos filtros. Prueba otra categoría o búsqueda.</div>';return;}
+  addNextChunk(renderToken);
+ }
+ function rowHTML(p){const n=state.qty[p.id]||1,u=state.unit[p.id]||'Piezas',fav=state.favs.has(p.id);
+  return `<article class="product" data-product="${esc(p.id)}"><img class="prod-art" src="${esc(p.imgOk&&p.img?p.img:fallback)}" alt="Producto ${esc(p.name)}" loading="lazy" decoding="async"><div class="prod-info"><h3 class="prod-name">${esc(p.name)}</h3><p class="prod-meta">${esc(p.category)}${p.box_qty>1?' · '+esc(p.detail):''}${p.period?' · Comprado recientemente':''}</p><div class="prod-code">${esc(p.id)}</div>${p.new?'<span class="tag new">Novedad</span>':''}</div><div class="prod-action"><div class="unit" aria-label="Presentación"><button type="button" data-action="unit" data-id="${esc(p.id)}" data-unit="Piezas" class="${u==='Piezas'?'active':''}">Piezas</button><button type="button" data-action="unit" data-id="${esc(p.id)}" data-unit="Cajas" class="${u==='Cajas'?'active':''}">Cajas</button></div><div class="qty" aria-label="Cantidad"><button type="button" data-action="minus" data-id="${esc(p.id)}" aria-label="Restar">−</button><span>${n}</span><button type="button" data-action="plus" data-id="${esc(p.id)}" aria-label="Sumar">+</button></div><button type="button" class="add" data-action="add" data-id="${esc(p.id)}">Agregar</button><button type="button" class="heart ${fav?'on':''}" data-action="fav" data-id="${esc(p.id)}" aria-label="${fav?'Quitar de favoritos':'Agregar a favoritos'}" aria-pressed="${fav}">${icons.heart}</button></div></article>`;
+ }
+ function addNextChunk(token){if(token!==renderToken||loaded>=visibleProducts.length)return;const end=Math.min(loaded+pageChunk,visibleProducts.length),s=visibleProducts.slice(loaded,end);loaded=end;
+  const temp=document.createElement('div');temp.innerHTML=s.map(rowHTML).join('');const frag=document.createDocumentFragment();while(temp.firstChild)frag.appendChild(temp.firstChild);$('products').append(frag);
+ }
+ const sentinel=$('moreSentinel');
+ if('IntersectionObserver' in window){const io=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting))addNextChunk(renderToken)},{rootMargin:'1300px 0px'});io.observe(sentinel)}
+ else window.addEventListener('scroll',()=>{if(sentinel.getBoundingClientRect().top<innerHeight+500)addNextChunk(renderToken)},{passive:true});
+ function cartData(){return [...state.cart.values()];}
+ function totalQty(){return cartData().reduce((s,r)=>s+r.qty,0)}
+ function renderCart(){const rows=cartData(),total=totalQty();$('headerCount').textContent=total;$('cartCount').textContent=total;$('mobileCartCount').textContent=total;$('mobileCount').textContent=total+' unidad'+(total===1?'':'es');
+  const body=rows.length?rows.map(r=>`<div class="cart-row"><div><strong>${esc(r.name)}</strong><small>${esc(r.id)} · ${esc(r.unit)}</small><div class="cart-adjust"><button type="button" data-cart-action="minus" data-key="${esc(r.key)}" aria-label="Reducir">−</button><span>${r.qty}</span><button type="button" data-cart-action="plus" data-key="${esc(r.key)}" aria-label="Aumentar">+</button></div></div><button type="button" class="remove" data-cart-action="remove" data-key="${esc(r.key)}">Quitar</button></div>`).join(''):`<div class="cart-empty">Tu pedido está vacío.<br>Agrega productos del catálogo.</div>`;
+  $('cartRows').innerHTML=body;$('mobileCartRows').innerHTML=body;
+  for(const id of ['downloadPdf','mobilePdf'])$(id).disabled=!rows.length;
+  persist();
+ }
+ function openDrawer(){if(innerWidth>780){$('cartDesktop').scrollIntoView({behavior:'smooth',block:'start'});return;}$('mobileNote').value=$('orderNote').value;$('mobileDrawer').classList.add('open');$('shade').classList.add('open');document.body.style.overflow='hidden';}
+ function closeDrawer(){$('orderNote').value=$('mobileNote').value;$('mobileDrawer').classList.remove('open');$('shade').classList.remove('open');document.body.style.overflow='';persist();}
+ function safeFilePart(v){return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9_-]+/g,'_').replace(/^_+|_+$/g,'').slice(0,75);}
+ function downloadOrderHtml(){const rows=cartData();if(!rows.length){toast('Agrega productos primero');return;}
+  const note=$('mobileDrawer').classList.contains('open')?$('mobileNote').value:$('orderNote').value;
+  // La columna Cantidad respeta las cantidades capturadas. Verificar unidad al registrar en SAP.
+  const table=rows.map(r=>`<tr><td>${esc(r.id)}</td><td>${esc(r.name)}</td><td>${r.qty}</td><td>${esc(r.unit)}</td></tr>`).join('');
+  const dataJson=JSON.stringify(rows.map(r=>({id:r.id,name:r.name,qty:r.qty,unit:r.unit}))).replace(/</g,'\\u003c').replace(/>/g,'\\u003e').replace(/&/g,'\\u0026');
+  const now=new Date(),date=now.toLocaleDateString('es-MX'),longDate=now.toLocaleString('es-MX',{dateStyle:'long',timeStyle:'short'});
+  const fields={'{{CLIENT_NAME}}':esc(DATA.client_name),'{{CLIENT_CODE}}':esc(DATA.client_code),'{{DATE_SHORT}}':date,'{{ORDER_DATE}}':longDate,
+   '{{TABLE_ROWS}}':table,'{{ORDER_ROWS_JSON}}':dataJson,'{{ITEM_COUNT}}':String(rows.length),'{{PCS_TOTAL}}':String(rows.filter(r=>r.unit==='Piezas').reduce((a,r)=>a+r.qty,0)),
+   '{{BOX_TOTAL}}':String(rows.filter(r=>r.unit==='Cajas').reduce((a,r)=>a+r.qty,0)),'{{NOTES}}':esc(note.trim()||'Sin observaciones'),
+   '{{LOGO_URI}}':ORDER_LOGO_DATA_URI
   };
-
-  function loadState() {
-    try {
-      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
-      if (saved && typeof saved === 'object') {
-        if (saved.quantities && typeof saved.quantities === 'object') state.quantities = saved.quantities;
-        if (saved.unitModes && typeof saved.unitModes === 'object') state.unitModes = saved.unitModes;
-        if (saved.favorites && typeof saved.favorites === 'object') state.favorites = saved.favorites;
-        if (saved.clientVersion === APP_DATA.client_name && typeof saved.clientName === 'string') state.clientName = saved.clientName;
-        if (typeof saved.clientCode === 'string') state.clientCode = saved.clientCode;
-        if (saved.vendorVersion === APP_DATA.vendor_label && typeof saved.seller === 'string') state.seller = saved.seller;
-        if (typeof saved.payment === 'string') state.payment = saved.payment;
-        if (typeof saved.notes === 'string') state.notes = saved.notes;
-      }
-    } catch (e) {}
-    products.forEach(p => {
-      if (!Number.isFinite(state.quantities[p.code])) state.quantities[p.code] = Number(state.quantities[p.code] || 0);
-      if (state.quantities[p.code] < 0) state.quantities[p.code] = 0;
-      if (state.unitModes[p.code] !== 'box') state.unitModes[p.code] = 'piece';
-      if (!(p.boxQty > 1)) state.unitModes[p.code] = 'piece';
-      state.favorites[p.code] = !!state.favorites[p.code];
-    });
-  }
-  function saveState() {
-    const payload = {
-      quantities: state.quantities,
-      unitModes: state.unitModes,
-      favorites: state.favorites,
-      clientName: state.clientName,
-      clientVersion: APP_DATA.client_name,
-      clientCode: state.clientCode,
-      seller: state.seller,
-      vendorVersion: APP_DATA.vendor_label,
-      payment: state.payment,
-      notes: state.notes
-    };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
-    localStorage.setItem(VIEW_KEY, state.viewMode);
-  }
-  loadState();
-
-  function applyViewMode(mode) {
-    state.viewMode = mode === 'web' ? 'web' : 'mobile';
-    document.body.classList.toggle('force-web', state.viewMode === 'web');
-    const btn = document.getElementById('viewToggleBtn');
-    const note = document.getElementById('viewNote');
-    if (btn) btn.textContent = state.viewMode === 'web' ? 'Vista móvil' : 'Vista web';
-    if (note) note.textContent = state.viewMode === 'web' ? 'Vista web activa' : 'Vista móvil activa';
-    saveState();
-    renderProducts();
-  }
-
-  function currentPageSize() {
-    return state.viewMode === 'web' ? pageSizeWeb : pageSizeMobile;
-  }
-  function filteredProducts() {
-    let rows = products.filter(p => {
-      const matchQuery = !state.query || normalize(p.name).includes(normalize(state.query)) || normalize(p.code).includes(normalize(state.query));
-      const matchCategory = !state.activeCategory || normalize(p.category) === normalize(state.activeCategory);
-      const matchSelected = !state.selectedOnly || (state.quantities[p.code] || 0) > 0;
-      const matchFavorite = !state.favoriteOnly || !!state.favorites[p.code];
-      const matchPeriod = state.periodFilter === 'all' || (state.periodFilter === 'recent' ? p.periodCurrent : !p.periodCurrent);
-      return matchQuery && matchCategory && matchSelected && matchFavorite && matchPeriod;
-    });
-    rows.sort((a, b) => Number(b.periodCurrent) - Number(a.periodCurrent) || (b.orders6m - a.orders6m) || (b.qty6m - a.qty6m) || a.name.localeCompare(b.name, 'es'));
-    return rows;
-  }
-  function totalProductsSelected() {
-    return products.filter(p => (state.quantities[p.code] || 0) > 0).length;
-  }
-  function totalFavoritesSelected() {
-    return products.filter(p => !!state.favorites[p.code]).length;
-  }
-  function getUnitMode(code) {
-    const p = productByCode[code];
-    return (p && p.boxQty > 1 && state.unitModes[code] === 'box') ? 'box' : 'piece';
-  }
-  function unitLabel(unit, qty) {
-    if (unit === 'box') return qty === 1 ? 'caja' : 'cajas';
-    return qty === 1 ? 'pieza' : 'piezas';
-  }
-  function totalPiecesFor(code) {
-    const p = productByCode[code];
-    const qty = Number(state.quantities[code] || 0);
-    if (!p) return qty;
-    return qty * (getUnitMode(code) === 'box' ? Number(p.boxQty || 1) : 1);
-  }
-  function totalPieces() {
-    return products.reduce((acc, p) => acc + totalPiecesFor(p.code), 0);
-  }
-  function totalBoxes() {
-    return products.reduce((acc, p) => acc + (getUnitMode(p.code) === 'box' ? Number(state.quantities[p.code] || 0) : 0), 0);
-  }
-  function cartItems() {
-    return products.filter(p => (state.quantities[p.code] || 0) > 0).map(p => {
-      const qty = Number(state.quantities[p.code] || 0);
-      const unitMode = getUnitMode(p.code);
-      const boxQty = Number(p.boxQty || 0);
-      const totalPcs = totalPiecesFor(p.code);
-      return {...p, qty, unitMode, boxQty, totalPieces: totalPcs};
-    });
-  }
-
-
-function buildUpdatesHTML() {
-  const cards = FEATURED_UPDATES.map(item => `
-    <article class="campaign-card campaign-${esc(item.kind || 'standard')}">
-      <img src="${esc(item.image)}" alt="${esc(item.alt)}" loading="lazy">
-    </article>
-  `).join('');
-
-  return `
-    <section class="updates-board campaign-board">
-      <div class="panel-head panel-head-clean">
-        <div>
-          <div class="panel-title">Nuevos productos</div>
-          <div class="panel-subtitle">Conoce las novedades disponibles para tu negocio</div>
-        </div>
-      </div>
-      <div class="campaign-grid">${cards}</div>
-    </section>
-  `;
-}
-
-  function buildAppChrome() {
-    document.body.innerHTML = `
-      <div class="app">
-        <header class="hero">
-          <div class="hero-shell">
-            <div class="hero-main">
-              <div class="brand-badge"><img src="${LOGO}" alt="Toyo Foods"></div>
-              <div class="hero-copy">
-                <div class="eyebrow">Pedido digital Toyo Foods</div>
-                <h1>${esc(APP_DATA.client_name || 'Cliente')}</h1>
-                <p>Historial mayo–septiembre 2026 · compra por piezas o cajas y conserva tus favoritos.</p>
-              </div>
-            </div>
-            <div class="hero-aside">
-              <div class="metric full"><div class="k">Cliente</div><div class="v">${esc(APP_DATA.client_name || '')}</div></div>
-              <div class="metric"><div class="k">Código</div><div class="v">${esc(APP_DATA.client_code || '')}</div></div>
-              <div class="metric"><div class="k">Vendedor</div><div class="v">${esc(APP_DATA.vendor_label || '')}</div></div>
-            </div>
-          </div>
-        </header>
-        <div class="layout">
-          <main>
-            <div class="toolbar">
-              <div class="toolcard">
-                <div class="search-grid">
-                  <div class="search">
-                    <span class="search-icon">🔎</span>
-                    <input id="searchInput" placeholder="Buscar artículo o código"/>
-                  </div>
-                  <button class="toolbtn" id="selectedBtn" type="button">Solo capturados</button>
-                  <button class="toolbtn" id="favoriteBtn" type="button">Favoritos</button>
-                  <button class="toolbtn" id="clearBtn" type="button">Limpiar todo</button>
-                  <button class="toolbtn" id="viewToggleBtn" type="button">Vista web</button>
-                </div>
-                <div class="helper">Puedes buscar por nombre o SKU, marcar favoritos ⭐ y capturar por piezas o cajas. El pedido y favoritos se guardan en este navegador.</div>
-                <div class="period-panel">
-                  <div class="period-heading"><strong>Historial mayo–septiembre 2026</strong><span>Los productos anteriores siguen disponibles para pedir.</span></div>
-                  <div class="period-tabs" id="periodTabs" role="group" aria-label="Filtrar por historial">
-                    <button type="button" data-period="recent">Comprados may–sep (${products.filter(p => p.periodCurrent).length})</button>
-                    <button type="button" data-period="old">Catálogo anterior (${products.filter(p => !p.periodCurrent).length})</button>
-                    <button type="button" data-period="all">Todos (${products.length})</button>
-                  </div>
-                </div>
-                <div class="chip-row" id="categoryChips"></div>
-                <div class="helper" id="viewNote">Vista móvil activa</div>
-              </div>
-            </div>
-            ${buildUpdatesHTML()}
-            <section class="section-head">
-              <h2 id="resultTitle">Catálogo del cliente</h2>
-              <div class="pagebadge" id="pageBadge">Página 1 / 1</div>
-            </section>
-            <section class="list" id="productList"></section>
-            <div class="empty" id="emptyState">No encontramos productos con ese filtro.</div>
-            <div class="pager">
-              <button id="prevBtn" type="button">← Anterior</button>
-              <button id="nextBtn" type="button">Siguiente →</button>
-            </div>
-          </main>
-          <aside class="side">
-            <div class="sheet-head">
-              <div>
-                <div style="font-size:10px;color:var(--muted);font-weight:800">Resumen del pedido</div>
-                <div style="font-size:16px;font-weight:900">Captura rápida</div>
-              </div>
-            </div>
-            <div class="sheet-body" id="desktopBody"></div>
-          </aside>
-        </div>
-      </div>
-      <div class="bar">
-        <div class="bar-inner">
-          <div>
-            <small id="barCount">0 productos seleccionados</small>
-            <strong id="barPieces">0 piezas</strong>
-          </div>
-          <button id="openSheetBtn" type="button">Ver pedido</button>
-        </div>
-      </div>
-      <div class="sheet-backdrop" id="sheetBackdrop"></div>
-      <div class="sheet" id="sheet">
-        <div class="sheet-head">
-          <div>
-            <div style="font-size:10px;color:var(--muted);font-weight:800">Resumen del pedido</div>
-            <div style="font-size:16px;font-weight:900">Captura rápida</div>
-          </div>
-          <button class="close" id="closeSheetBtn" type="button">×</button>
-        </div>
-        <div class="sheet-body" id="mobileBody"></div>
-      </div>
-    `;
-  }
-
-  function renderPeriodTabs() {
-    const wrap = document.getElementById('periodTabs');
-    if (!wrap) return;
-    wrap.querySelectorAll('button[data-period]').forEach(btn => {
-      const selected = btn.dataset.period === state.periodFilter;
-      btn.classList.toggle('active', selected);
-      btn.setAttribute('aria-pressed', selected ? 'true' : 'false');
-    });
-  }
-
-  function renderCategoryChips() {
-    const wrap = document.getElementById('categoryChips');
-    const selectedClass = state.selectedOnly ? 'active' : '';
-    wrap.innerHTML = [`<button class="chip ${!state.activeCategory ? 'active' : ''}" data-category="">Todas</button>`]
-      .concat(categories.map(cat => `<button class="chip ${normalize(cat)===normalize(state.activeCategory) ? 'active' : ''}" data-category="${esc(cat)}">${esc(cat)}</button>`))
-      .join('');
-    wrap.querySelectorAll('.chip').forEach(btn => {
-      btn.addEventListener('click', () => {
-        state.activeCategory = btn.dataset.category || '';
-        state.page = 1;
-        renderCategoryChips();
-        renderProducts();
-      });
-    });
-    const selectedBtn = document.getElementById('selectedBtn');
-    selectedBtn.classList.toggle('primary', state.selectedOnly);
-    const favoriteBtn = document.getElementById('favoriteBtn');
-    if (favoriteBtn) {
-      favoriteBtn.classList.toggle('primary', state.favoriteOnly);
-      const n = totalFavoritesSelected();
-      favoriteBtn.textContent = state.favoriteOnly ? `Ver todos (${n})` : `Favoritos (${n})`;
-    }
-  }
-
-  function renderProducts() {
-    renderPeriodTabs();
-    const rows = filteredProducts();
-    const totalPages = Math.max(1, Math.ceil(rows.length / currentPageSize()));
-    if (state.page > totalPages) state.page = totalPages;
-    const start = (state.page - 1) * currentPageSize();
-    const visible = rows.slice(start, start + currentPageSize());
-
-    const pageBadge = document.getElementById('pageBadge');
-    const resultTitle = document.getElementById('resultTitle');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const empty = document.getElementById('emptyState');
-    const list = document.getElementById('productList');
-
-    pageBadge.textContent = `Página ${state.page} / ${totalPages} · ${rows.length} artículo(s)`;
-    resultTitle.textContent = state.favoriteOnly ? 'Productos favoritos' : (state.activeCategory ? `Catálogo · ${state.activeCategory}` : (state.periodFilter === 'recent' ? 'Comprados mayo–septiembre' : state.periodFilter === 'old' ? 'Catálogo anterior' : 'Catálogo completo'));
-    prevBtn.disabled = state.page <= 1;
-    nextBtn.disabled = state.page >= totalPages;
-
-    if (!visible.length) {
-      list.innerHTML = '';
-      empty.style.display = 'block';
-      return;
-    }
-    empty.style.display = 'none';
-
-    list.innerHTML = visible.map(p => {
-      const qty = Number(state.quantities[p.code] || 0);
-      const hasBox = Number(p.boxQty || 0) > 1;
-      const unitMode = getUnitMode(p.code);
-      const totalPcs = totalPiecesFor(p.code);
-      const qtyLabel = unitMode === 'box' ? 'Cajas a pedir' : 'Piezas a pedir';
-      const conversion = hasBox && qty > 0
-        ? `<div class="conversion-hint">${unitMode === 'box' ? `${qty} ${unitLabel('box', qty)} × ${p.boxQty} = ${totalPcs} pzas` : `${qty} ${unitLabel('piece', qty)}`}</div>`
-        : '';
-      return `
-        <article class="product ${qty > 0 ? 'has-qty' : ''} ${state.favorites[p.code] ? 'is-fav' : ''}">
-          <button class="fav-btn ${state.favorites[p.code] ? 'active' : ''}" type="button" data-fav-code="${esc(p.code)}" aria-label="Marcar favorito" title="${state.favorites[p.code] ? 'Quitar de favoritos' : 'Marcar favorito'}">${state.favorites[p.code] ? '★' : '☆'}</button>
-          <div class="thumb"><img src="${esc(p.img || placeholderFor(p.code))}" alt="${esc(p.name)}" loading="lazy"></div>
-          <div class="name-band" title="${esc(p.name)}">${esc(p.name)}</div>
-          <div class="info visual-info">
-            <div class="product-line">
-              <span class="red-dot" aria-hidden="true"></span>
-              <div class="product-details">
-                <div class="code">${esc(p.code)}</div>
-                <div class="origin-line">${esc(p.category || 'Catálogo Toyo')}</div>
-                <div class="history-line">${p.periodCurrent ? `Cantidad registrada may–sep: ${p.qty6m.toLocaleString('es-MX')} · ${p.orders6m} registro(s)` : 'Catálogo anterior · sin compra registrada may–sep'}</div>
-                <div class="box-line">${hasBox ? `Caja: ${p.boxQty} pzas` : 'Venta por pieza'}</div>
-              </div>
-            </div>
-            <div class="tagwrap clean-tags">
-              ${state.favorites[p.code] ? `<span class="tag fav-tag">Favorito</span>` : ''}
-              ${p.periodCurrent ? '<span class="tag period-new">May–sep 2026</span>' : '<span class="tag period-old">Anterior</span>'}
-              ${p.badge ? `<span class="tag badge">${esc(p.badge)}</span>` : ''}
-              <span class="tag">${p.has_img ? 'Con foto' : 'Sin foto'}</span>
-              ${hasBox ? `<span class="tag box-tag">Caja ${p.boxQty}</span>` : ''}
-            </div>
-            ${hasBox ? `<div class="unit-row"><span>Capturar por</span><select class="unit-select" data-unit-code="${esc(p.code)}"><option value="piece" ${unitMode === 'piece' ? 'selected' : ''}>Piezas</option><option value="box" ${unitMode === 'box' ? 'selected' : ''}>Cajas</option></select></div>` : `<div class="unit-row single"><span>Captura por piezas</span></div>`}
-            <div class="bottom">
-              <div class="pieces-label">${qtyLabel}</div>
-              <div class="qty">
-                <button type="button" aria-label="Quitar cantidad" data-action="minus" data-code="${esc(p.code)}">−</button>
-                <input class="qty-input" type="number" min="0" step="1" inputmode="numeric" value="${qty}" data-input-code="${esc(p.code)}" aria-label="Cantidad"/>
-                <button type="button" aria-label="Agregar cantidad" data-action="plus" data-code="${esc(p.code)}">+</button>
-              </div>
-              ${conversion}
-            </div>
-          </div>
-        </article>
-      `;
-    }).join('');
-
-    list.querySelectorAll('button[data-fav-code]').forEach(btn => {
-      btn.addEventListener('click', () => toggleFavorite(btn.dataset.favCode));
-    });
-    list.querySelectorAll('button[data-action]').forEach(btn => {
-      btn.addEventListener('click', () => changeQty(btn.dataset.code, btn.dataset.action === 'plus' ? 1 : -1));
-    });
-    list.querySelectorAll('select[data-unit-code]').forEach(sel => {
-      sel.addEventListener('change', () => changeUnitMode(sel.dataset.unitCode, sel.value));
-    });
-    list.querySelectorAll('input[data-input-code]').forEach(input => {
-      input.addEventListener('focus', () => input.select());
-      input.addEventListener('input', () => {
-        input.value = input.value.replace(/[^\d]/g, '');
-      });
-      input.addEventListener('keydown', e => {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          commitQtyInput(input.dataset.inputCode, input.value);
-          input.blur();
-        }
-      });
-      input.addEventListener('change', () => commitQtyInput(input.dataset.inputCode, input.value));
-      input.addEventListener('blur', () => commitQtyInput(input.dataset.inputCode, input.value));
-    });
-  }
-
-  function bindSummaryInputs(target) {
-    const map = [
-      ['clientName', 'clientName'],
-      ['clientCode', 'clientCode'],
-      ['seller', 'seller'],
-      ['payment', 'payment'],
-      ['notes', 'notes']
-    ];
-    map.forEach(([id, key]) => {
-      const el = target.querySelector('#' + id);
-      if (!el) return;
-      el.addEventListener('input', () => {
-        state[key] = el.value;
-        saveState();
-      });
-      el.addEventListener('change', () => {
-        state[key] = el.value;
-        saveState();
-      });
-    });
-    target.querySelector('#downloadBtn')?.addEventListener('click', downloadOrder);
-    target.querySelector('#resetOrderBtn')?.addEventListener('click', clearAll);
-  }
-
-  function buildSummaryHTML() {
-    const items = cartItems();
-    const pieces = totalPieces();
-    const boxes = totalBoxes();
-    const productsCount = totalProductsSelected();
-    const rows = items.length ? items.map(item => {
-      const mainQty = `${item.qty} ${unitLabel(item.unitMode, item.qty)}`;
-      const detail = item.unitMode === 'box'
-        ? `Caja ${item.boxQty} pzas · Total ${item.totalPieces} pzas`
-        : `Total ${item.totalPieces} pzas`;
-      return `
-      <div class="line-item">
-        <div>
-          <div class="lname">${esc(item.name)}</div>
-          <div class="lcode">${esc(item.code)}</div>
-          <div class="lmeta">${esc(detail)}</div>
-        </div>
-        <div class="lqty"><span>${esc(mainQty)}</span><small>${item.totalPieces} pzas</small></div>
-      </div>
-    `;
-    }).join('') : `<div style="color:var(--muted);font-weight:800">Aún no agregas productos al pedido.</div>`;
-
-    return `
-      <div class="order-card">
-        <div class="summary-brand">
-          <img class="logo" src="${LOGO}" alt="Toyo Foods">
-          <div class="txt">
-            <div>Toyo Foods</div>
-            <div>Resumen ejecutivo del pedido</div>
-          </div>
-        </div>
-        <div class="order-grid">
-          <div class="field full">
-            <label>Cliente</label>
-            <textarea id="clientName" class="wrapfix" style="min-height:52px">${esc(state.clientName)}</textarea>
-          </div>
-          <div class="field">
-            <label>Código cliente</label>
-            <input id="clientCode" value="${esc(state.clientCode)}"/>
-          </div>
-          <div class="field">
-            <label>Vendedor</label>
-            <input id="seller" value="${esc(state.seller)}"/>
-          </div>
-          <div class="field full">
-            <label>Forma de pago</label>
-            <select id="payment">
-              <option ${state.payment === 'Crédito' ? 'selected' : ''}>Crédito</option>
-              <option ${state.payment === 'Contado' ? 'selected' : ''}>Contado</option>
-              <option ${state.payment === 'Transferencia' ? 'selected' : ''}>Transferencia</option>
-            </select>
-          </div>
-        </div>
-        <div class="statusline">
-          <span class="statuspill">Productos: <strong>${productsCount}</strong></span>
-          <span class="statuspill">Favoritos: <strong>${totalFavoritesSelected()}</strong></span>
-          <span class="statuspill">Cajas: <strong>${boxes}</strong></span>
-          <span class="statuspill">Piezas totales: <strong>${pieces}</strong></span>
-        </div>
-      </div>
-      <div class="order-card">
-        <div style="font-size:12px;font-weight:900;margin-bottom:8px;color:#38517a">Productos seleccionados</div>
-        <div class="line-list">${rows}</div>
-      </div>
-      <div class="order-card">
-        <div class="field full">
-          <label>Comentarios</label>
-          <textarea id="notes" placeholder="Ej. favor de confirmar disponibilidad, mandar en siguiente ruta, etc." style="min-height:54px">${esc(state.notes)}</textarea>
-        </div>
-      </div>
-      <div class="totalbox">
-        <div class="totalrow"><span>Total productos</span><strong>${productsCount}</strong></div>
-        <div class="totalrow"><span>Total cajas</span><strong>${boxes}</strong></div>
-        <div class="totalrow"><span>Total piezas</span><strong>${pieces}</strong></div>
-        <div class="actions-row">
-          <button class="ghostbtn" id="resetOrderBtn" type="button">Vaciar pedido</button>
-          <button class="actionbtn" id="downloadBtn" type="button">Descargar pedido</button>
-        </div>
-      </div>
-    `;
-  }
-
-  function renderSummary() {
-    const mobileBody = document.getElementById('mobileBody');
-    const desktopBody = document.getElementById('desktopBody');
-    mobileBody.innerHTML = buildSummaryHTML();
-    desktopBody.innerHTML = buildSummaryHTML();
-    bindSummaryInputs(mobileBody);
-    bindSummaryInputs(desktopBody);
-    document.getElementById('barPieces').textContent = `${totalPieces()} piezas totales`;
-    document.getElementById('barCount').textContent = `${totalProductsSelected()} productos · ${totalFavoritesSelected()} favoritos · ${totalBoxes()} cajas`;
-    const favoriteBtn = document.getElementById('favoriteBtn');
-    if (favoriteBtn) {
-      const n = totalFavoritesSelected();
-      favoriteBtn.textContent = state.favoriteOnly ? `Ver todos (${n})` : `Favoritos (${n})`;
-    }
-  }
-
-  function toggleFavorite(code) {
-    if (!code) return;
-    state.favorites[code] = !state.favorites[code];
-    if (state.favoriteOnly && totalFavoritesSelected() === 0) state.favoriteOnly = false;
-    saveState();
-    renderCategoryChips();
-    renderProducts();
-    renderSummary();
-  }
-
-  function changeQty(code, delta) {
-    state.quantities[code] = Math.max(0, Number(state.quantities[code] || 0) + delta);
-    saveState();
-    renderProducts();
-    renderSummary();
-  }
-
-  function changeUnitMode(code, mode) {
-    const p = productByCode[code];
-    state.unitModes[code] = (mode === 'box' && p && p.boxQty > 1) ? 'box' : 'piece';
-    saveState();
-    renderProducts();
-    renderSummary();
-  }
-
-  function commitQtyInput(code, rawValue) {
-    const clean = String(rawValue ?? '').replace(/[^\d]/g, '');
-    const value = clean === '' ? 0 : Number(clean);
-    state.quantities[code] = Number.isFinite(value) ? Math.max(0, value) : 0;
-    saveState();
-    renderProducts();
-    renderSummary();
-  }
-
-  function clearAll() {
-    Object.keys(state.quantities).forEach(code => state.quantities[code] = 0);
-    Object.keys(state.unitModes).forEach(code => state.unitModes[code] = 'piece');
-    state.notes = '';
-    saveState();
-    renderProducts();
-    renderSummary();
-  }
-
-  function openSheet() {
-    if (!totalProductsSelected()) {
-      renderSummary();
-    }
-    document.getElementById('sheet').classList.add('open');
-    document.getElementById('sheetBackdrop').classList.add('open');
-  }
-  function closeSheet() {
-    document.getElementById('sheet').classList.remove('open');
-    document.getElementById('sheetBackdrop').classList.remove('open');
-  }
-
-  function fieldStateKey(id) {
-    return ({
-      clientName: 'clientName',
-      clientCode: 'clientCode',
-      seller: 'seller',
-      payment: 'payment',
-      notes: 'notes'
-    })[id] || '';
-  }
-
-  function isFieldVisible(el) {
-    if (!el) return false;
-    const style = window.getComputedStyle(el);
-    if (style.display === 'none' || style.visibility === 'hidden') return false;
-    return !!(el.offsetParent || el.getClientRects().length);
-  }
-
-  function syncSummaryStateFromDOM() {
-    ['clientName', 'clientCode', 'seller', 'payment', 'notes'].forEach(id => {
-      const key = fieldStateKey(id);
-      if (!key) return;
-      const fields = Array.from(document.querySelectorAll('#desktopBody #' + id + ', #mobileBody #' + id));
-      if (!fields.length) return;
-      const active = document.activeElement && document.activeElement.id === id ? document.activeElement : null;
-      const visible = fields.find(isFieldVisible);
-      const changed = fields.find(el => String(el.value ?? '') !== String(state[key] ?? ''));
-      const chosen = active || visible || changed || fields[0];
-      state[key] = chosen.value;
-    });
-    saveState();
-  }
-
-  function summaryField(id, fallback) {
-    syncSummaryStateFromDOM();
-    const key = fieldStateKey(id);
-    if (key && typeof state[key] === 'string') return state[key];
-    const fields = Array.from(document.querySelectorAll('#desktopBody #' + id + ', #mobileBody #' + id));
-    const active = document.activeElement && document.activeElement.id === id ? document.activeElement : null;
-    const visible = fields.find(isFieldVisible);
-    const el = active || visible || fields[0];
-    return el ? el.value : fallback;
-  }
-
-  function generateDownloadHTML() {
-    const items = cartItems();
-    const now = new Date();
-    const fileDate = now.toISOString().slice(0, 10);
-    const prettyDate = now.toLocaleString('es-MX');
-    const clientName = summaryField('clientName', APP_DATA.client_name || '');
-    const clientCode = summaryField('clientCode', APP_DATA.client_code || '');
-    const seller = summaryField('seller', APP_DATA.vendor_label || '');
-    const payment = summaryField('payment', APP_DATA.payment_default || 'Crédito');
-    const notes = summaryField('notes', '');
-    const copyLines = items.map(item => `${item.code}\t${item.name}\t${item.totalPieces}`).join('\n');
-    const copyPayload = JSON.stringify(copyLines);
-    const rows = items.length ? items.map(item => `
-      <tr>
-        <td><span class="code">${esc(item.code)}</span></td>
-        <td class="desc">${esc(item.name)}</td>
-        <td class="pieces"><strong>${item.totalPieces}</strong></td>
-      </tr>`).join('') : `<tr><td colspan="3" style="text-align:center;color:#667085;padding:22px 16px">No se seleccionaron productos.</td></tr>`;
-
-    return `<!doctype html>
-<html lang="es">
-<head>
-<meta charset="utf-8"/>
-<title>Pedido_${esc(clientCode)}_${fileDate}</title>
-<style>
-*{box-sizing:border-box}
-body{margin:0;padding:28px;background:#f5f7fb;color:#0f172a;font-family:Arial,Helvetica,sans-serif}
-.page{max-width:960px;margin:0 auto;background:#fff;border:1px solid #e5eaf2;border-radius:24px;overflow:hidden;box-shadow:0 12px 32px rgba(15,23,42,.08)}
-.head{padding:24px 28px;background:linear-gradient(135deg,#0b4aa2,#0d61d6);color:#fff}
-.brand{display:flex;align-items:center;gap:14px}
-.brand img{width:68px;height:68px;border-radius:18px;background:#fff;padding:6px;object-fit:contain}
-.brand-copy{min-width:0}
-.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;opacity:.82;font-weight:700}
-h1{margin:8px 0 4px;font-size:32px;line-height:1}
-.sub{margin:0;font-size:14px;opacity:.92}
-.meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:24px 28px 8px}
-.box{background:#f7f9fc;border:1px solid #e7edf6;border-radius:16px;padding:14px 16px;min-width:0}
-.box .k{font-size:12px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
-.box .v{margin-top:6px;font-size:15px;font-weight:800;line-height:1.3;overflow-wrap:anywhere;word-break:break-word}
-.content{padding:8px 28px 28px}
-table{width:100%;border-collapse:collapse;margin-top:18px;table-layout:fixed}
-thead th{background:#f8fafc;color:#334155;font-size:12px;text-transform:uppercase;letter-spacing:.05em;padding:14px 12px;border-bottom:1px solid #e5e7eb;text-align:left}
-tbody td{padding:14px 12px;border-bottom:1px solid #eef2f7;font-size:16px;vertical-align:middle}
-tbody tr:nth-child(even){background:#fcfdff}
-.code{font-family:Consolas,Menlo,monospace;font-weight:800;letter-spacing:.02em;color:#0f172a}
-.desc{font-weight:700;line-height:1.35;overflow-wrap:anywhere;word-break:break-word}
-.pieces{text-align:right;font-size:18px;width:140px}
-.orderhead{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-top:18px;background:#f8fafc;border:1px solid #e5eaf2;border-bottom:0;border-radius:18px 18px 0 0;padding:14px 16px}
-.copytitle{font-size:13px;font-weight:900;color:#0f172a;text-transform:uppercase;letter-spacing:.04em}
-.copyhint{font-size:12px;color:#64748b;margin-top:3px}
-.copybtn{border:0;border-radius:999px;background:#0b4aa2;color:#fff;font-weight:900;padding:10px 16px;cursor:pointer;box-shadow:0 8px 18px rgba(11,74,162,.18)}
-.copybtn.ok{background:#16a34a}
-.orderTable{margin-top:0;border:1px solid #e5eaf2;border-top:0;border-radius:0 0 18px 18px;overflow:hidden}
-.orderTable table{margin-top:0}
-.summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:18px}
-.sum{background:#0f172a;color:#fff;border-radius:18px;padding:16px 18px}
-.sum .k{font-size:12px;opacity:.72;text-transform:uppercase;letter-spacing:.05em}
-.sum .v{margin-top:8px;font-size:28px;font-weight:900}
-.notes{margin-top:18px;background:#f7f9fc;border:1px solid #e7edf6;border-radius:18px;padding:16px}
-.notes .title{font-size:13px;font-weight:900;color:#38517a;margin-bottom:8px}
-.notes .text{overflow-wrap:anywhere;word-break:break-word;line-height:1.5}
-.foot{padding:0 28px 28px;color:#64748b;font-size:12px;line-height:1.5}
-@media print { body{padding:0;background:#fff} .page{border:0;border-radius:0;box-shadow:none} }
-</style>
-</head>
-<body>
-<div class="page">
-  <div class="head">
-    <div class="brand">
-      <img src="${LOGO}" alt="Toyo Foods">
-      <div class="brand-copy">
-        <div class="eyebrow">Toyo Foods</div>
-        <h1>Pedido digital</h1>
-        <p class="sub">Documento generado el ${prettyDate}</p>
-      </div>
-    </div>
-  </div>
-  <div class="meta">
-    <div class="box"><div class="k">Cliente</div><div class="v">${esc(clientName)}</div></div>
-    <div class="box"><div class="k">Código cliente</div><div class="v">${esc(clientCode)}</div></div>
-    <div class="box"><div class="k">Vendedor</div><div class="v">${esc(seller)}</div></div>
-    <div class="box"><div class="k">Forma de pago</div><div class="v">${esc(payment)}</div></div>
-  </div>
-  <div class="content">
-    <div class="orderhead">
-      <div>
-        <div class="copytitle">Pedido para copiar</div>
-        <div class="copyhint">Código producto + nombre producto + piezas. Usa el botón para pegarlo en Excel o sistema.</div>
-      </div>
-      <button class="copybtn" type="button" onclick="copyPedidoData(this)">Copiar pedido</button>
-    </div>
-    <div class="orderTable">
-      <table>
-        <thead><tr><th style="width:190px">Código producto</th><th>Nombre producto</th><th style="text-align:right;width:140px">Piezas</th></tr></thead>
-        <tbody>${rows}</tbody>
-      </table>
-    </div>
-    <script type="application/json" id="copyDataJson">${esc(copyPayload)}</script>
-    <script>
-      function copyPedidoData(btn){
-        var dataEl = document.getElementById('copyDataJson');
-        if(!dataEl) return;
-        var text = '';
-        try{ text = JSON.parse(dataEl.textContent || '""'); }
-        catch(e){ text = dataEl.textContent || ''; }
-        function markDone(){
-          if(!btn) return;
-          var old = btn.textContent;
-          btn.textContent = 'Copiado';
-          btn.className = 'copybtn ok';
-          setTimeout(function(){ btn.textContent = old || 'Copiar pedido'; btn.className = 'copybtn'; }, 1400);
-        }
-        try{
-          if(navigator.clipboard && navigator.clipboard.writeText){
-            navigator.clipboard.writeText(text).then(markDone).catch(function(){ fallbackCopy(text); markDone(); });
-          }else{
-            fallbackCopy(text); markDone();
-          }
-        }catch(e){ fallbackCopy(text); markDone(); }
-      }
-      function fallbackCopy(text){
-        var ta = document.createElement('textarea');
-        ta.value = text;
-        ta.setAttribute('readonly','');
-        ta.style.position = 'fixed';
-        ta.style.left = '-9999px';
-        document.body.appendChild(ta);
-        ta.focus();
-        ta.select();
-        try{document.execCommand('copy');}catch(e){}
-        document.body.removeChild(ta);
-      }
-    <\/script>
-    <div class="summary">
-      <div class="sum"><div class="k">Productos</div><div class="v">${items.length}</div></div>
-      <div class="sum"><div class="k">Cajas</div><div class="v">${items.reduce((a,b) => a + (b.unitMode === 'box' ? b.qty : 0), 0)}</div></div>
-      <div class="sum"><div class="k">Piezas totales</div><div class="v">${items.reduce((a,b) => a + b.totalPieces, 0)}</div></div>
-    </div>
-    <div class="notes">
-      <div class="title">Comentarios</div>
-      <div class="text">${esc(notes || 'Sin comentarios')}</div>
-    </div>
-  </div>
-  <div class="foot">Este archivo fue generado desde el formato digital de pedidos de Toyo Foods.</div>
-</div>
-</body>
-</html>`;
-  }
-
-  function downloadOrder() {
-    syncSummaryStateFromDOM();
-    const html = generateDownloadHTML();
-    const clientCode = summaryField('clientCode', APP_DATA.client_code || 'cliente');
-    const blob = new Blob([html], {type: 'text/html;charset=utf-8'});
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = `pedido_${clientCode}.html`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(() => URL.revokeObjectURL(a.href), 1200);
-  }
-
-  buildAppChrome();
-  document.getElementById('periodTabs')?.addEventListener('click', e => {
-    const btn = e.target.closest('button[data-period]');
-    if (!btn) return;
-    state.periodFilter = btn.dataset.period;
-    state.page = 1;
-    renderProducts();
-  });
-  renderCategoryChips();
-  renderProducts();
-  renderSummary();
-  applyViewMode(state.viewMode);
-
-  document.getElementById('searchInput').addEventListener('input', e => {
-    state.query = e.target.value || '';
-    state.page = 1;
-    renderProducts();
-  });
-  document.getElementById('selectedBtn').addEventListener('click', () => {
-    state.selectedOnly = !state.selectedOnly;
-    state.page = 1;
-    renderCategoryChips();
-    renderProducts();
-  });
-  document.getElementById('favoriteBtn').addEventListener('click', () => {
-    state.favoriteOnly = !state.favoriteOnly;
-    state.page = 1;
-    renderCategoryChips();
-    renderProducts();
-  });
-  document.getElementById('clearBtn').addEventListener('click', clearAll);
-  document.getElementById('viewToggleBtn').addEventListener('click', () => applyViewMode(state.viewMode === 'web' ? 'mobile' : 'web'));
-  document.getElementById('prevBtn').addEventListener('click', () => {
-    state.page = Math.max(1, state.page - 1);
-    renderProducts();
-  });
-  document.getElementById('nextBtn').addEventListener('click', () => {
-    const totalPages = Math.max(1, Math.ceil(filteredProducts().length / currentPageSize()));
-    state.page = Math.min(totalPages, state.page + 1);
-    renderProducts();
-  });
-  document.getElementById('openSheetBtn').addEventListener('click', openSheet);
-  document.getElementById('closeSheetBtn').addEventListener('click', closeSheet);
-  document.getElementById('sheetBackdrop').addEventListener('click', closeSheet);
+  let page=ORDER_HTML_TEMPLATE;
+  for(const [token,v] of Object.entries(fields))page=page.replaceAll(token,()=>v);
+  const blob=new Blob([page],{type:'text/html;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+  const slug=[safeFilePart(DATA.client_code),safeFilePart(DATA.client_name)].filter(Boolean).join('_');
+  a.href=url;a.download=`Toyo_Pedido_${slug}_${now.toISOString().slice(0,10)}.html`;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),12000);toast('Pedido HTML descargado con nombre y código de cliente.');
+ }
+ $('searchInput').addEventListener('input',e=>{state.q=e.target.value;$('clearSearch').hidden=!state.q;renderProducts();});
+ $('clearSearch').addEventListener('click',()=>{$('searchInput').value='';state.q='';$('clearSearch').hidden=true;renderProducts();$('searchInput').focus();});
+ $('categoryTabs').addEventListener('click',e=>{const b=e.target.closest('[data-category]');if(!b)return;state.category=b.dataset.category;drawTabs();renderProducts()});
+ $('favoriteOnly').addEventListener('click',()=>{state.favOnly=!state.favOnly;$('favoriteOnly').classList.toggle('active',state.favOnly);$('favoriteOnly').setAttribute('aria-pressed',String(state.favOnly));renderProducts()});
+ $('products').addEventListener('click',e=>{const b=e.target.closest('[data-action]');if(!b)return;const id=b.dataset.id,act=b.dataset.action,p=PRODUCTS.find(p=>p.id===id);if(!p)return;
+  if(act==='fav'){state.favs.has(id)?state.favs.delete(id):state.favs.add(id);try{localStorage.setItem(FAVKEY,JSON.stringify([...state.favs]));}catch(e){}renderProducts();return;}
+  if(act==='unit'){state.unit[id]=b.dataset.unit;renderProducts();return;}
+  if(act==='minus'||act==='plus'){state.qty[id]=Math.max(1,Math.min(999,(state.qty[id]||1)+(act==='plus'?1:-1)));renderProducts();return;}
+  if(act==='add'){const unit=state.unit[id]||'Piezas',key=id+'|'+unit,prev=state.cart.get(key);state.cart.set(key,{key,id,name:p.name,unit,qty:(prev?.qty||0)+(state.qty[id]||1)});renderCart();toast('Producto agregado al pedido');return;}
+ });
+ $('products').addEventListener('error',e=>{if(e.target.matches('img.prod-art')){e.target.onerror=null;e.target.src=fallback;}},true);
+ function cartAction(e){const b=e.target.closest('[data-cart-action]');if(!b)return;const row=state.cart.get(b.dataset.key);if(!row)return;const act=b.dataset.cartAction;if(act==='remove'||(act==='minus'&&row.qty<=1))state.cart.delete(b.dataset.key);else row.qty=Math.max(1,Math.min(999,row.qty+(act==='plus'?1:-1)));renderCart();}
+ $('cartRows').addEventListener('click',cartAction);$('mobileCartRows').addEventListener('click',cartAction);
+ $('headerCart').addEventListener('click',openDrawer);$('openCartMobile').addEventListener('click',openDrawer);$('shade').addEventListener('click',closeDrawer);$('closeDrawer').addEventListener('click',closeDrawer);document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer();});
+ $('downloadPdf').addEventListener('click',downloadOrderHtml);$('mobilePdf').addEventListener('click',downloadOrderHtml);
+ $('orderNote').addEventListener('input',persist);$('mobileNote').addEventListener('input',()=>{$('orderNote').value=$('mobileNote').value;persist();});
+ const back=$('returnToInicio');if(back)back.href=new URL('../index.html',location.href).href;
+ drawTabs();renderProducts();renderCart();
 })();
-
-try{document.documentElement.setAttribute("data-app-build", APP_BUILD + "-copycodepieces");}catch(e){}
