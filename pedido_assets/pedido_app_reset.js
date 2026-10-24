@@ -11,10 +11,13 @@ document.getElementById("app").innerHTML="<div class=\"top-line\"></div>\n<heade
  if(!raw){$('app').textContent='No se encontraron los datos del cliente.';return;}
  let DATA;
  try{DATA=JSON.parse(raw.textContent);}catch(e){$('app').textContent='No se pudo leer el catálogo del cliente.';return;}
+ // Solo las equivalencias >1 verificadas habilitan cajas; 1, vacío o ausente NO implica caja de una pieza.
+ const VERIFIED_BOX_QTY={'RE-BEB159-0096':25}; // CALPI SUI 500 ML, confirmado por el usuario
  const PRODUCTS=(DATA.products||[]).map(p=>({
   id:String(p.code||'').trim(),name:String(p.name||'Sin descripción'),category:String(p.category||'Otros').trim()||'Otros',
-  img:String(p.img||''),imgOk:!!p.has_img||!!p.img,detail: p.box_qty>1?'Caja: '+Number(p.box_qty)+' piezas':'Presentación por pieza',
-  box_qty:Math.max(1,Number(p.box_qty)||1),new:!!p.badge,orders:Number(p.orders6m)||0,period:!!p.period_current
+  img:String(p.img||''),imgOk:!!p.has_img||!!p.img,
+  detail:(VERIFIED_BOX_QTY[String(p.code||'').trim()]||Number(p.box_qty))>1?'Caja: '+(VERIFIED_BOX_QTY[String(p.code||'').trim()]||Number(p.box_qty))+' piezas':'Solo piezas · equivalencia por caja pendiente',
+  box_qty:(()=>{const v=Number(VERIFIED_BOX_QTY[String(p.code||'').trim()]||p.box_qty);return Number.isSafeInteger(v)&&v>1?v:0})(),new:!!p.badge,orders:Number(p.orders6m)||0,period:!!p.period_current
  })).filter(p=>p.id);
  const FAVKEY='toyo_favs_v1_'+DATA.client_code;
  const DRAFTKEY='toyo_draft_v20261022_'+DATA.client_code;
@@ -48,8 +51,8 @@ document.getElementById("app").innerHTML="<div class=\"top-line\"></div>\n<heade
   if(!visibleProducts.length){$('products').innerHTML='<div class="no-results">No encontramos productos con esos filtros. Prueba otra categoría o búsqueda.</div>';return;}
   addNextChunk(renderToken);
  }
- function rowHTML(p){const n=state.qty[p.id]||1,u=state.unit[p.id]||'Piezas',fav=state.favs.has(p.id);
-  return `<article class="product" data-product="${esc(p.id)}"><img class="prod-art" src="${esc(p.imgOk&&p.img?p.img:fallback)}" alt="Producto ${esc(p.name)}" loading="lazy" decoding="async"><div class="prod-info"><h3 class="prod-name">${esc(p.name)}</h3><p class="prod-meta">${esc(p.category)}${p.box_qty>1?' · '+esc(p.detail):''}${p.period?' · Comprado recientemente':''}</p><div class="prod-code">${esc(p.id)}</div>${p.new?'<span class="tag new">Novedad</span>':''}</div><div class="prod-action"><div class="unit" aria-label="Presentación"><button type="button" data-action="unit" data-id="${esc(p.id)}" data-unit="Piezas" class="${u==='Piezas'?'active':''}">Piezas</button><button type="button" data-action="unit" data-id="${esc(p.id)}" data-unit="Cajas" class="${u==='Cajas'?'active':''}">Cajas</button></div><div class="qty" aria-label="Cantidad"><button type="button" data-action="minus" data-id="${esc(p.id)}" aria-label="Restar">−</button><span>${n}</span><button type="button" data-action="plus" data-id="${esc(p.id)}" aria-label="Sumar">+</button></div><button type="button" class="add" data-action="add" data-id="${esc(p.id)}">Agregar</button><button type="button" class="heart ${fav?'on':''}" data-action="fav" data-id="${esc(p.id)}" aria-label="${fav?'Quitar de favoritos':'Agregar a favoritos'}" aria-pressed="${fav}">${icons.heart}</button></div></article>`;
+ function rowHTML(p){const n=state.qty[p.id]||1,u=state.unit[p.id]==='Cajas'&&p.box_qty>1?'Cajas':'Piezas',fav=state.favs.has(p.id);
+  return `<article class="product" data-product="${esc(p.id)}"><img class="prod-art" src="${esc(p.imgOk&&p.img?p.img:fallback)}" alt="Producto ${esc(p.name)}" loading="lazy" decoding="async"><div class="prod-info"><h3 class="prod-name">${esc(p.name)}</h3><p class="prod-meta">${esc(p.category)} · ${esc(p.detail)}${p.period?' · Comprado recientemente':''}</p><div class="prod-code">${esc(p.id)}</div>${p.new?'<span class="tag new">Novedad</span>':''}</div><div class="prod-action"><div class="unit" aria-label="Presentación"><button type="button" data-action="unit" data-id="${esc(p.id)}" data-unit="Piezas" class="${u==='Piezas'?'active':''}">Piezas</button><button type="button" data-action="unit" data-id="${esc(p.id)}" data-unit="Cajas" ${p.box_qty>1?'':'disabled title="Caja no disponible: no se conoce la cantidad de piezas por caja" aria-label="Caja bloqueada: solicita este producto por piezas"'} class="${u==='Cajas'?'active':''}">Cajas</button></div><div class="qty" aria-label="Cantidad"><button type="button" data-action="minus" data-id="${esc(p.id)}" aria-label="Restar">−</button><span>${n}</span><button type="button" data-action="plus" data-id="${esc(p.id)}" aria-label="Sumar">+</button></div><button type="button" class="add" data-action="add" data-id="${esc(p.id)}">Agregar</button><button type="button" class="heart ${fav?'on':''}" data-action="fav" data-id="${esc(p.id)}" aria-label="${fav?'Quitar de favoritos':'Agregar a favoritos'}" aria-pressed="${fav}">${icons.heart}</button></div></article>`;
  }
  function addNextChunk(token){if(token!==renderToken||loaded>=visibleProducts.length)return;const end=Math.min(loaded+pageChunk,visibleProducts.length),s=visibleProducts.slice(loaded,end);loaded=end;
   const temp=document.createElement('div');temp.innerHTML=s.map(rowHTML).join('');const frag=document.createDocumentFragment();while(temp.firstChild)frag.appendChild(temp.firstChild);$('products').append(frag);
@@ -64,27 +67,31 @@ document.getElementById("app").innerHTML="<div class=\"top-line\"></div>\n<heade
   for(const row of cartRows){
     const id=String(row.id||'').trim();if(!id)continue;
     const product=productsByCode.get(id);
-    const boxQty=Math.max(1,Math.floor(Number(product?.box_qty)||1));
+    const boxQty=Number(product?.box_qty)>1?Math.floor(Number(product.box_qty)):0;
     const qty=Math.max(0,Math.floor(Number(row.qty)||0));
     if(!qty)continue;
     let out=byCode.get(id);
     if(!out){out={id,name:String(product?.name||row.name||'Sin descripción'),boxes:0,pieces:0,boxQty,totalPieces:0};byCode.set(id,out);}
-    if(row.unit==='Cajas')out.boxes+=qty;
+    if(row.unit==='Cajas'&&boxQty>1)out.boxes+=qty;
     else out.pieces+=qty;
   }
   return [...byCode.values()].map(r=>({...r,totalPieces:r.boxes*r.boxQty+r.pieces}));
  }
  function totalQty(){return cartData().reduce((s,r)=>s+r.qty,0)}
- function renderCart(){const rows=cartData(),total=totalQty();$('headerCount').textContent=total;$('cartCount').textContent=total;$('mobileCartCount').textContent=total;$('mobileCount').textContent=total+' unidad'+(total===1?'':'es');
-  const body=rows.length?rows.map(r=>`<div class="cart-row"><div><strong>${esc(r.name)}</strong><small>${esc(r.id)} · ${esc(r.unit)}</small><div class="cart-adjust"><button type="button" data-cart-action="minus" data-key="${esc(r.key)}" aria-label="Reducir">−</button><span>${r.qty}</span><button type="button" data-cart-action="plus" data-key="${esc(r.key)}" aria-label="Aumentar">+</button></div></div><button type="button" class="remove" data-cart-action="remove" data-key="${esc(r.key)}">Quitar</button></div>`).join(''):`<div class="cart-empty">Tu pedido está vacío.<br>Agrega productos del catálogo.</div>`;
+ function renderCart(){const rows=cartData(),total=totalQty();
+  const boxesToReview=rows.filter(r=>r.unit==='Cajas'&&!PRODUCTS.some(p=>p.id===r.id&&p.box_qty>1));
+  $('headerCount').textContent=total;$('cartCount').textContent=total;$('mobileCartCount').textContent=total;$('mobileCount').textContent=total+' unidad'+(total===1?'':'es');
+  const reviewWarning=boxesToReview.length?`<div class="cart-warning" role="alert">⚠ ${boxesToReview.length} artículo(s) tienen cajas sin equivalencia confirmada. Quita esas cajas y agrega la cantidad correcta en piezas antes de descargar.</div>`:'';
+  const body=reviewWarning+(rows.length?rows.map(r=>`<div class="cart-row"><div><strong>${esc(r.name)}</strong><small>${esc(r.id)} · ${esc(r.unit)}</small>${r.unit==='Cajas'&&!PRODUCTS.some(p=>p.id===r.id&&p.box_qty>1)?'<small class="cart-issue">Caja no disponible · elimina este renglón y pide por piezas</small>':''}<div class="cart-adjust"><button type="button" data-cart-action="minus" data-key="${esc(r.key)}" aria-label="Reducir">−</button><span>${r.qty}</span><button type="button" data-cart-action="plus" data-key="${esc(r.key)}" aria-label="Aumentar">+</button></div></div><button type="button" class="remove" data-cart-action="remove" data-key="${esc(r.key)}">Quitar</button></div>`).join(''):`<div class="cart-empty">Tu pedido está vacío.<br>Agrega productos del catálogo.</div>`);
   $('cartRows').innerHTML=body;$('mobileCartRows').innerHTML=body;
-  for(const id of ['downloadPdf','mobilePdf'])$(id).disabled=!rows.length;
+  for(const id of ['downloadPdf','mobilePdf'])$(id).disabled=!rows.length||boxesToReview.length>0;
   persist();
  }
  function openDrawer(){if(innerWidth>780){$('cartDesktop').scrollIntoView({behavior:'smooth',block:'start'});return;}$('mobileNote').value=$('orderNote').value;$('mobileDrawer').classList.add('open');$('shade').classList.add('open');document.body.style.overflow='hidden';}
  function closeDrawer(){$('orderNote').value=$('mobileNote').value;$('mobileDrawer').classList.remove('open');$('shade').classList.remove('open');document.body.style.overflow='';persist();}
  function safeFilePart(v){return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9_-]+/g,'_').replace(/^_+|_+$/g,'').slice(0,75);}
  function downloadOrderHtml(){const cartRows=cartData();if(!cartRows.length){toast('Agrega productos primero');return;}
+  if(cartRows.some(r=>r.unit==='Cajas'&&!PRODUCTS.some(p=>p.id===r.id&&p.box_qty>1))){toast('Revisa el pedido: elimina las cajas sin equivalencia confirmada y solicita piezas.');return;}
   const rows=consolidatedOrderLines(cartRows);if(!rows.length){toast('Agrega productos primero');return;}
   const note=$('mobileDrawer').classList.contains('open')?$('mobileNote').value:$('orderNote').value;
   // Una fila por SKU. El HTML muestra cajas y piezas sueltas por separado y el total convertido a piezas.
@@ -112,9 +119,9 @@ document.getElementById("app").innerHTML="<div class=\"top-line\"></div>\n<heade
  $('favoriteOnly').addEventListener('click',()=>{state.favOnly=!state.favOnly;$('favoriteOnly').classList.toggle('active',state.favOnly);$('favoriteOnly').setAttribute('aria-pressed',String(state.favOnly));renderProducts()});
  $('products').addEventListener('click',e=>{const b=e.target.closest('[data-action]');if(!b)return;const id=b.dataset.id,act=b.dataset.action,p=PRODUCTS.find(p=>p.id===id);if(!p)return;
   if(act==='fav'){state.favs.has(id)?state.favs.delete(id):state.favs.add(id);try{localStorage.setItem(FAVKEY,JSON.stringify([...state.favs]));}catch(e){}renderProducts();return;}
-  if(act==='unit'){state.unit[id]=b.dataset.unit;renderProducts();return;}
+  if(act==='unit'){if(b.dataset.unit==='Cajas'&&p.box_qty<=1){toast('Caja bloqueada: equivalencia de piezas por caja no confirmada.');return;}state.unit[id]=b.dataset.unit;renderProducts();return;}
   if(act==='minus'||act==='plus'){state.qty[id]=Math.max(1,Math.min(999,(state.qty[id]||1)+(act==='plus'?1:-1)));renderProducts();return;}
-  if(act==='add'){const unit=state.unit[id]||'Piezas',key=id+'|'+unit,prev=state.cart.get(key);state.cart.set(key,{key,id,name:p.name,unit,qty:(prev?.qty||0)+(state.qty[id]||1)});renderCart();toast('Producto agregado al pedido');return;}
+  if(act==='add'){const unit=state.unit[id]==='Cajas'&&p.box_qty>1?'Cajas':'Piezas',key=id+'|'+unit,prev=state.cart.get(key);state.cart.set(key,{key,id,name:p.name,unit,qty:(prev?.qty||0)+(state.qty[id]||1)});renderCart();toast('Producto agregado al pedido');return;}
  });
  $('products').addEventListener('error',e=>{if(e.target.matches('img.prod-art')){e.target.onerror=null;e.target.src=fallback;}},true);
  function cartAction(e){const b=e.target.closest('[data-cart-action]');if(!b)return;const row=state.cart.get(b.dataset.key);if(!row)return;const act=b.dataset.cartAction;if(act==='remove'||(act==='minus'&&row.qty<=1))state.cart.delete(b.dataset.key);else row.qty=Math.max(1,Math.min(999,row.qty+(act==='plus'?1:-1)));renderCart();}

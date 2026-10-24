@@ -52,3 +52,8 @@
 #moreSentinel{height:1px;pointer-events:none}
 @media (min-width:781px){.client-back{margin-top:4px}}
 @media(max-width:420px){.intro h1{font-weight:640}.prod-name{font-size:13px!important}}
+
+/* 2026-10-24: Bloquear cajas sin equivalencia verificada para SAP */
+.unit button:disabled{opacity:.36;cursor:not-allowed;background:transparent!important;box-shadow:none!important;color:#7e8996!important;}
+.cart-warning{margin:8px 0 12px;padding:10px 12px;border-left:3px solid #b77925;border-radius:6px;background:#fff7e9;color:#795020;font-size:11px;line-height:1.5}
+.cart-issue{color:#a24f1e!important;font-weight:600;line-height:1.4}
